@@ -13,8 +13,8 @@
     left: 0;
     right: 0;
     width: 100%;
-    background-color: var(--color-dark, #272727);
-    color: var(--color-white, #fff);
+    background-color: var(--white, #fff);
+    color: var(--black, #000);
     z-index: 40;
 }
 
@@ -107,7 +107,7 @@
     justify-content: space-between;
     gap: 0.375rem;
     padding: 0.75rem 1.25rem;
-    color: var(--color-white, #fff);
+    color: var(--black, #000);
     text-decoration: none;
     transition: color 0.2s ease;
 }
@@ -145,20 +145,25 @@
 }
 
 @media (min-width: 1024px) {
+    .bma-c-header-split__nav-primary-list li {
+        position: relative;
+    }
+
     .bma-c-header-split__nav-primary-list .sub-menu {
         position: absolute;
-        left: 0;
+        left: 50%;
+        transform: translateX(-50%);
         top: 100%;
         z-index: 999;
         display: none;
         flex-direction: column;
         gap: 0.125rem;
-        min-width: 14rem;
-        margin-top: 26px;
-        padding: 0.5rem;
+        min-width: 16rem;
+        margin-top: 0.5rem;
+        padding: 0.75rem;
         background-color: var(--color-white, #fff);
-        border-radius: 0.25rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-radius: 0.5rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     }
 
     .bma-c-header-split__nav-primary-list li:hover > .sub-menu,
@@ -169,6 +174,11 @@
 
 .bma-c-header-split__nav-primary-list .sub-menu a {
     font-size: 0.875rem;
+    color: var(--color-dark, #272727);
+}
+
+.bma-c-header-split__nav-primary-list .sub-menu a:hover {
+    color: var(--color-primary, #da4926);
 }
 
 @media (min-width: 1024px) {
@@ -349,7 +359,9 @@ body.menu-open .nav-links,
     z-index: 45;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
 }
 
 .menu-overlay.active {
@@ -416,7 +428,7 @@ body.menu-open {
 }
 
 .submenu-toggle::after {
-    content: '';
+    content: "";
     display: block;
     width: 0.5rem;
     height: 0.5rem;
@@ -433,26 +445,6 @@ body.menu-open {
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* Floating phone button */
-.mobile-menu-phone {
-    position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    z-index: 55;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
-    background-color: var(--color-primary, #ff6a00);
-    color: #fff;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.mobile-menu-phone svg {
     width: 1.25rem;
     height: 1.25rem;
 }
-
