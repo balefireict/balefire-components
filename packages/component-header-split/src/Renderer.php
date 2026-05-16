@@ -133,7 +133,7 @@ final class Renderer {
         $args = [
             'theme_location' => (string) ( $atts['primary_menu'] ?? 'primary' ),
             'container'      => false,
-            'menu_class'     => 'nostyle bma-c-header__nav-primary-list',
+            'menu_class'     => 'nostyle bma-c-header-split__nav-primary-list',
             'menu_id'        => 'nav-main',
             'fallback_cb'    => false,
             'echo'           => false,
