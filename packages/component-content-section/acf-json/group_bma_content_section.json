@@ -1,0 +1,153 @@
+{
+    "key": "group_bma_content_section",
+    "title": "Content Section",
+    "fields": [
+        {
+            "key": "field_bma_content_section_headline",
+            "label": "Headline",
+            "name": "bma_content_section_headline",
+            "type": "text",
+            "instructions": "Optional section headline.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_bma_content_section_body",
+            "label": "Body",
+            "name": "bma_content_section_body",
+            "type": "wysiwyg",
+            "instructions": "Main content for this section.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
+            "key": "field_bma_content_section_image",
+            "label": "Image",
+            "name": "bma_content_section_image",
+            "type": "image",
+            "instructions": "Optional image. Layout controls its placement.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_bma_content_section_cta",
+            "label": "CTA Button",
+            "name": "bma_content_section_cta",
+            "type": "link",
+            "instructions": "Optional call-to-action button.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array"
+        },
+        {
+            "key": "field_bma_content_section_layout",
+            "label": "Layout",
+            "name": "bma_content_section_layout",
+            "type": "select",
+            "instructions": "How image and text are arranged.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "text-only": "Text only",
+                "image-top": "Image above text",
+                "image-left": "Image left, text right",
+                "image-right": "Image right, text left"
+            },
+            "default_value": "text-only",
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_bma_content_section_background",
+            "label": "Background",
+            "name": "bma_content_section_background",
+            "type": "select",
+            "instructions": "Section background color.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "white": "White",
+                "light": "Light gray",
+                "dark": "Dark"
+            },
+            "default_value": "white",
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": ""
+}
