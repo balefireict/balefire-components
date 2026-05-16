@@ -1,0 +1,160 @@
+{
+    "key": "group_bma_hero",
+    "title": "Hero",
+    "fields": [
+        {
+            "key": "field_bma_hero_eyebrow",
+            "label": "Eyebrow",
+            "name": "bma_hero_eyebrow",
+            "type": "text",
+            "instructions": "Short label above the headline.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_bma_hero_headline",
+            "label": "Headline",
+            "name": "bma_hero_headline",
+            "type": "wysiwyg",
+            "instructions": "Main hero headline. Keep it concise.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_bma_hero_subhead",
+            "label": "Subhead",
+            "name": "bma_hero_subhead",
+            "type": "textarea",
+            "instructions": "Supporting text below the headline.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_bma_hero_primary_cta",
+            "label": "Primary CTA",
+            "name": "bma_hero_primary_cta",
+            "type": "link",
+            "instructions": "Main call-to-action button.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array"
+        },
+        {
+            "key": "field_bma_hero_secondary_cta",
+            "label": "Secondary CTA",
+            "name": "bma_hero_secondary_cta",
+            "type": "link",
+            "instructions": "Optional secondary button.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array"
+        },
+        {
+            "key": "field_bma_hero_bg_image",
+            "label": "Background Image",
+            "name": "bma_hero_bg_image",
+            "type": "image",
+            "instructions": "Optional background image. Leave empty for solid color.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_bma_hero_variant",
+            "label": "Variant",
+            "name": "bma_hero_variant",
+            "type": "select",
+            "instructions": "Visual treatment for the hero section.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "light": "Light overlay (dark text)",
+                "dark": "Dark overlay (light text)",
+                "gradient": "Gradient overlay"
+            },
+            "default_value": "light",
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": ""
+}
