@@ -1,7 +1,7 @@
 {
     "name": "balefireict/balefire-components",
     "description": "Balefire Marketing + Advertising base-theme component library. Reusable section-level components shipped as Composer subpackages, consumed by classic WordPress themes via WPBakery shortcodes + ACF field groups.",
-    "type": "metapackage",
+    "type": "project",
     "license": "MIT",
     "authors": [
         { "name": "Balefire Marketing + Advertising", "homepage": "https://balefireagency.com" }
