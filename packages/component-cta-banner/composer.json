@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-cta-banner",
+    "description": "CTA banner section component for Balefire classic-theme builds.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\CtaBanner\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "cta-banner",
+            "type": "field-group",
+            "shortcode": "bma_cta_banner",
+            "css_class": "bma-c-cta-banner",
+            "owns_css": true
+        }
+    }
+}
