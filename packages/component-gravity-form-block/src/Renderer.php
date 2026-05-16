@@ -18,6 +18,9 @@ final class Renderer {
             'spacing_bottom' => '',
             'id'             => '',
             'class'          => '',
+            'headline'       => '',
+            'subhead'        => '',
+            'form_id'        => '',
         ];
     }
 
@@ -30,10 +33,10 @@ final class Renderer {
 
         $post_id = \get_the_ID() ?: 0;
 
-        $headline  = \get_field( 'bma_gravity_form_block_headline', $post_id ) ?: '';
-        $subhead   = \get_field( 'bma_gravity_form_block_subhead', $post_id ) ?: '';
-        $form_id   = (int) ( \get_field( 'bma_gravity_form_block_form_id', $post_id ) ?: 0 );
-        $variant   = \get_field( 'bma_gravity_form_block_variant', $post_id ) ?: $atts['variant'];
+        $headline  = (string) ( $atts['headline'] ?? \get_field( 'bma_gravity_form_block_headline', $post_id ) ?? '' );
+        $subhead   = (string) ( $atts['subhead'] ?? \get_field( 'bma_gravity_form_block_subhead', $post_id ) ?? '' );
+        $form_id   = (int) ( $atts['form_id'] ?? \get_field( 'bma_gravity_form_block_form_id', $post_id ) ?? 0 );
+        $variant   = (string) ( $atts['variant'] ?: ( \get_field( 'bma_gravity_form_block_variant', $post_id ) ?: 'light' ) );
 
         $wrapper_atts = self::build_wrapper_atts( $atts, $variant );
 

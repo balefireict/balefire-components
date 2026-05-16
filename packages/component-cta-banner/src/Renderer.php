@@ -21,6 +21,9 @@ final class Renderer {
             'spacing_bottom' => '',
             'id'             => '',
             'class'          => '',
+            'headline'       => '',
+            'subhead'        => '',
+            'cta'            => '',
         ];
     }
 
@@ -36,10 +39,10 @@ final class Renderer {
 
         $post_id = \get_the_ID() ?: 0;
 
-        $headline = \get_field( 'bma_cta_banner_headline', $post_id ) ?: '';
-        $subhead  = \get_field( 'bma_cta_banner_subhead', $post_id ) ?: '';
-        $cta      = \get_field( 'bma_cta_banner_cta', $post_id ) ?: null;
-        $variant  = \get_field( 'bma_cta_banner_variant', $post_id ) ?: $atts['variant'];
+        $headline = (string) ( $atts['headline'] ?? \get_field( 'bma_cta_banner_headline', $post_id ) ?? '' );
+        $subhead  = (string) ( $atts['subhead'] ?? \get_field( 'bma_cta_banner_subhead', $post_id ) ?? '' );
+        $cta      = \is_array( $atts['cta'] ?? null ) ? $atts['cta'] : ( \get_field( 'bma_cta_banner_cta', $post_id ) ?: null );
+        $variant  = (string) ( $atts['variant'] ?: ( \get_field( 'bma_cta_banner_variant', $post_id ) ?: 'gradient' ) );
 
         $wrapper_atts = self::build_wrapper_atts( $atts, $variant );
 

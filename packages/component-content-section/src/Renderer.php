@@ -20,6 +20,11 @@ final class Renderer {
             'spacing_bottom' => '',
             'id'             => '',
             'class'          => '',
+            'headline'       => '',
+            'body'           => '',
+            'image'          => '',
+            'cta'            => '',
+            'background'     => '',
         ];
     }
 
@@ -35,12 +40,12 @@ final class Renderer {
 
         $post_id = \get_the_ID() ?: 0;
 
-        $headline   = \get_field( 'bma_content_section_headline', $post_id ) ?: '';
-        $body       = \get_field( 'bma_content_section_body', $post_id ) ?: '';
-        $image      = \get_field( 'bma_content_section_image', $post_id ) ?: null;
-        $cta        = \get_field( 'bma_content_section_cta', $post_id ) ?: null;
-        $layout     = \get_field( 'bma_content_section_layout', $post_id ) ?: $atts['layout'];
-        $background = \get_field( 'bma_content_section_background', $post_id ) ?: 'white';
+        $headline   = (string) ( $atts['headline'] ?? \get_field( 'bma_content_section_headline', $post_id ) ?? '' );
+        $body       = (string) ( $atts['body'] ?? \get_field( 'bma_content_section_body', $post_id ) ?? '' );
+        $image      = \is_array( $atts['image'] ?? null ) ? $atts['image'] : ( \get_field( 'bma_content_section_image', $post_id ) ?: null );
+        $cta        = \is_array( $atts['cta'] ?? null ) ? $atts['cta'] : ( \get_field( 'bma_content_section_cta', $post_id ) ?: null );
+        $layout     = (string) ( $atts['layout'] ?: ( \get_field( 'bma_content_section_layout', $post_id ) ?: 'text-only' ) );
+        $background = (string) ( $atts['background'] ?: ( \get_field( 'bma_content_section_background', $post_id ) ?: 'white' ) );
 
         $wrapper_atts = self::build_wrapper_atts( $atts, $layout, $background );
 

@@ -17,6 +17,11 @@ final class Renderer {
             'spacing_bottom' => '',
             'id'             => '',
             'class'          => '',
+            'quote'          => '',
+            'attribution'    => '',
+            'role'           => '',
+            'company'        => '',
+            'image'          => '',
         ];
     }
 
@@ -29,11 +34,11 @@ final class Renderer {
 
         $post_id = \get_the_ID() ?: 0;
 
-        $quote      = \get_field( 'bma_testimonial_quote', $post_id ) ?: '';
-        $attribution = \get_field( 'bma_testimonial_attribution', $post_id ) ?: '';
-        $role       = \get_field( 'bma_testimonial_role', $post_id ) ?: '';
-        $company    = \get_field( 'bma_testimonial_company', $post_id ) ?: '';
-        $image      = \get_field( 'bma_testimonial_image', $post_id ) ?: null;
+        $quote       = (string) ( $atts['quote'] ?? \get_field( 'bma_testimonial_quote', $post_id ) ?? '' );
+        $attribution = (string) ( $atts['attribution'] ?? \get_field( 'bma_testimonial_attribution', $post_id ) ?? '' );
+        $role        = (string) ( $atts['role'] ?? \get_field( 'bma_testimonial_role', $post_id ) ?? '' );
+        $company     = (string) ( $atts['company'] ?? \get_field( 'bma_testimonial_company', $post_id ) ?? '' );
+        $image       = \is_array( $atts['image'] ?? null ) ? $atts['image'] : ( \get_field( 'bma_testimonial_image', $post_id ) ?: null );
 
         $wrapper_atts = self::build_wrapper_atts( $atts );
 

@@ -21,6 +21,12 @@ final class Renderer {
             'spacing_bottom' => '',
             'id'             => '',
             'class'          => '',
+            'eyebrow'        => '',
+            'headline'       => '',
+            'subhead'        => '',
+            'primary_cta'    => '',
+            'secondary_cta'  => '',
+            'bg_image'       => '',
         ];
     }
 
@@ -36,13 +42,13 @@ final class Renderer {
 
         $post_id = \get_the_ID() ?: 0;
 
-        $eyebrow       = \get_field( 'bma_hero_eyebrow', $post_id ) ?: '';
-        $headline      = \get_field( 'bma_hero_headline', $post_id ) ?: '';
-        $subhead       = \get_field( 'bma_hero_subhead', $post_id ) ?: '';
-        $primary_cta   = \get_field( 'bma_hero_primary_cta', $post_id ) ?: null;
-        $secondary_cta = \get_field( 'bma_hero_secondary_cta', $post_id ) ?: null;
-        $bg_image      = \get_field( 'bma_hero_bg_image', $post_id ) ?: null;
-        $variant       = \get_field( 'bma_hero_variant', $post_id ) ?: $atts['variant'];
+        $eyebrow       = (string) ( $atts['eyebrow'] ?? \get_field( 'bma_hero_eyebrow', $post_id ) ?? '' );
+        $headline      = (string) ( $atts['headline'] ?? \get_field( 'bma_hero_headline', $post_id ) ?? '' );
+        $subhead       = (string) ( $atts['subhead'] ?? \get_field( 'bma_hero_subhead', $post_id ) ?? '' );
+        $primary_cta   = \is_array( $atts['primary_cta'] ?? null ) ? $atts['primary_cta'] : ( \get_field( 'bma_hero_primary_cta', $post_id ) ?: null );
+        $secondary_cta = \is_array( $atts['secondary_cta'] ?? null ) ? $atts['secondary_cta'] : ( \get_field( 'bma_hero_secondary_cta', $post_id ) ?: null );
+        $bg_image      = \is_array( $atts['bg_image'] ?? null ) ? $atts['bg_image'] : ( \get_field( 'bma_hero_bg_image', $post_id ) ?: null );
+        $variant       = (string) ( $atts['variant'] ?: ( \get_field( 'bma_hero_variant', $post_id ) ?: 'light' ) );
 
         $wrapper_atts = self::build_wrapper_atts( $atts, $variant );
 
