@@ -1,0 +1,59 @@
+/**
+ * Stat Callout Component Styles
+ * Scoped under .bma-c-stat-callout
+ */
+
+.bma-c-stat-callout {
+    width: 100%;
+    padding-block: var(--spacing-section);
+    background-color: var(--color-white);
+}
+
+.bma-c-stat-callout__inner {
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+}
+
+.bma-c-stat-callout__list {
+    display: grid;
+    gap: 2rem;
+    text-align: center;
+}
+
+.bma-c-stat-callout__list--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.bma-c-stat-callout__list--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bma-c-stat-callout__list--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+    .bma-c-stat-callout__list--4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.bma-c-stat-callout__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bma-c-stat-callout__value {
+    font-size: var(--text-5xl);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-1);
+}
+
+.bma-c-stat-callout__label {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-neutral-600);
+}

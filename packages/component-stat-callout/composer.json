@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-stat-callout",
+    "description": "Stat callout section component for Balefire classic-theme builds.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\StatCallout\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "stat-callout",
+            "type": "field-group",
+            "shortcode": "bma_stat_callout",
+            "css_class": "bma-c-stat-callout",
+            "owns_css": true
+        }
+    }
+}
