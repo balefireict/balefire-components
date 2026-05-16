@@ -1,0 +1,458 @@
+/**
+ * Header Split Component Styles
+ * Scaffolding component — theme owns all CSS.
+ * Replicates the Rockerbox sticky blur header from the Tailwind build.
+ */
+
+/* ------------------------------------------
+   Root / wrapper
+   ------------------------------------------ */
+.bma-c-header-split {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: var(--color-dark, #272727);
+    color: var(--color-white, #fff);
+    z-index: 40;
+}
+
+.bma-c-header-split--blur {
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
+}
+
+/* Inner container */
+.bma-c-header-split__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1536px;
+    margin-inline: auto;
+    padding: 24px 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__inner {
+        padding-inline: 2rem;
+    }
+}
+
+/* ------------------------------------------
+   Logo
+   ------------------------------------------ */
+.bma-c-header-split__logo {
+    flex-shrink: 0;
+}
+
+.bma-c-header-split__logo svg,
+.bma-c-header-split__logo img {
+    display: block;
+    max-width: 240px;
+    height: auto;
+}
+
+.bma-c-header-split__logo-fallback {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--color-white, #fff);
+    text-decoration: none;
+}
+
+/* ------------------------------------------
+   Primary nav
+   ------------------------------------------ */
+.bma-c-header-split__nav-primary {
+    display: none;
+    color: var(--color-dark, #1a1a1a);
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__nav-primary {
+        display: block;
+        order: 1;
+    }
+}
+
+.bma-c-header-split__nav-primary-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    line-height: 1.25;
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__nav-primary-list {
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+        border-top: 0;
+    }
+}
+
+@media (min-width: 1280px) {
+    .bma-c-header-split__nav-primary-list {
+        gap: 3rem;
+    }
+}
+
+/* Primary nav links */
+.bma-c-header-split__nav-primary-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.375rem;
+    padding: 0.75rem 1.25rem;
+    color: var(--color-white, #fff);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__nav-primary-list a {
+        padding: 0.5rem 0;
+    }
+}
+
+.bma-c-header-split__nav-primary-list a:hover,
+.bma-c-header-split__nav-primary-list a:focus {
+    text-decoration: none;
+}
+
+.bma-c-header-split__nav-primary-list a:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__nav-primary-list a:focus-visible {
+        outline-color: var(--color-secondary, #faab45);
+    }
+}
+
+/* Sub-menus (dropdowns) */
+.bma-c-header-split__nav-primary-list .sub-menu {
+    display: none;
+    margin: 0;
+    padding: 0;
+    padding-inline: 0.375rem;
+    padding-block: 0.75rem;
+    list-style: none;
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__nav-primary-list .sub-menu {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        z-index: 999;
+        display: none;
+        flex-direction: column;
+        gap: 0.125rem;
+        min-width: 14rem;
+        margin-top: 26px;
+        padding: 0.5rem;
+        background-color: var(--color-white, #fff);
+        border-radius: 0.25rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .bma-c-header-split__nav-primary-list li:hover > .sub-menu,
+    .bma-c-header-split__nav-primary-list li:focus-within > .sub-menu {
+        display: flex;
+    }
+}
+
+.bma-c-header-split__nav-primary-list .sub-menu a {
+    font-size: 0.875rem;
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__nav-primary-list .sub-menu a {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Parent indicator (chevron) */
+.bma-c-header-split__nav-primary-list .menu-item-has-children > a {
+    cursor: pointer;
+}
+
+/* ------------------------------------------
+   Utility area (secondary nav + toggle)
+   ------------------------------------------ */
+.bma-c-header-split__utility {
+    display: flex;
+    align-items: center;
+    order: 2;
+}
+
+/* Secondary nav */
+.bma-c-header-split__nav-secondary {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__nav-secondary {
+        display: block;
+    }
+}
+
+.bma-c-header-split__nav-secondary-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bma-c-header-split__nav-secondary-list a {
+    display: inline-flex;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    color: var(--color-white, #fff);
+    text-decoration: none;
+    transition: color 0.5s ease-in-out;
+}
+
+.bma-c-header-split__nav-secondary-list li:last-child a {
+    background-color: var(--color-secondary, #faab45);
+    color: var(--color-dark, #272727);
+    font-weight: 600;
+}
+
+.bma-c-header-split__nav-secondary-list li:last-child a:hover {
+    background-color: #e89a3a;
+}
+
+.bma-c-header-split__nav-secondary-list a:hover,
+.bma-c-header-split__nav-secondary-list a:focus {
+    text-decoration: none;
+}
+
+.bma-c-header-split__nav-secondary-list .btn,
+.bma-c-header-split__nav-secondary-list a.btn {
+    /* Inherits theme .btn styles; keep minimal overrides here */
+}
+
+/* ------------------------------------------
+   Mobile toggle
+   ------------------------------------------ */
+.bma-c-header-split__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    margin-left: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--color-white, #fff);
+    background: transparent;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.bma-c-header-split__toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.bma-c-header-split__toggle:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    --tw-ring-offset-width: 2px;
+    --tw-ring-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 calc(2px + 2px) var(--tw-ring-color);
+}
+
+@media (min-width: 1024px) {
+    .bma-c-header-split__toggle {
+        display: none;
+    }
+}
+
+.bma-c-header-split__toggle svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* ------------------------------------------
+   Accessibility helpers
+   ------------------------------------------ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ------------------------------------------
+   Mobile drawer (off-canvas)
+   ------------------------------------------ */
+
+/* Drawer panel */
+.nav-links {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 80%;
+    max-width: 320px;
+    background-color: var(--color-white, #fff);
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    padding: 1.5rem;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+body.menu-open .nav-links,
+.nav-links[style*="left: 0px"],
+.nav-links[style*="left: 0;"] {
+    transform: translateX(0);
+}
+
+/* Close button */
+.nav-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    margin-bottom: 1rem;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: var(--color-dark, #1a1a1a);
+}
+
+.nav-close svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Overlay */
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 45;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Prevent body scroll when drawer is open */
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Mobile nav list overrides (when JS moves navs into drawer) */
+.nav-links #nav-main,
+.nav-links #nav-secondary {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-links #nav-main a,
+.nav-links #nav-secondary a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.nav-links #nav-main .sub-menu,
+.nav-links #nav-secondary .sub-menu {
+    display: none;
+    margin: 0;
+    padding: 0 0 0 1rem;
+    list-style: none;
+}
+
+.nav-links #nav-main .sub-menu.active,
+.nav-links #nav-secondary .sub-menu.active {
+    display: block;
+}
+
+/* Submenu toggle button (added by JS on mobile) */
+.submenu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: inherit;
+}
+
+.submenu-toggle.active {
+    transform: rotate(180deg);
+}
+
+.submenu-toggle::after {
+    content: '';
+    display: block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+}
+
+/* Secondary nav wrapper inside drawer */
+.secondary-nav-wrapper {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Floating phone button */
+.mobile-menu-phone {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background-color: var(--color-primary, #ff6a00);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-menu-phone svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
