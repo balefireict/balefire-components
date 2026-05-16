@@ -1,0 +1,50 @@
+/*
+ * component-template
+ *
+ * Vite entry. Compiled by the host theme into dist/components/template-<hash>.css
+ * and conditionally enqueued via has_shortcode($post, 'bma_template').
+ *
+ * Scope ALL rules under .bma-c-template so they cannot leak.
+ */
+
+.bma-c-template {
+    /* Local tuning tokens — default to host tokens, overridable per usage */
+    --bma-c-template-bg: var(--color-light, #f0f4f3);
+    --bma-c-template-pad-block: var(--spacing-section, clamp(4rem, 7vw, 7rem));
+    --bma-c-template-pad-inline: var(--spacing-gutter, clamp(1rem, 0.88rem + 0.55vw, 1.5rem));
+    --bma-c-template-text: var(--color-dark, #272727);
+    --bma-c-template-max-w: var(--container-content, 1128px);
+
+    background-color: var(--bma-c-template-bg);
+    color: var(--bma-c-template-text);
+    padding-block: var(--bma-c-template-pad-block);
+    padding-inline: var(--bma-c-template-pad-inline);
+}
+
+.bma-c-template__inner {
+    max-width: var(--bma-c-template-max-w);
+    margin-inline: auto;
+}
+
+.bma-c-template__placeholder {
+    font-family: var(--font-1, system-ui, sans-serif);
+    text-align: center;
+    margin: 0;
+}
+
+/* Variant: dark */
+.bma-c-template--variant-dark {
+    --bma-c-template-bg: var(--color-dark, #272727);
+    --bma-c-template-text: var(--white, #ffffff);
+}
+
+/* Variant: brand */
+.bma-c-template--variant-brand {
+    --bma-c-template-bg: var(--color-primary, #da4926);
+    --bma-c-template-text: var(--white, #ffffff);
+}
+
+/* Container variants */
+.bma-c-template--container-wide   .bma-c-template__inner { max-width: var(--container-site, 1440px); }
+.bma-c-template--container-narrow .bma-c-template__inner { max-width: var(--container-narrow, 512px); }
+.bma-c-template--container-full   .bma-c-template__inner { max-width: none; padding-inline: 0; }
