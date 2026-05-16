@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-accordion-faq",
+    "description": "Accordion FAQ section component for Balefire classic-theme builds.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\AccordionFaq\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "accordion-faq",
+            "type": "field-group",
+            "shortcode": "bma_accordion_faq",
+            "css_class": "bma-c-accordion-faq",
+            "owns_css": true
+        }
+    }
+}

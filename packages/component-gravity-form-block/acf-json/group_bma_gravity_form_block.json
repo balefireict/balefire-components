@@ -1,0 +1,108 @@
+{
+    "key": "group_bma_gravity_form_block",
+    "title": "Gravity Form Block",
+    "fields": [
+        {
+            "key": "field_bma_gravity_form_block_headline",
+            "label": "Headline",
+            "name": "bma_gravity_form_block_headline",
+            "type": "text",
+            "instructions": "Headline above the form.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_bma_gravity_form_block_subhead",
+            "label": "Subhead",
+            "name": "bma_gravity_form_block_subhead",
+            "type": "textarea",
+            "instructions": "Optional supporting text.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_bma_gravity_form_block_form_id",
+            "label": "Gravity Form ID",
+            "name": "bma_gravity_form_block_form_id",
+            "type": "number",
+            "instructions": "The ID of the Gravity Form to display.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": 1,
+            "max": "",
+            "step": 1
+        },
+        {
+            "key": "field_bma_gravity_form_block_variant",
+            "label": "Variant",
+            "name": "bma_gravity_form_block_variant",
+            "type": "select",
+            "instructions": "Visual treatment.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "light": "Light",
+                "dark": "Dark",
+                "gradient": "Gradient"
+            },
+            "default_value": "light",
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 7,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": ""
+}
