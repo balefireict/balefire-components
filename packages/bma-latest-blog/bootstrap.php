@@ -42,13 +42,19 @@ if ( ! function_exists( 'bma_post_card' ) ) {
 	}
 }
 
-add_action(
-	'plugins_loaded',
-	function (): void {
+$bma_latest_blog_boot = function (): void {
 		\Balefire\Components\LatestBlog\LatestBlog::register();
 		if ( function_exists( 'vc_map' ) ) {
 			add_action( 'vc_before_init', array( \Balefire\Components\LatestBlog\LatestBlog::class, 'vcMap' ) );
 		}
-	},
-	20
-);
+};
+
+// WP load order: plugins_loaded fires BEFORE theme functions.php. When this
+// autoloader is required from a theme, the hook has already fired - boot now.
+// vc_before_init hooks 'init', which is always later, so vcMap still lands.
+if ( did_action( 'plugins_loaded' ) ) {
+	$bma_latest_blog_boot();
+} else {
+	add_action( 'plugins_loaded', $bma_latest_blog_boot, 20 );
+}
+unset( $bma_latest_blog_boot );

@@ -41,14 +41,20 @@ if ( ! function_exists( 'bma_image_text_item_render' ) ) {
 	}
 }
 
-add_action(
-	'plugins_loaded',
-	function (): void {
+$bma_image_text_list_boot = function (): void {
 		\Balefire\Components\ImageTextList\ImageTextList::register();
 		if ( function_exists( 'vc_map' ) ) {
 			add_action( 'vc_before_init', array( \Balefire\Components\ImageTextList\ImageTextList::class, 'vcMap' ) );
 			add_action( 'vc_after_init', array( \Balefire\Components\ImageTextList\ImageTextList::class, 'registerContainerClass' ) );
 		}
-	},
-	20
-);
+};
+
+// WP load order: plugins_loaded fires BEFORE theme functions.php. When this
+// autoloader is required from a theme, the hook has already fired - boot now.
+// vc_before_init hooks 'init', which is always later, so vcMap still lands.
+if ( did_action( 'plugins_loaded' ) ) {
+	$bma_image_text_list_boot();
+} else {
+	add_action( 'plugins_loaded', $bma_image_text_list_boot, 20 );
+}
+unset( $bma_image_text_list_boot );

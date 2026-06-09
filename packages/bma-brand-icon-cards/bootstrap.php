@@ -66,14 +66,20 @@ if ( ! function_exists( 'bma_brand_icon_card_render' ) ) {
 	}
 }
 
-add_action(
-	'plugins_loaded',
-	function (): void {
+$bma_brand_icon_cards_boot = function (): void {
 		\Balefire\Components\BrandIconCards\BrandIconCards::register();
 		if ( function_exists( 'vc_map' ) ) {
 			add_action( 'vc_before_init', array( \Balefire\Components\BrandIconCards\BrandIconCards::class, 'vcMap' ) );
 			add_action( 'vc_after_init', array( \Balefire\Components\BrandIconCards\BrandIconCards::class, 'registerContainerClass' ) );
 		}
-	},
-	20
-);
+};
+
+// WP load order: plugins_loaded fires BEFORE theme functions.php. When this
+// autoloader is required from a theme, the hook has already fired - boot now.
+// vc_before_init hooks 'init', which is always later, so vcMap still lands.
+if ( did_action( 'plugins_loaded' ) ) {
+	$bma_brand_icon_cards_boot();
+} else {
+	add_action( 'plugins_loaded', $bma_brand_icon_cards_boot, 20 );
+}
+unset( $bma_brand_icon_cards_boot );
