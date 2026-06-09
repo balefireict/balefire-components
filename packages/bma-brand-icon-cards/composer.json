@@ -1,0 +1,21 @@
+{
+    "name": "balefire/bma-brand-icon-cards",
+    "description": "Brand Icon Cards - homepage brand/service icon-card grid. Parent/child WPBakery container, vanilla CSS. Depends on balefire/bma-image-helper, balefire/bma-arrow, balefire/bma-href.",
+    "type": "wordpress-library",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.2",
+        "balefire/bma-image-helper": "^1.0",
+        "balefire/bma-arrow": "^1.0",
+        "balefire/bma-href": "^1.0"
+    },
+    "autoload": {
+        "files": [
+            "bootstrap.php"
+        ],
+        "psr-4": {
+            "Balefire\\Components\\BrandIconCards\\": "src/"
+        }
+    }
+}

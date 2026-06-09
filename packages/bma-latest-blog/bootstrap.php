@@ -1,0 +1,54 @@
+<?php
+/**
+ * Balefire/bma-latest-blog — bootstrap.
+ *
+ * Defines thin global function wrappers, registers the [latest_blog] and
+ * [bma_latest_blog] shortcodes, and wires vc_map on vc_before_init.
+ *
+ * Auto-loaded by Composer (autoload.files in composer.json).
+ *
+ * @package Balefire\Components\LatestBlog
+ */
+
+declare( strict_types=1 );
+
+defined( 'ABSPATH' ) || exit;
+
+if ( ! function_exists( 'bma_latest_blog_render' ) ) {
+	/**
+	 * Programmatic equivalent of do_shortcode('[latest_blog]').
+	 *
+	 * @param array $atts Shortcode attributes.
+	 * @return string HTML output.
+	 */
+	function bma_latest_blog_render( array $atts = array() ): string {
+		return \Balefire\Components\LatestBlog\LatestBlog::render( $atts );
+	}
+}
+
+if ( ! function_exists( 'bma_post_card' ) ) {
+	/**
+	 * Programmatic equivalent of including the legacy post-card partial.
+	 *
+	 * Echoes the card HTML for the current post in the loop (or the
+	 * optional $post_id). Same markup as the inline include in the
+	 * [bma_latest_blog] shortcode.
+	 *
+	 * @param int|null $post_id Post ID; null = current post.
+	 * @return string HTML output.
+	 */
+	function bma_post_card( ?int $post_id = null ): string {
+		return \Balefire\Components\LatestBlog\PostCard::render( $post_id, false );
+	}
+}
+
+add_action(
+	'plugins_loaded',
+	function (): void {
+		\Balefire\Components\LatestBlog\LatestBlog::register();
+		if ( function_exists( 'vc_map' ) ) {
+			add_action( 'vc_before_init', array( \Balefire\Components\LatestBlog\LatestBlog::class, 'vcMap' ) );
+		}
+	},
+	20
+);

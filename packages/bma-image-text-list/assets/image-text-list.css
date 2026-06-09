@@ -1,0 +1,80 @@
+/* ==========================================================================
+   BMA Image Text List — vanilla (no tw color tokens, no utility classes)
+   Source package: balefire/bma-image-text-list
+   ========================================================================== */
+
+.bma-image-text-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.bma-image-text-list--white {
+    color: #fff;
+}
+
+.bma-image-text-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+    .bma-image-text-item {
+        flex-direction: column;
+    }
+}
+
+.bma-image-text-item__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
+@media (max-width: 640px) {
+    .bma-image-text-item__inner {
+        flex-direction: column;
+    }
+}
+
+.bma-image-text-item--linked .bma-image-text-item__inner:hover {
+    text-decoration: underline;
+}
+
+.bma-image-text-item__media {
+    flex: 0 0 auto;
+    width: 120px;
+    margin: 0;
+}
+
+.bma-image-text-item__img {
+    display: block;
+    width: 120px;
+    height: auto;
+    border-radius: 0.5rem;
+}
+
+.bma-image-text-item__content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.bma-image-text-item__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.bma-image-text-item__body p {
+    margin: 0 0 0.5rem;
+}
+
+.bma-image-text-item__body p:last-child {
+    margin-bottom: 0;
+}

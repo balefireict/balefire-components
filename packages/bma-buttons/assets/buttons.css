@@ -1,0 +1,28 @@
+/* ==========================================================================
+   BMA Buttons — vanilla (no tw color tokens, no utility classes)
+   Source package: balefire/bma-buttons
+   Per project rule: rely on currentColor / inherit / explicit hex; do NOT
+   add --color-* token lookups. The .btn base styles are assumed to exist
+   in the consumer theme (balefire-base has its own button styles in
+   resources/css/wp-button-overrides.css). This file is the package-local
+   BEM wrapper that lays out the buttons group.
+   ========================================================================== */
+
+.bma-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.bma-buttons.justify-start {
+    justify-content: flex-start;
+}
+
+.bma-buttons.justify-center {
+    justify-content: center;
+}
+
+.bma-buttons.justify-end {
+    justify-content: flex-end;
+}

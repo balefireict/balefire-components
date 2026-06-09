@@ -1,0 +1,18 @@
+{
+    "name": "balefire/bma-buttons",
+    "description": "BMA Buttons shortcode - pair of buttons (primary/secondary) with style, size, arrow, and alignment. Vanilla CSS, [bma_buttons] shortcode + WPBakery vc_map.",
+    "type": "wordpress-library",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "files": [
+            "bootstrap.php"
+        ],
+        "psr-4": {
+            "Balefire\\Components\\Buttons\\": "src/"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "name": "balefire/bma-arrow",
+    "description": "Inline SVG arrow icon (chevron). Pure PHP, no CSS, no shortcode.",
+    "type": "wordpress-library",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "files": [
+            "bootstrap.php"
+        ],
+        "psr-4": {
+            "Balefire\\Components\\Arrow\\": "src/"
+        }
+    }
+}

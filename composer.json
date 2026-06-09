@@ -1,0 +1,91 @@
+{
+    "name": "balefire/components",
+    "description": "Balefire WordPress shortcode component monorepo - a collection of [bma_*] shortcode packages consumed by balefire-base and any derivative balefire theme.",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/bma-image-helper",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/bma-arrow",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/bma-href",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/bma-buttons",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/bma-image-text-list",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/bma-logo-grid",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/bma-brand-icon-cards",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/bma-latest-blog",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "balefire/bma-image-helper": "*",
+        "balefire/bma-arrow": "*",
+        "balefire/bma-href": "*",
+        "balefire/bma-buttons": "*",
+        "balefire/bma-image-text-list": "*",
+        "balefire/bma-logo-grid": "*",
+        "balefire/bma-brand-icon-cards": "*",
+        "balefire/bma-latest-blog": "*"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=phpcs.xml.dist packages/",
+        "phpcbf": "phpcbf --standard=phpcs.xml.dist packages/"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
