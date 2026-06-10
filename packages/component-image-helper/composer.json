@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-image-helper",
+    "description": "Image + SVG rendering helpers used by other bma_* shortcode packages. Pure PHP, no CSS, no shortcode.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\ImageHelper\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "image-helper",
+            "type": "helper",
+            "shortcode": null,
+            "css_class": null,
+            "owns_css": false
+        }
+    }
+}

@@ -8,71 +8,22 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./packages/bma-image-helper",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./packages/bma-arrow",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./packages/bma-href",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./packages/bma-buttons",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./packages/bma-image-text-list",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./packages/bma-logo-grid",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./packages/bma-brand-icon-cards",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./packages/bma-latest-blog",
+            "url": "./packages/*",
             "options": {
                 "symlink": true
             }
         }
     ],
     "require": {
-        "php": ">=8.2",
-        "balefire/bma-image-helper": "*",
-        "balefire/bma-arrow": "*",
-        "balefire/bma-href": "*",
-        "balefire/bma-buttons": "*",
-        "balefire/bma-image-text-list": "*",
-        "balefire/bma-logo-grid": "*",
-        "balefire/bma-brand-icon-cards": "*",
-        "balefire/bma-latest-blog": "*"
+        "php": ">=8.1",
+        "balefireict/component-image-helper": "dev-main",
+        "balefireict/component-arrow": "dev-main",
+        "balefireict/component-href": "dev-main",
+        "balefireict/component-buttons": "dev-main",
+        "balefireict/component-image-text-list": "dev-main",
+        "balefireict/component-logo-grid": "dev-main",
+        "balefireict/component-brand-icon-cards": "dev-main",
+        "balefireict/component-latest-blog": "dev-main"
     },
     "require-dev": {
         "wp-coding-standards/wpcs": "^3.0",

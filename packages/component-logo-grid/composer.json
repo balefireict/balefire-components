@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-logo-grid",
+    "description": "BMA Logo Grid - partner/client logo grid with configurable column count. Parent/child WPBakery container, vanilla CSS.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\LogoGrid\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "logo-grid",
+            "type": "scaffolding",
+            "shortcode": "bma_logo_grid",
+            "css_class": "bma-logo-grid",
+            "owns_css": true
+        }
+    }
+}
