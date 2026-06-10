@@ -1,13 +1,10 @@
 {
-    "name": "balefireict/balefire-components",
+    "name": "balefire/components",
     "description": "Balefire WordPress shortcode component monorepo - a collection of [bma_*] shortcode packages consumed by balefire-base and any derivative balefire theme.",
     "type": "project",
     "license": "MIT",
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "authors": [
-        { "name": "Balefire Marketing + Advertising", "homepage": "https://balefireagency.com" }
-    ],
     "repositories": [
         {
             "type": "path",
