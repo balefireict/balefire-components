@@ -21,13 +21,15 @@ const CSS_CLASS  = 'bma-c-template';
 const PACKAGE_DIR = __DIR__ . '/..'; // /vendor/balefireict/component-template
 
 // 1) ACF JSON load path (skip for scaffolding components with no acf-json/)
-\add_filter( 'acf/settings/load_json', static function ( array $paths ): array {
-    $candidate = realpath( PACKAGE_DIR . '/acf-json' );
-    if ( $candidate && is_dir( $candidate ) ) {
-        $paths[] = $candidate;
-    }
-    return $paths;
-} );
+if ( ! \defined( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) || \constant( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) ) {
+    \add_filter( 'acf/settings/load_json', static function ( array $paths ): array {
+        $candidate = realpath( PACKAGE_DIR . '/acf-json' );
+        if ( $candidate && is_dir( $candidate ) ) {
+            $paths[] = $candidate;
+        }
+        return $paths;
+    } );
+}
 
 // 2) Shortcode
 \add_action( 'init', static function (): void {

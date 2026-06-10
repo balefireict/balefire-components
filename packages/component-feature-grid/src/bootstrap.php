@@ -33,7 +33,9 @@ const SHORTCODE = 'bma_feature_grid';
 } );
 
 // Register ACF JSON load path.
-\add_filter( 'acf/settings/load_json', static function ( array $paths ): array {
-    $paths[] = __DIR__ . '/../acf-json';
-    return $paths;
-} );
+if ( ! \defined( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) || \constant( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) ) {
+    \add_filter( 'acf/settings/load_json', static function ( array $paths ): array {
+        $paths[] = __DIR__ . '/../acf-json';
+        return $paths;
+    } );
+}
