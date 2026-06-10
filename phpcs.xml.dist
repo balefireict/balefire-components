@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<ruleset name="Balefire Components">
+    <description>WordPress coding standards for the balefire-components monorepo.</description>
+
+    <!-- WPCS + PHPCompatibilityWP -->
+    <!-- installed_paths is auto-configured by dealerdirect/phpcodesniffer-composer-installer -->
+    <rule ref="WordPress"/>
+    <rule ref="WordPress-Extra"/>
+    <rule ref="PHPCompatibilityWP"/>
+
+    <!-- PHP 8.2+ -->
+    <config name="testVersion" value="8.2-"/>
+
+    <!-- Allow short array syntax -->
+    <rule ref="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+
+    <!-- File naming: PSR-4 (StudlyCaps for class files, lowercase for bootstrap / assets) -->
+    <rule ref="WordPress.Files.FileName.InvalidClassFileName">
+        <exclude-pattern>*/bootstrap.php</exclude-pattern>
+    </rule>
+
+    <!-- Bootstrap files are auto-loaded by Composer; they call add_shortcode/add_action
+         at the global scope, so the "exit if accessed directly" sniff is unnecessary. -->
+    <rule ref="WordPress.Security.NonceVerification">
+        <exclude-pattern>*/bootstrap.php</exclude-pattern>
+    </rule>
+
+    <!-- The renderers do their own escaping. Don't double-escape shortcode output. -->
+    <rule ref="WordPress.Security.EscapeOutput">
+        <exclude-pattern>*/bootstrap.php</exclude-pattern>
+    </rule>
+
+    <!-- Ignore vendor + node_modules -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/dist/*</exclude-pattern>
+
+    <!-- PSR-4 mode: class files in src/ follow PSR-4 (StudlyCaps filename == class
+         name, camelCase methods). WordPress-Core defaults enforce snake_case file
+         names + snake_case methods — none of which apply to PSR-4. These
+         exclusions are scoped to src/ only; bootstrap.php and any procedural
+         helpers still follow WP conventions. -->
+    <rule ref="WordPress.Files.FileName.InvalidClassFileName">
+        <exclude-pattern>*/src/*.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Files.FileName.NotHyphenated">
+        <exclude-pattern>*/src/*.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+        <exclude-pattern>*/src/*.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
+        <exclude-pattern>*/src/*.php</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Classes.ClassFileName">
+        <exclude-pattern>*/src/*.php</exclude-pattern>
+    </rule>
+</ruleset>

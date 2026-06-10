@@ -1,0 +1,44 @@
+/* ==========================================================================
+   BMA Logo Grid — vanilla (no tw color tokens, no utility classes)
+   Source package: balefire/bma-logo-grid
+   Column count is read from data-cols on the wrapper. No dynamic class
+   needed in markup — the CSS handles all variants.
+   ========================================================================== */
+
+.bma-logo-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--bma-cols, 5), minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: center;
+    justify-items: center;
+}
+
+.bma-logo-grid[data-cols="1"] { --bma-cols: 1; }
+.bma-logo-grid[data-cols="2"] { --bma-cols: 2; }
+.bma-logo-grid[data-cols="3"] { --bma-cols: 3; }
+.bma-logo-grid[data-cols="4"] { --bma-cols: 4; }
+.bma-logo-grid[data-cols="5"] { --bma-cols: 5; }
+.bma-logo-grid[data-cols="6"] { --bma-cols: 6; }
+
+.bma-logo-grid-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.bma-logo-grid-item__img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 4rem;
+    width: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .bma-logo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .bma-logo-grid[data-cols="1"] { grid-template-columns: 1fr; }
+}

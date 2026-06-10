@@ -1,10 +1,29 @@
-node_modules/
-vendor/
+# Composer — each package has its own vendor/ when required standalone
+**/vendor/
+**/composer.lock
+
+# Build outputs
+**/dist/
+**/build/
+**/*.min.css
+**/*.min.js
+
+# Node
+**/node_modules/
+**/package-lock.json
+**/pnpm-lock.yaml
+**/yarn.lock
+
+# OS
 .DS_Store
-.idea/
+Thumbs.db
+
+# Editor
 .vscode/
+.idea/
 *.swp
 *.swo
-*~
-composer.lock
-.phpunit.result.cache
+
+# Local env
+.env
+.env.local
