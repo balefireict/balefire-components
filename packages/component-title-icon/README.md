@@ -5,7 +5,9 @@ WPBakery/shortcode component for an icon + title row with supporting paragraph b
 Shortcode:
 
 ```
-[bma_title_icon title="Premium Charters" text="Philadelphia’s most professional and seamless charter bus experience."]
+[bma_title_icon icon_id="123" title="Premium Charters" text="Philadelphia’s most professional and seamless charter bus experience."]
 ```
+
+`icon_id` is a Media Library attachment ID. Leave it empty to use the built-in fallback SVG.
 
 CSS is owned by `src/style.css` and consumed through the theme bundle.

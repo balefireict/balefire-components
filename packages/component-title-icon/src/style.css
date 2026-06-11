@@ -35,10 +35,15 @@
 	height: var(--bma-title-icon-icon-height, 36px);
 }
 
-.bma-title-icon__svg {
+.bma-title-icon__svg,
+.bma-title-icon__img {
 	display: block;
 	width: 100%;
 	height: 100%;
+}
+
+.bma-title-icon__img {
+	object-fit: contain;
 }
 
 .bma-title-icon__title {

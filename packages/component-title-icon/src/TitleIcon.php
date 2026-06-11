@@ -40,6 +40,7 @@ final class TitleIcon {
 				'title'          => 'Premium Charters',
 				'text'           => 'Philadelphia’s most professional and seamless charter bus experience.',
 				'tag'            => 'h2',
+				'icon_id'        => '',
 				'align'          => 'center',
 				'max_width'      => '598px',
 				'icon_width'     => '40px',
@@ -83,7 +84,7 @@ final class TitleIcon {
 		<div class="<?php echo $classes; ?>" style="<?php echo $style; ?>">
 			<?php if ( '' !== $title ) : ?>
 				<div class="bma-title-icon__heading-row">
-					<span class="bma-title-icon__icon" aria-hidden="true"><?php echo self::renderIconSvg(); ?></span>
+					<?php echo self::renderIcon( (string) $atts['icon_id'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<<?php echo esc_html( $tag ); ?> class="bma-title-icon__title"><?php echo esc_html( $title ); ?></<?php echo esc_html( $tag ); ?>>
 				</div>
 			<?php endif; ?>
@@ -93,6 +94,41 @@ final class TitleIcon {
 		</div>
 		<?php
 		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Render the selected media-library icon, falling back to the built-in SVG.
+	 *
+	 * @param string $icon_id Attachment ID from WPBakery attach_image.
+	 * @return string Icon markup.
+	 */
+	private static function renderIcon( string $icon_id ): string {
+		$attachment_id = absint( $icon_id );
+		if ( $attachment_id > 0 ) {
+			$image = wp_get_attachment_image(
+				$attachment_id,
+				'full',
+				false,
+				array(
+					'class'       => 'bma-title-icon__img',
+					'alt'         => '',
+					'aria-hidden' => 'true',
+				)
+			);
+
+			if ( is_string( $image ) && '' !== $image ) {
+				return '<span class="bma-title-icon__icon" aria-hidden="true">' . $image . '</span>';
+			}
+
+			$url = wp_get_attachment_url( $attachment_id );
+			if ( is_string( $url ) && '' !== $url ) {
+				return '<span class="bma-title-icon__icon" aria-hidden="true">'
+					. '<img class="bma-title-icon__img" src="' . esc_url( $url ) . '" alt="" aria-hidden="true" />'
+					. '</span>';
+			}
+		}
+
+		return '<span class="bma-title-icon__icon" aria-hidden="true">' . self::renderIconSvg() . '</span>';
 	}
 
 	/**
@@ -148,6 +184,12 @@ final class TitleIcon {
 							'H4' => 'h4',
 						),
 						'std'        => 'h2',
+					),
+					array(
+						'type'        => 'attach_image',
+						'heading'     => __( 'Icon', 'balefire' ),
+						'param_name'  => 'icon_id',
+						'description' => __( 'Choose an icon from the Media Library. Leave empty to use the default icon.', 'balefire' ),
 					),
 					array(
 						'type'       => 'dropdown',
@@ -236,6 +278,7 @@ final class TitleIcon {
 		\Balefire\Component\BakeryPreview\Preview::registerElementClass(
 			'WPBakeryShortCode_BMA_TitleIcon',
 			array(
+				'image' => 'icon_id',
 				'title' => 'title',
 				'text'  => 'text',
 			)
