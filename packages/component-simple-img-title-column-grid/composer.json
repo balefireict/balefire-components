@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-simple-img-title-column-grid",
+    "description": "BMA Simple Image Title Column Grid - image tiles with bottom titles and a full color overlay hover state. Parent/child WPBakery container, vanilla CSS.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\SimpleImgTitleColumnGrid\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "simple-img-title-column-grid",
+            "type": "scaffolding",
+            "shortcode": "bma_simple_img_title_column_grid",
+            "css_class": "bma-simple-img-title-column-grid",
+            "owns_css": true
+        }
+    }
+}

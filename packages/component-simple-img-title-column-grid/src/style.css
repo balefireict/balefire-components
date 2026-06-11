@@ -1,0 +1,123 @@
+/**
+ * balefireict/component-simple-img-title-column-grid.
+ *
+ * Image tiles based on David Tours layouts/sections/simple-img-title-column-grid.svg:
+ * default state = image with bottom black gradient/title; hover/focus state =
+ * full #84081c color overlay with centered title.
+ *
+ * The wrapper also emits bma-auto-grid / auto-grid-* classes. Those shared grid
+ * utilities are owned by component-auto-grid; this file owns the tile styling.
+ */
+
+.bma-simple-img-title-column-grid {
+    --bma-simple-img-title-column-grid-card-radius: 5px;
+    --bma-simple-img-title-column-grid-card-height: 235px;
+    --bma-simple-img-title-column-grid-title-color: #ffffff;
+    --bma-simple-img-title-column-grid-hover-overlay: #84081c;
+    --bma-simple-img-title-column-grid-default-overlay: rgba(0, 0, 0, 0.5);
+    --bma-simple-img-title-column-grid-shadow: 0 0 25px rgba(255, 255, 255, 0.37);
+}
+
+.bma-simple-img-title-column-grid__item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    min-height: var(--bma-simple-img-title-column-grid-card-height);
+    border-radius: var(--bma-simple-img-title-column-grid-card-radius);
+    background-color: #000000;
+    box-shadow: var(--bma-simple-img-title-column-grid-shadow);
+    color: var(--bma-simple-img-title-column-grid-title-color);
+    isolation: isolate;
+    text-decoration: none;
+}
+
+.bma-simple-img-title-column-grid__item:hover,
+.bma-simple-img-title-column-grid__item:focus-visible {
+    color: var(--bma-simple-img-title-column-grid-title-color);
+    text-decoration: none;
+}
+
+.bma-simple-img-title-column-grid__media,
+.bma-simple-img-title-column-grid__img,
+.bma-simple-img-title-column-grid__shade {
+    position: absolute;
+    inset: 0;
+}
+
+.bma-simple-img-title-column-grid__media {
+    z-index: 0;
+}
+
+.bma-simple-img-title-column-grid__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 350ms ease;
+}
+
+.bma-simple-img-title-column-grid__shade {
+    z-index: 1;
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0) 52%, rgba(0, 0, 0, 0.84) 100%),
+        var(--bma-simple-img-title-column-grid-default-overlay);
+    opacity: 1;
+    transition:
+        background-color 350ms ease,
+        opacity 350ms ease;
+}
+
+.bma-simple-img-title-column-grid__title {
+    position: absolute;
+    z-index: 2;
+    inset-inline: 1.25rem;
+    bottom: 1.15rem;
+    display: grid;
+    place-items: center;
+    min-height: 2.25rem;
+    color: var(--bma-simple-img-title-column-grid-title-color);
+    font-family:
+        Montserrat,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-align: center;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.65);
+    transition:
+        inset 350ms ease,
+        font-size 350ms ease,
+        text-shadow 350ms ease;
+}
+
+.bma-simple-img-title-column-grid__item:hover .bma-simple-img-title-column-grid__img,
+.bma-simple-img-title-column-grid__item:focus-visible .bma-simple-img-title-column-grid__img,
+.bma-simple-img-title-column-grid__item:focus-within .bma-simple-img-title-column-grid__img {
+    transform: scale(1.035);
+}
+
+.bma-simple-img-title-column-grid__item:hover .bma-simple-img-title-column-grid__shade,
+.bma-simple-img-title-column-grid__item:focus-visible .bma-simple-img-title-column-grid__shade,
+.bma-simple-img-title-column-grid__item:focus-within .bma-simple-img-title-column-grid__shade {
+    background: var(--bma-simple-img-title-column-grid-hover-overlay);
+    opacity: 0.7;
+}
+
+.bma-simple-img-title-column-grid__item:hover .bma-simple-img-title-column-grid__title,
+.bma-simple-img-title-column-grid__item:focus-visible .bma-simple-img-title-column-grid__title,
+.bma-simple-img-title-column-grid__item:focus-within .bma-simple-img-title-column-grid__title {
+    inset-block: 0;
+    font-size: 30px;
+    text-shadow: none;
+}
+
+@media (max-width: 781px) {
+    .bma-simple-img-title-column-grid__item {
+        min-height: 210px;
+    }
+}
