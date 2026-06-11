@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-simple-image-card",
+    "description": "BMA Simple Image Card - image-top card grid (parent container + child card). Parent/child WPBakery container, vanilla CSS.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\SimpleImageCard\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "simple-image-card",
+            "type": "scaffolding",
+            "shortcode": "bma_simple_image_card_grid",
+            "css_class": "bma-simple-image-card",
+            "owns_css": true
+        }
+    }
+}

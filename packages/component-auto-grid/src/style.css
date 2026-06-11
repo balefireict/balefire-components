@@ -1,0 +1,110 @@
+/* ================================================================
+ * balefireict/component-auto-grid — src/style.css
+ *
+ * Shared responsive grid utilities used by several rockerbox card
+ * shortcodes (simple-card, steps, card-stat, team-member-centered,
+ * simple-image-card). Ported from balefire theme resources/css
+ * (sections.css auto-grid block + global.css / custom.css).
+ *
+ * Markup pattern (Tailwind utilities removed, semantic classes kept):
+ *   <div class="bma-auto-grid auto-grid-gap-6 auto-grid-cols-1 lg:auto-grid-cols-3">
+ *     <div> ...card... </div>
+ *   </div>
+ *
+ * The wrapper is a flex-wrap row that centers the last (orphan) row;
+ * .auto-grid-cols-N sets each child's flex-basis (width) per breakpoint,
+ * and .auto-grid-gap-N sets the inter-item gap via --auto-grid-gap.
+ *
+ * No Tailwind color/space tokens are referenced. Gap defaults are
+ * explicit rem values so the grid works standalone.
+ * ================================================================ */
+
+/* ---- Base wrapper: flex-wrap with centered last row ---- */
+/* In the rockerbox markup the flex/justify/gap came from Tailwind
+   utilities (flex flex-wrap justify-center gap-6). Those utilities are
+   stripped in the ported markup, so reproduce them here on the semantic
+   class. The gap mirrors --auto-grid-gap so cols math and visual gap match. */
+.bma-auto-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--auto-grid-gap, 1.5rem);
+    overflow: visible;
+}
+
+/* ---- Gap tokens ---- */
+.auto-grid-gap-5 {
+    --auto-grid-gap: 1.25rem;
+}
+.auto-grid-gap-6 {
+    --auto-grid-gap: 1.5rem;
+}
+.auto-grid-gap-12 {
+    --auto-grid-gap: 3rem;
+}
+
+/* ---- Base / mobile-up column counts ---- */
+/* Each child's width = (100% minus the gaps) / N so N items fit per row. */
+.auto-grid-cols-1 > :where(*) {
+    width: 100%;
+}
+.auto-grid-cols-2 > :where(*) {
+    width: calc((100% - var(--auto-grid-gap, 1.5rem)) / 2);
+}
+.auto-grid-cols-3 > :where(*) {
+    width: calc((100% - var(--auto-grid-gap, 1.5rem) * 2) / 3);
+}
+.auto-grid-cols-4 > :where(*) {
+    width: calc((100% - var(--auto-grid-gap, 1.5rem) * 3) / 4);
+}
+.auto-grid-cols-5 > :where(*) {
+    width: calc((100% - var(--auto-grid-gap, 1.5rem) * 4) / 5);
+}
+.auto-grid-cols-6 > :where(*) {
+    width: calc((100% - var(--auto-grid-gap, 1.5rem) * 5) / 6);
+}
+
+/* ---- Responsive: md (782px) ---- */
+@media (min-width: 782px) {
+    .md\:auto-grid-cols-1 > :where(*) {
+        width: 100%;
+    }
+    .md\:auto-grid-cols-2 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem)) / 2);
+    }
+    .md\:auto-grid-cols-3 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 2) / 3);
+    }
+    .md\:auto-grid-cols-4 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 3) / 4);
+    }
+    .md\:auto-grid-cols-5 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 4) / 5);
+    }
+    .md\:auto-grid-cols-6 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 5) / 6);
+    }
+}
+
+/* ---- Responsive: lg (960px) ---- */
+@media (min-width: 960px) {
+    .lg\:auto-grid-cols-1 > :where(*) {
+        width: 100%;
+    }
+    .lg\:auto-grid-cols-2 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem)) / 2);
+    }
+    .lg\:auto-grid-cols-3 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 2) / 3);
+    }
+    .lg\:auto-grid-cols-4 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 3) / 4);
+    }
+    .lg\:auto-grid-cols-5 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 4) / 5);
+    }
+    .lg\:auto-grid-cols-6 > :where(*) {
+        width: calc((100% - var(--auto-grid-gap, 1.5rem) * 5) / 6);
+    }
+}

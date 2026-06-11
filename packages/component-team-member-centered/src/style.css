@@ -1,0 +1,56 @@
+/**
+ * balefireict/component-team-member-centered — card internals.
+ *
+ * Ported from the Tailwind utilities on the rockerbox
+ * inc/shortcodes/bma-team-member-centered.php member markup:
+ *   card    : flex flex-col items-center gap-2.5
+ *   media   : w-full overflow-hidden rounded-full
+ *   img     : block w-full h-auto object-cover object-center
+ *   content : flex flex-col items-center gap-0.5 text-center
+ *   name    : mt-2 font-semibold text-black
+ *   role    : m-0 text-[15px]
+ *
+ * The parent grid markup keeps the bma-auto-grid / auto-grid-cols-N /
+ * auto-grid-gap-N classes — that CSS is owned by component-auto-grid and is
+ * intentionally NOT defined here.
+ */
+
+.bma-team-member-centered {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.625rem; /* gap-2.5 */
+}
+
+.bma-team-member-centered__media {
+	width: 100%;
+	overflow: hidden;
+	border-radius: 9999px; /* rounded-full */
+}
+
+.bma-team-member-centered__img {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	object-position: center;
+}
+
+.bma-team-member-centered__content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.125rem; /* gap-0.5 */
+	text-align: center;
+}
+
+.bma-team-member-centered__name {
+	margin-top: 0.5rem; /* mt-2 */
+	font-weight: 600; /* font-semibold */
+	color: #000; /* text-black */
+}
+
+.bma-team-member-centered__role {
+	margin: 0; /* m-0 */
+	font-size: 15px; /* text-[15px] */
+}

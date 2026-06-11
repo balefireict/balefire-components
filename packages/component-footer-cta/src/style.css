@@ -1,0 +1,76 @@
+/**
+ * balefireict/component-footer-cta — styles.
+ *
+ * Ported from rockerbox balefire theme resources/css/sections.css
+ * (section "13. CTA SECTION"). Covers the centered CTA content block:
+ * inner wrapper, preheader, title, content, and the button actions row.
+ *
+ * NOTE: the wrapping row (e.g. .bma-bg-gradient / .bma-bg-dark) is supplied
+ * by the WPBakery vc_row that contains [bma_footer_cta], not by this package.
+ * The contextual overrides below are kept so the component degrades correctly
+ * when placed inside those backgrounds. Page-specific
+ * #cta-green-gradient rules stay in the theme.
+ *
+ * Consumers import this file from:
+ *   ~/vendor/balefireict/component-footer-cta/src/style.css
+ */
+
+.bma-cta {
+    text-align: center;
+}
+
+.bma-cta__inner {
+    max-width: 48rem;
+    margin-inline: auto;
+}
+
+.bma-cta__preheader {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: currentColor;
+    margin-block-end: auto;
+    padding-block-end: 0.5rem;
+}
+
+.bma-bg-gradient .bma-cta__preheader {
+    color: #fff;
+    opacity: 0.85;
+}
+
+.bma-cta__title {
+    font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-block-end: 1rem;
+}
+
+.bma-cta__content {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: #6b7280;
+    margin-block-end: 2rem;
+}
+
+.bma-bg-dark .bma-cta__content,
+.bma-bg-gradient .bma-cta__content {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Button actions row. Replaces the Tailwind utilities
+   (flex flex-col items-center justify-center gap-4 sm:flex-row) that were
+   on the button wrapper in the rockerbox markup. */
+.bma-cta__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 40rem) {
+    .bma-cta__actions {
+        flex-direction: row;
+    }
+}

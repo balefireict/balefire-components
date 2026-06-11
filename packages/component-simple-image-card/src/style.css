@@ -1,0 +1,40 @@
+/**
+ * balefireict/component-simple-image-card — card internals.
+ *
+ * Ported from rockerbox balefire theme resources/css/sections.css
+ * (.bma-simple-image-card rules) plus the inline Tailwind utilities the
+ * shortcode markup carried.
+ *
+ * NOTE: the parent grid emits bma-auto-grid / auto-grid-* classes whose CSS is
+ * owned by the component-auto-grid package — intentionally not defined here.
+ */
+
+.bma-simple-image-card {
+	overflow: hidden;
+	border-radius: var(--radius-card, 0.5rem);
+	background-color: #ffffff;
+	border: solid 2px rgba(0, 0, 0, 0.1);
+}
+
+.bma-simple-image-card__media {
+	width: 100%;
+}
+
+.bma-simple-image-card__img {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+.bma-simple-image-card__content {
+	padding: var(--spacing-card, 1.5rem);
+}
+
+.bma-simple-image-card__title {
+	color: #000000;
+	font-size: 20px;
+	min-height: 60px;
+	line-height: 1.2;
+	margin-block-start: 0.5rem;
+}

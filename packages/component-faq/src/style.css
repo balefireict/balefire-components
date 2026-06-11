@@ -1,0 +1,92 @@
+/* ---------------------------------------------------------------------------
+   BMA FAQ accordion
+   Ported from rockerbox balefire theme: resources/css/sections.css (section 14).
+   --------------------------------------------------------------------------- */
+
+.bma-faq__list {
+    max-width: 48rem;
+    margin-inline: auto;
+}
+
+.bma-faq__item {
+    border-bottom: 1px solid #d6d6d6;
+}
+
+.bma-faq__item:first-child {
+    border-top: 1px solid #d6d6d6;
+}
+
+.bma-faq__item--no-borders,
+.bma-faq__item--no-borders:first-child {
+    border: 0;
+}
+
+.bma-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.25rem 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+    list-style: none;
+    background: none;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+}
+
+/* Remove default marker */
+.bma-faq__question::-webkit-details-marker {
+    display: none;
+}
+
+.bma-faq__question::marker {
+    content: "";
+}
+
+/* Custom chevron indicator */
+.bma-faq__question::after {
+    content: "+";
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1;
+    width: 1rem;
+    text-align: center;
+    transition: transform 0.25s ease;
+}
+
+/* Open state — plus becomes minus */
+.bma-faq__item[open] > .bma-faq__question::after {
+    content: "\2212"; /* minus sign */
+    transform: none;
+}
+
+.bma-faq__answer {
+    padding-block-end: 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: #6b7280;
+}
+
+.bma-bg-dark .bma-faq__item {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.bma-bg-dark .bma-faq__answer {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* FAQ no-borders variant (style="no-borders" on [bma_faq]) */
+.bma-faq__item--no-borders {
+    border: 0;
+}
+
+.bma-faq__item--no-borders:first-child {
+    border-top: 0;
+}

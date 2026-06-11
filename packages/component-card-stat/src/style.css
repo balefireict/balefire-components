@@ -1,0 +1,97 @@
+/**
+ * balefireict/component-card-stat — vanilla CSS.
+ *
+ * Ported from rockerbox resources/css/sections.css (.bma-card-stat block) plus
+ * the Tailwind utilities stripped from the markup (flex items-end
+ * justify-between gap-3, grid grid-cols-2 gap-4, flex flex-col gap-4,
+ * rounded-lg, shrink-0, block, h-12 w-auto object-contain).
+ *
+ * NOTE: the parent grid emits bma-auto-grid / auto-grid-* classes whose CSS is
+ * owned by component-auto-grid — not defined here.
+ */
+
+.bma-card-stat {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	background: var(--white, #fff);
+	border: 2px solid #e5e7eb;
+	border-radius: 0.5rem;
+	padding: 2rem 1.5rem;
+}
+
+.bma-card-stat--white {
+	background: var(--white, #fff);
+}
+
+.bma-card-stat--dark {
+	background: #272727;
+	border-color: color-mix(in srgb, var(--white, #fff) 16%, transparent);
+	color: var(--white, #fff);
+}
+
+.bma-card-stat__head {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.bma-card-stat__title {
+	font-size: 24px;
+	font-family: var(--font-1, inherit);
+	font-weight: 700;
+	color: #6dbe45;
+	margin-block: 0;
+	padding-block: 0;
+}
+
+.bma-card-stat__icon {
+	display: flex;
+	flex-shrink: 0;
+	align-items: flex-end;
+	justify-content: flex-end;
+	margin-inline-start: auto;
+}
+
+.bma-card-stat__icon svg,
+.bma-card-stat__icon img,
+.bma-card-stat__img {
+	display: block;
+	color: #6dbe45;
+	width: auto;
+	max-width: 3.5rem;
+	max-height: 3.5rem;
+	object-fit: contain;
+}
+
+.bma-card-stat__stats {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+.bma-card-stat__value {
+	display: block;
+	font-family: var(--font-1, inherit);
+	font-weight: 700;
+	color: var(--black, #000);
+}
+
+.bma-card-stat__label {
+	display: block;
+	color: #6b7280;
+}
+
+.bma-card-stat--dark .bma-card-stat__title,
+.bma-card-stat--dark .bma-card-stat__value {
+	color: var(--white, #fff);
+}
+
+.bma-card-stat--dark .bma-card-stat__label {
+	color: color-mix(in srgb, var(--white, #fff) 72%, transparent);
+}
+
+.bma-card-stat--dark .bma-card-stat__icon svg {
+	color: var(--white, #fff);
+}

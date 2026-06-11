@@ -1,0 +1,71 @@
+/**
+ * balefireict/component-steps — card styles.
+ *
+ * Owns ONLY the .simple-steps-card internals. The grid container classes
+ * (.bma-auto-grid / .auto-grid-cols-N / .auto-grid-gap-6) are owned by
+ * component-auto-grid and are intentionally NOT styled here.
+ *
+ * Ported from rockerbox theme resources/css/sections.css ("Simple Steps Card").
+ * Tailwind utility classes that the original markup carried (flex, flex-col,
+ * items-stretch, text-center, rounded-[...]) are reproduced here in vanilla CSS.
+ * Theme spacing/color tokens are replaced with explicit values exposed as
+ * component-scoped custom properties with standalone fallbacks.
+ */
+
+.simple-steps-card {
+	/* Layout reproduced from the removed Tailwind utilities. */
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	text-align: center;
+	align-self: stretch;
+	border-radius: var(--radius-card, 0.5rem);
+
+	/* padding: var(--space-m) var(--space-s); */
+	padding: var(--steps-card-pad-block, 1.6875rem) var(--steps-card-pad-inline, 1.125rem);
+	background-color: #ffffff20;
+	border: solid 3px var(--steps-card-border-color, #65d0e2);
+}
+
+/* On an aqua section background the border switches to white. */
+.bg-aqua .simple-steps-card {
+	border-color: #ffffff;
+}
+
+/* Content block fills the card; title + body sit together at the top in
+   natural flow. Cards stay equal height via the grid's stretch alignment. */
+.simple-steps-card .simple-steps-card__content {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.simple-steps-card .simple-steps-card__content h3.wp-block-heading {
+	font-size: 22px;
+	font-weight: 700;
+	color: var(--steps-heading-color, #000000);
+	margin-block-start: var(--steps-space-s, 1.125rem);
+	margin-block-end: 0;
+	padding-block-end: var(--steps-space-2xs, 0.5625rem);
+}
+
+.simple-steps-card__icon {
+	margin: var(--steps-space-xs, 0.875rem) auto auto;
+}
+
+/* Inline SVG / image icon sizing (markup carried w-24 h-24 object-contain). */
+.simple-steps-card__icon svg,
+.simple-steps-card__icon img.simple-steps-card__img {
+	width: 6rem;
+	height: 6rem;
+	object-fit: contain;
+}
+
+.simple-steps-card .simple-steps-card__content p.wp-block-paragraph {
+	font-size: 18px;
+	line-height: 1.5;
+	padding-block-start: 0;
+	padding-block-end: var(--steps-space-m, 1.6875rem);
+	padding-inline: var(--steps-space-2xs, 0.5625rem);
+	max-width: 26ch;
+}

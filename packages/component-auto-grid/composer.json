@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-auto-grid",
+    "description": "BMA Auto Grid - shared responsive flex-wrap grid utility classes (bma-auto-grid / auto-grid-cols-N / auto-grid-gap-N) used by several rockerbox card shortcodes. CSS-only utility package, vanilla CSS, registers no shortcode.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\AutoGrid\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "auto-grid",
+            "type": "scaffolding",
+            "shortcode": null,
+            "css_class": "bma-auto-grid",
+            "owns_css": true
+        }
+    }
+}

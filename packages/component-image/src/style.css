@@ -1,0 +1,115 @@
+/* ---------------------------------------------------------------------------
+   balefireict/component-image — BMA Image
+   Single image in a <figure> with fit, crop, aspect ratio, and rounded
+   corner controls. Ported from rockerbox inc/shortcodes/bma-image-text.php
+   and the .bma-image rule in resources/css/sections.css.
+   --------------------------------------------------------------------------- */
+
+.bma-image {
+	display: block;
+	margin: 0;
+	/* rockerbox sections.css: margin-block-end: var(--space-m-l) (fluid ~2rem). */
+	margin-block-end: var(--bma-image-gap, 2rem);
+}
+
+/* Base image — replaces Tailwind w-full / h-auto. */
+.bma-image__img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+/* When the figure carries an aspect-ratio modifier, the image fills it. */
+.bma-image[class*="bma-image--aspect-"] .bma-image__img {
+	width: 100%;
+	height: 100%;
+}
+
+/* ---- Object fit (object-fit) ---- */
+.bma-image__img.bma-image--cover {
+	object-fit: cover;
+}
+
+.bma-image__img.bma-image--contain {
+	object-fit: contain;
+}
+
+.bma-image__img.bma-image--fill {
+	object-fit: fill;
+}
+
+.bma-image__img.bma-image--fit-none {
+	object-fit: none;
+}
+
+/* ---- Crop position (object-position) ---- default is center ---- */
+.bma-image__img.bma-image--crop-top-left {
+	object-position: left top;
+}
+
+.bma-image__img.bma-image--crop-top {
+	object-position: center top;
+}
+
+.bma-image__img.bma-image--crop-top-right {
+	object-position: right top;
+}
+
+.bma-image__img.bma-image--crop-left {
+	object-position: left center;
+}
+
+.bma-image__img.bma-image--crop-right {
+	object-position: right center;
+}
+
+.bma-image__img.bma-image--crop-bottom-left {
+	object-position: left bottom;
+}
+
+.bma-image__img.bma-image--crop-bottom {
+	object-position: center bottom;
+}
+
+.bma-image__img.bma-image--crop-bottom-right {
+	object-position: right bottom;
+}
+
+/* ---- Aspect ratio (aspect-ratio) ---- applied to the figure ---- */
+.bma-image--aspect-auto {
+	aspect-ratio: auto;
+}
+
+.bma-image--aspect-square {
+	aspect-ratio: 1 / 1;
+}
+
+.bma-image--aspect-video {
+	aspect-ratio: 16 / 9;
+}
+
+.bma-image--aspect-4-3 {
+	aspect-ratio: 4 / 3;
+}
+
+.bma-image--aspect-3-4 {
+	aspect-ratio: 3 / 4;
+}
+
+.bma-image--aspect-16-9 {
+	aspect-ratio: 16 / 9;
+}
+
+.bma-image--aspect-21-9 {
+	aspect-ratio: 21 / 9;
+}
+
+/* ---- Rounded corners ---- */
+.bma-image--rounded {
+	overflow: hidden;
+	border-radius: var(--radius-card, 0.5rem);
+}
+
+.bma-image--rounded .bma-image__img {
+	border-radius: inherit;
+}

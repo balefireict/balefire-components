@@ -1,0 +1,159 @@
+/**
+ * balefireict/component-case-study-compare — styles.
+ *
+ * Ported from rockerbox resources/css/sections.css
+ * (.bma-case-study-compare, .bma-card-icon-break, .icon-bg) and
+ * utilities.css (icon-breathe animation, scoped here).
+ *
+ * Tailwind utility classes were removed from the markup; this reproduces the
+ * same visual result in vanilla CSS. No Tailwind color/space tokens are used;
+ * component-scoped custom properties carry explicit fallbacks so the component
+ * works standalone.
+ */
+
+/* ── Wrapper ─────────────────────────────────────────────────────── */
+.bma-case-study-compare {
+	margin-block: 2.5rem;
+	margin-inline: auto;
+	max-width: 675px;
+}
+
+.bma-case-study-compare h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-block-end: auto;
+	padding-block-end: 0.5rem;
+}
+
+/* ── Card-break variant ──────────────────────────────────────────── */
+.bma-case-study-compare--card-break {
+	max-width: 760px;
+	margin-block: 5rem 3rem;
+	overflow: visible;
+}
+
+.bma-case-study-compare--card-break .bma-case-study-compare__cards {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 1.5rem;
+	align-items: stretch;
+	overflow: visible;
+}
+
+/* ── Cards (inlined icon-card "break" variant) ───────────────────── */
+.bma-case-study-compare .bma-card-icon-break {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 2.5rem 1rem 1.5rem;
+	background-color: var(--white, #fff);
+	border-radius: var(--radius-card, 0.75rem);
+	border: 0.109rem solid #99dbbd;
+	text-align: center;
+	width: 100%;
+	max-width: none;
+	min-height: 205px;
+	margin-block-end: 0;
+}
+
+.bma-case-study-compare .bma-card-icon-break:hover {
+	box-shadow: var(--shadow-card, 0 1px 3px rgb(0 0 0 / 0.06));
+}
+
+.bma-case-study-compare .bma-card-icon-break__icon {
+	position: absolute;
+	top: -3.125rem;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1;
+}
+
+/* Circular gradient badge behind the icon (was Tailwind
+   `icon-bg rounded-full h-24 w-24 flex items-center justify-center`). */
+.bma-case-study-compare .icon-bg {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 6rem;
+	width: 6rem;
+	border-radius: 9999px;
+	background: linear-gradient(130deg, #b6e3cf 30%, #7fcfa8 70%);
+}
+
+.bma-case-study-compare--card-break .bma-card-icon-break__icon .icon-bg :is(img, svg) {
+	width: 4rem;
+	height: 4rem;
+	max-width: 4rem;
+	object-fit: contain;
+}
+
+.bma-case-study-compare--card-break .bma-card-icon-break__content {
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.bma-case-study-compare--card-break .bma-card-icon-break h3 {
+	color: #405be3;
+	font-size: var(--text-lg, 1.125rem);
+	font-weight: 700;
+	line-height: 1.1;
+	margin-block: 0.5rem 0.5rem;
+	padding-block-end: 0;
+}
+
+.bma-case-study-compare--card-break .bma-card-icon-break p {
+	margin: 0;
+	color: #333;
+	font-size: var(--text-base, 0.95rem);
+	line-height: 1.5;
+}
+
+/* ── Transition arrow ────────────────────────────────────────────── */
+.bma-case-study-compare--card-break .bma-case-study-compare__arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	transform: rotate(90deg);
+	margin-block: -0.5rem;
+}
+
+.bma-case-study-compare--card-break .bma-case-study-compare__arrow-svg {
+	display: block;
+	width: 37.224px;
+	height: 37.225px;
+	flex: none;
+}
+
+/* ── Breathing pulse (scoped) — only the inlined "stacked" variant
+      emits .icon-breathe, kept for completeness. ─────────────────── */
+.bma-case-study-compare .icon-breathe img {
+	animation: bma-case-study-compare-breathe 3s ease-in-out infinite;
+}
+
+@keyframes bma-case-study-compare-breathe {
+	0%,
+	100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+}
+
+/* ── Desktop: three-column row with centered arrow ───────────────── */
+@media (min-width: 48rem) {
+	.bma-case-study-compare--card-break .bma-case-study-compare__cards {
+		grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+		gap: clamp(1rem, 2.25vw, 1.5rem);
+	}
+
+	.bma-case-study-compare--card-break .bma-case-study-compare__arrow {
+		transform: none;
+		margin-block: 0;
+	}
+}

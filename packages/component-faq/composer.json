@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-faq",
+    "description": "BMA FAQ - native details/summary accordion with +/- chevron. Parent/child WPBakery container, vanilla CSS.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\Faq\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "faq",
+            "type": "scaffolding",
+            "shortcode": "bma_faq",
+            "css_class": "bma-faq",
+            "owns_css": true
+        }
+    }
+}

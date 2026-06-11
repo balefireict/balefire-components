@@ -1,0 +1,24 @@
+{
+    "name": "balefireict/component-hr",
+    "type": "library",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\Hr\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "hr",
+            "type": "scaffolding",
+            "shortcode": "bma_hr",
+            "css_class": "bma-hr",
+            "owns_css": true
+        }
+    }
+}

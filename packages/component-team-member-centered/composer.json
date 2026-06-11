@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-team-member-centered",
+    "description": "BMA Team Member (Centered) - circular-photo team grid (parent) with centered member cards (child). Parent/child WPBakery container, vanilla CSS.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\TeamMemberCentered\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "team-member-centered",
+            "type": "scaffolding",
+            "shortcode": "bma_team_grid",
+            "css_class": "bma-team-member-centered",
+            "owns_css": true
+        }
+    }
+}

@@ -1,0 +1,182 @@
+/**
+ * balefireict/component-portrait-slider styles.
+ *
+ * Ported from rockerbox theme resources/css/swiper.css (.bma-portrait-* rules).
+ * Swiper's own core CSS (swiper-bundle.min.css) is NOT bundled here — the
+ * consumer theme must enqueue Swiper's CSS + JS itself.
+ *
+ * Tailwind utilities from the source markup (container, my-12) are folded into
+ * the .bma-portrait-slider rule below. Theme color/space tokens were replaced
+ * with standalone values or component-scoped custom properties that carry
+ * explicit fallbacks.
+ */
+
+.bma-portrait-slider {
+	width: 100%;
+	max-width: var(--bma-container-max, 1200px);
+	margin-inline: auto;
+	margin-block: 3rem; /* was Tailwind my-12 */
+	padding-inline: 1rem;
+}
+
+/* Layout: arrows live OUTSIDE the swiper, in the side margins of the
+   block, so cards can use the full content width without overlap. */
+.bma-portrait-swiper-slides {
+	position: relative;
+	/* Reserve room on left/right for the arrows */
+	padding-inline: 56px;
+}
+
+.bma-portrait-swiper-slides .swiper-button-prev,
+.bma-portrait-swiper-slides .swiper-button-next {
+	position: absolute;
+	top: calc(50% - 22px); /* 22px = ~half title row; raises arrows above pagination */
+	width: 36px;
+	height: 36px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: currentColor;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: opacity 0.3s ease-in-out;
+	z-index: 10;
+}
+
+.bma-portrait-swiper-slides .swiper-button-prev {
+	left: 8px;
+	right: auto;
+}
+
+.bma-portrait-swiper-slides .swiper-button-next {
+	right: 8px;
+	left: auto;
+}
+
+.bma-portrait-swiper-slides .swiper-button-prev:hover,
+.bma-portrait-swiper-slides .swiper-button-next:hover {
+	opacity: 0.7;
+}
+
+/* Hide default Swiper pseudo-element arrows; we use inline SVGs */
+.bma-portrait-swiper-slides .swiper-button-prev::after,
+.bma-portrait-swiper-slides .swiper-button-next::after {
+	content: none;
+}
+
+.bma-portrait-swiper-arrow {
+	width: 28px;
+	height: 28px;
+}
+
+/* Left arrow faces left */
+.bma-portrait-swiper-slides .swiper-button-prev .bma-portrait-swiper-arrow {
+	transform: scaleX(-1);
+}
+
+@media (max-width: 640px) {
+	.bma-portrait-swiper-slides {
+		padding-inline: 40px;
+	}
+	.bma-portrait-swiper-slides .swiper-button-prev {
+		left: 0;
+	}
+	.bma-portrait-swiper-slides .swiper-button-next {
+		right: 0;
+	}
+}
+
+/* Pagination — scoped to this component so it does not override other sliders */
+.bma-portrait-swiper-slides .swiper-pagination {
+	position: static;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	margin-top: 1.5rem;
+	height: auto;
+	min-height: 26px;
+}
+
+.bma-portrait-swiper-slides .swiper-pagination-bullet {
+	box-sizing: content-box;
+	background: currentColor;
+	opacity: 0.4;
+	border-radius: 50%;
+	transition:
+		opacity 0.3s ease-in-out,
+		width 0.3s ease-in-out;
+	padding: 4px;
+	background-clip: content-box;
+	cursor: pointer;
+}
+
+.bma-portrait-swiper-slides .swiper-pagination-bullet-active {
+	opacity: 1;
+}
+
+/* Portrait Slide */
+.bma-portrait-slide {
+	position: relative;
+	display: block;
+	aspect-ratio: 3 / 4;
+	overflow: hidden;
+	border-radius: var(--radius-card, 0.5rem);
+}
+
+.bma-portrait-slide__image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.4s ease-in-out;
+}
+
+.bma-portrait-slide:hover .bma-portrait-slide__image {
+	transform: scale(1.04);
+}
+
+.bma-portrait-slide__title {
+	color: #ffffff;
+	font-family: inherit;
+	font-size: 1.125rem;
+	font-weight: 700;
+	line-height: 1.05;
+	padding-block-end: 0;
+}
+
+.bma-portrait-slide__content {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	padding: var(--spacing-card, 1.5rem);
+	transition: transform 0.3s ease-in-out;
+}
+
+.bma-portrait-slide:hover .bma-portrait-slide__content {
+	transform: translateY(-4px);
+}
+
+.bma-portrait-slide__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(
+		340deg,
+		var(--bma-portrait-overlay-from, #0b1f3a),
+		var(--bma-portrait-overlay-to, #1d4ed8)
+	);
+	opacity: 0.83;
+	transition: opacity 0.3s ease-in-out;
+}
+
+.bma-portrait-slide:hover .bma-portrait-slide__overlay {
+	opacity: 0;
+}

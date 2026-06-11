@@ -1,0 +1,40 @@
+/**
+ * balefireict/component-simple-card — card internals.
+ *
+ * Vanilla CSS port of the Tailwind utility classes used by the rockerbox
+ * `.bma-simple-card` markup, plus the existing `.bma-simple-card` rule mined
+ * from the theme's sections.css.
+ *
+ * NOTE: the parent emits the shared `bma-auto-grid` wrapper. That grid CSS is
+ * owned by component-auto-grid and is intentionally NOT defined here.
+ *
+ * Consumers import this from ~/vendor/balefireict/component-simple-card/src/style.css
+ */
+
+/* Card shell — was: flex flex-col rounded-lg p-16 border border-gray-200 min-h-[325px] my-auto */
+.bma-simple-card {
+	display: flex;
+	flex-direction: column;
+	margin-block: auto;
+	min-height: 325px;
+	padding: 4rem;
+	border: 1px solid #e5e7eb; /* gray-200 */
+	border-radius: var(--radius-card, 0.5rem); /* rounded-lg */
+}
+
+/* Inner content — was: flex flex-1 flex-col items-center justify-center gap-2 */
+.bma-simple-card__content {
+	display: flex;
+	flex: 1 1 0%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+/* Ported from rockerbox sections.css (.bma-simple-card p.wp-block-paragraph) */
+.bma-simple-card p.wp-block-paragraph {
+	font-size: 20px;
+	padding-block: 0;
+	padding-inline: 1rem;
+}

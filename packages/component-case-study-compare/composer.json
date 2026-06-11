@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-case-study-compare",
+    "description": "BMA Case Study Compare - before/after card-break comparison with a centered transition arrow. Self-closing WPBakery element, vanilla CSS. Inlines the icon-card break renderer.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\CaseStudyCompare\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "case-study-compare",
+            "type": "scaffolding",
+            "shortcode": "bma_compare",
+            "css_class": "bma-case-study-compare",
+            "owns_css": true
+        }
+    }
+}

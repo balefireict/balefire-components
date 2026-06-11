@@ -1,0 +1,70 @@
+/**
+ * balefireict/component-title-eyebrow — styles.
+ *
+ * Ported from rockerbox theme resources/css/sections.css ("Preheader & Title"
+ * block). Tailwind utilities that were on the markup (font-semibold, mb-1.5,
+ * max-w-3xl, block, mx-auto, ml-auto, text-center) are folded into the
+ * semantic classes below so no Tailwind runtime is required. Design tokens
+ * have been resolved to explicit values for standalone use.
+ */
+
+.bma-title-eyebrow {
+	display: block;
+	max-width: 48rem; /* tw max-w-3xl */
+	/* tw spacing var(--space-s-m) resolved */
+	margin-block-end: clamp(1.125rem, 0.9375rem + 0.8333vw, 1.6875rem);
+}
+
+/* Alignment (was Tailwind text-center/mx-auto, text-right/ml-auto) */
+.bma-title-eyebrow.text-left {
+	text-align: left;
+}
+
+.bma-title-eyebrow.text-center {
+	text-align: center;
+	margin-inline: auto; /* tw mx-auto */
+}
+
+.bma-title-eyebrow.text-right {
+	text-align: right;
+	margin-left: auto; /* tw ml-auto */
+}
+
+/* Eyebrow / preheader (was: bma-preheader font-semibold mb-1.5) */
+.bma-title-eyebrow .bma-preheader {
+	display: block;
+	width: 100%;
+	height: auto;
+	margin-top: 0;
+	margin-bottom: 0.375rem; /* tw mb-1.5 */
+	font-size: clamp(1.125rem, 1.06rem + 0.24vi, 1.25rem); /* --text-md */
+	font-weight: 600; /* tw font-semibold */
+	color: #93a8a4;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	text-wrap: balance;
+}
+
+/* Heading */
+.bma-title-eyebrow h2 {
+	font-weight: 600;
+	font-size: clamp(2.5rem, 2.08rem + 1.15vi, 2.795rem); /* --text-4xl */
+}
+
+.bma-title-eyebrow.text-center h2 {
+	max-width: 1440px; /* --container-content */
+	margin-inline: auto;
+}
+
+.bma-title-eyebrow .bma-preheader-and-title__heading {
+	line-height: 1;
+}
+
+/* White text variant */
+.bma-title-eyebrow--white .bma-preheader {
+	color: #fff;
+}
+
+.bma-title-eyebrow--white .bma-preheader-and-title__heading {
+	color: #fff;
+}
