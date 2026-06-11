@@ -1,6 +1,6 @@
 <?php
 /**
- * BMA HR — gradient horizontal rule.
+ * BMA HR — CSS horizontal rule.
  *
  * Editable content (preferred):
  *   [bma_hr]
@@ -38,32 +38,63 @@ final class Hr {
 	public static function render( array $atts = array() ): string {
 		$atts = shortcode_atts(
 			array(
-				'width' => '230',
+				'width'  => '230px',
+				'height' => '4px',
+				'color'  => '#65d0e2',
 			),
 			(array) $atts,
 			'bma_hr'
 		);
 
-		$width = max( 1, (int) $atts['width'] );
+		$width  = self::sanitizeLength( (string) $atts['width'], '230px' );
+		$height = self::sanitizeLength( (string) $atts['height'], '4px' );
+		$color  = self::sanitizeHexColor( (string) $atts['color'], '#65d0e2' );
+		$style  = sprintf(
+			'--bma-hr-width:%s;--bma-hr-height:%s;--bma-hr-color:%s;',
+			esc_attr( $width ),
+			esc_attr( $height ),
+			esc_attr( $color )
+		);
 
-		// Static gradient id is fine here — the gradient stops and colors are
-		// identical for every instance, so all <rect> fills reference the same
-		// defs block and the SVG can be inlined once. The id is namespaced to
-		// avoid clashing with other inline SVGs on the page.
-		$svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
-			. 'width="' . esc_attr( (string) $width ) . '" height="4" viewBox="0 0 230 4" '
-			. 'role="presentation" aria-hidden="true" focusable="false">'
-			. '<defs>'
-			. '<linearGradient id="bma-hr-gradient" x1="0.132" y1="0.5" x2="0.909" y2="0.5" gradientUnits="objectBoundingBox">'
-			. '<stop offset="0" stop-color="#6ad0a1"/>'
-			. '<stop offset="1" stop-color="#65d0e2"/>'
-			. '</linearGradient>'
-			. '</defs>'
-			. '<rect data-name="Rectangle 988" width="230" height="4" rx="2" '
-			. 'transform="translate(230 4) rotate(180)" fill="url(#bma-hr-gradient)"/>'
-			. '</svg>';
+		return '<div class="bma-hr" style="' . $style . '" role="presentation" aria-hidden="true"></div>';
+	}
 
-		return '<div class="bma-hr">' . $svg . '</div>';
+	/**
+	 * Sanitize a CSS length value.
+	 *
+	 * @param string $value    Raw value.
+	 * @param string $fallback Fallback length.
+	 * @return string Safe CSS length.
+	 */
+	private static function sanitizeLength( string $value, string $fallback ): string {
+		$value = trim( $value );
+		if ( '' === $value ) {
+			return $fallback;
+		}
+		if ( preg_match( '/^\d+(\.\d+)?$/', $value ) ) {
+			return $value . 'px';
+		}
+		if ( preg_match( '/^\d+(\.\d+)?(px|rem|em|%)$/', $value ) ) {
+			return $value;
+		}
+
+		return $fallback;
+	}
+
+	/**
+	 * Sanitize a hex color value.
+	 *
+	 * @param string $value    Raw value.
+	 * @param string $fallback Fallback hex color.
+	 * @return string Safe hex color.
+	 */
+	private static function sanitizeHexColor( string $value, string $fallback ): string {
+		$value = trim( $value );
+		if ( preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $value ) ) {
+			return $value;
+		}
+
+		return $fallback;
 	}
 
 	/**
@@ -83,19 +114,33 @@ final class Hr {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA HR', 'balefire' ),
+				'name'            => __( 'HR', 'balefire' ),
 				'base'            => 'bma_hr',
-				'category'        => __( 'BMA Elements', 'balefire' ),
-				'description'     => __( 'Gradient horizontal rule. Wrap in a vc_row for background/spacing.', 'balefire' ),
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — CSS horizontal rule. Wrap in a vc_row for background/spacing.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-divider',
 				'content_element' => true,
 				'params'          => array(
 					array(
 						'type'        => 'textfield',
-						'heading'     => __( 'Width (px)', 'balefire' ),
+						'heading'     => __( 'Width', 'balefire' ),
 						'param_name'  => 'width',
-						'value'       => '230',
-						'description' => __( 'Rendered width in pixels. Height stays 4px and the viewBox preserves the gradient proportions.', 'balefire' ),
+						'value'       => '230px',
+						'description' => __( 'BMA — CSS width. Bare numbers are treated as px.', 'balefire' ),
+					),
+					array(
+						'type'        => 'textfield',
+						'heading'     => __( 'Height', 'balefire' ),
+						'param_name'  => 'height',
+						'value'       => '4px',
+						'description' => __( 'BMA — CSS height. Bare numbers are treated as px.', 'balefire' ),
+					),
+					array(
+						'type'        => 'colorpicker',
+						'heading'     => __( 'Color', 'balefire' ),
+						'param_name'  => 'color',
+						'value'       => '#65d0e2',
+						'description' => __( 'BMA — Solid hex color for the rule.', 'balefire' ),
 					),
 				),
 			)

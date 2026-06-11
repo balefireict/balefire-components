@@ -17,7 +17,7 @@
     "extra": {
         "balefire-component": {
             "slug": "cta-banner",
-            "type": "field-group",
+            "type": "scaffolding",
             "shortcode": "bma_cta_banner",
             "css_class": "bma-c-cta-banner",
             "owns_css": true

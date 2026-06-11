@@ -131,11 +131,11 @@ final class LogoGrid {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Logo Grid', 'balefire' ),
+				'name'                    => __( 'Logo Grid', 'balefire' ),
 				'base'                    => 'bma_logo_grid',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_LogoGrid',
-				'category'                => __( 'BMA Elements', 'balefire' ),
-				'description'             => __( 'Partner / client logo grid.', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Partner / client logo grid.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-images-carousel',
 				'as_parent'               => array( 'only' => 'bma_logo_grid_item' ),
 				'content_element'         => true,
@@ -156,11 +156,11 @@ final class LogoGrid {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Logo Grid Item', 'balefire' ),
+				'name'            => __( 'Logo Grid Item', 'balefire' ),
 				'base'            => 'bma_logo_grid_item',
 				'php_class_name'  => 'WPBakeryShortCode_BMA_LogoGridItem',
-				'category'        => __( 'BMA Elements', 'balefire' ),
-				'description'     => __( 'A single logo inside a logo grid.', 'balefire' ),
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — A single logo inside a logo grid.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_logo_grid' ),
 				'content_element' => true,

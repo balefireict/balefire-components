@@ -34,6 +34,7 @@ $bma_title_eyebrow_boot = function (): void {
 	\Balefire\Component\TitleEyebrow\TitleEyebrow::register();
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\TitleEyebrow\TitleEyebrow::class, 'vcMap' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\TitleEyebrow\TitleEyebrow::class, 'registerPreviewClasses' ) );
 	}
 };
 

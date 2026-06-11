@@ -118,11 +118,11 @@ final class SimpleCard {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Simple Card Grid', 'balefire' ),
+				'name'                    => __( 'Simple Card Grid', 'balefire' ),
 				'base'                    => 'bma_simple_card_grid',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_SimpleCard',
-				'category'                => __( 'BMA Cards', 'balefire' ),
-				'description'             => __( 'Text-only bordered card grid.', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Text-only bordered card grid.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-row',
 				'as_parent'               => array( 'only' => 'bma_simple_card' ),
 				'content_element'         => true,
@@ -143,10 +143,11 @@ final class SimpleCard {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Simple Card', 'balefire' ),
+				'name'            => __( 'Simple Card', 'balefire' ),
 				'base'            => 'bma_simple_card',
-				'category'        => __( 'BMA Cards', 'balefire' ),
-				'description'     => __( 'A single text-only bordered card.', 'balefire' ),
+				'php_class_name'  => 'WPBakeryShortCode_BMA_SimpleCardItem',
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — A single text-only bordered card.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_simple_card_grid' ),
 				'content_element' => true,
@@ -167,16 +168,42 @@ final class SimpleCard {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass that the parent
-	 * shortcode needs to be recognized as a container in the editor.
-	 * Hooked on vc_after_init so the parent class is loaded.
+	 * Register the WPBakery backend-editor classes for both elements.
+	 *
+	 * Parent: a WPBakeryShortCodesContainer subclass so the grid is treated
+	 * as a container in the editor. It has no meaningful preview params, so
+	 * it registers with an empty map (container registration only).
+	 * Child: a preview-enabled element showing the card title + body excerpt.
+	 *
+	 * When the shared BakeryPreview infra is present we route through it;
+	 * otherwise the container falls back to the plain eval'd subclass (the
+	 * child needs no fallback — WPBakery defaults it to FishBones).
+	 * Hooked on vc_after_init so the parent classes are loaded.
 	 */
-	public static function registerContainerClass(): void {
+	public static function registerPreviewClasses(): void {
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}
+
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_SimpleCard',
+				array()
+			);
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_SimpleCardItem',
+				array(
+					'title' => 'title',
+					'text'  => 'content',
+				)
+			);
+			return;
+		}
+
+		// Fallback: BakeryPreview infra absent. The container still needs its
+		// plain subclass; the child element needs none (WPBakery FishBones).
 		if ( ! class_exists( 'WPBakeryShortCode_BMA_SimpleCard' ) ) {
-			eval( 'class WPBakeryShortCode_BMA_SimpleCard extends \\WPBakeryShortCodesContainer {}' );
+			eval( 'class WPBakeryShortCode_BMA_SimpleCard extends \WPBakeryShortCodesContainer {}' );
 		}
 	}
 }

@@ -167,11 +167,11 @@ final class ImageTextList {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Image Text List', 'balefire' ),
+				'name'                    => __( 'Image Text List', 'balefire' ),
 				'base'                    => 'bma_image_text_list',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_ImageTextList',
-				'category'                => __( 'BMA Elements', 'balefire' ),
-				'description'             => __( 'Vertical image-left text rows with optional links.', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Vertical image-left text rows with optional links.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-row',
 				'as_parent'               => array( 'only' => 'bma_image_text_item' ),
 				'content_element'         => true,
@@ -195,11 +195,11 @@ final class ImageTextList {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Image Text Item', 'balefire' ),
+				'name'            => __( 'Image Text Item', 'balefire' ),
 				'base'            => 'bma_image_text_item',
 				'php_class_name'  => 'WPBakeryShortCode_BMA_ImageTextItem',
-				'category'        => __( 'BMA Elements', 'balefire' ),
-				'description'     => __( 'One image-left text row, with an optional link.', 'balefire' ),
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — One image-left text row, with an optional link.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_image_text_list' ),
 				'content_element' => true,
@@ -236,14 +236,39 @@ final class ImageTextList {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass that the parent
-	 * shortcode needs to be recognized as a container in the editor.
-	 * Hooked on vc_after_init so the parent class is loaded.
+	 * Register the WPBakery editor classes for the parent container and the
+	 * child element. Hooked on vc_after_init so the parent classes are loaded.
+	 *
+	 * When the shared BakeryPreview infra is present (soft dep), both classes
+	 * are generated through it so the child shows a thumbnail + title/excerpt
+	 * preview in the backend editor. When it is absent, the parent falls back
+	 * to the plain eval'd WPBakeryShortCodesContainer subclass; the child
+	 * needs no fallback (WPBakery defaults to FishBones when no class exists).
 	 */
 	public static function registerContainerClass(): void {
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}
+
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			// Parent is a bare container — empty map renders nothing extra.
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_ImageTextList',
+				array()
+			);
+			// Child element gets the thumbnail + title + excerpt preview.
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_ImageTextItem',
+				array(
+					'image' => 'image',
+					'title' => 'title',
+					'text'  => 'content',
+				)
+			);
+			return;
+		}
+
+		// Fallback (no preview infra): plain container subclass for the parent.
 		if ( ! class_exists( 'WPBakeryShortCode_BMA_ImageTextList' ) ) {
 			eval( 'class WPBakeryShortCode_BMA_ImageTextList extends \\WPBakeryShortCodesContainer {}' );
 		}

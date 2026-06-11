@@ -1,139 +1,148 @@
 <?php
 /**
- * Renderer for [bma_logo_card] shortcode.
+ * Renderer for [bma_logo_card] (parent) and [bma_logo_card_item] (child).
+ *
+ * Attribute-driven WPBakery parent/child container. No ACF reads.
+ *
+ * Parent: [bma_logo_card headline="" columns="5"]…[/bma_logo_card]
+ * Child:  [bma_logo_card_item image="123" link=""]
+ *
+ * @package Balefire\Component\LogoCard
  */
 
 declare( strict_types=1 );
 
 namespace Balefire\Component\LogoCard;
 
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Static logo-card parent + child renderers.
+ */
 final class Renderer {
 
-    /**
-     * @return array<string, string>
-     */
-    private static function defaults(): array {
-        return [
-            'align'          => 'center',
-            'columns'        => '5',
-            'container'      => '',
-            'spacing_top'    => '',
-            'spacing_bottom' => '',
-            'id'             => '',
-            'class'          => '',
-        ];
-    }
+	public const COLUMN_CHOICES  = array( 3, 4, 5, 6 );
+	public const DEFAULT_COLUMNS = 5;
 
-    /**
-     * @param array<string,string>|string $atts
-     */
-    public static function render( $atts, ?string $content = null ): string {
-        $atts = \shortcode_atts(
-            self::defaults(),
-            is_array( $atts ) ? $atts : [],
-            'bma_logo_card'
-        );
+	/**
+	 * Render the parent [bma_logo_card] shortcode.
+	 *
+	 * @param array<string,string>|string $atts    Shortcode attributes.
+	 * @param string|null                  $content Inner shortcodes (children).
+	 * @return string HTML output, or '' when content is empty.
+	 */
+	public static function render( $atts, ?string $content = null ): string {
+		$atts = \shortcode_atts(
+			array(
+				'headline' => '',
+				'columns'  => (string) self::DEFAULT_COLUMNS,
+				'el_id'    => '',
+				'el_class' => '',
+			),
+			is_array( $atts ) ? $atts : array(),
+			'bma_logo_card'
+		);
 
-        $post_id = \get_the_ID() ?: 0;
+		if ( null === $content || '' === trim( (string) $content ) ) {
+			return '';
+		}
 
-        $headline = \get_field( 'bma_logo_card_headline', $post_id ) ?: '';
-        $logos    = \get_field( 'bma_logo_card_logos', $post_id ) ?: [];
-        $columns  = \get_field( 'bma_logo_card_columns', $post_id ) ?: $atts['columns'];
+		$inner = \do_shortcode( \shortcode_unautop( trim( (string) $content ) ) );
+		$inner = (string) preg_replace( '/^\s*<br\s*\/?>\s*/i', '', (string) $inner );
+		$inner = (string) preg_replace( '/<br\s*\/?>\s*(?=<(?:a|div)\s+[^>]*class="bma-c-logo-card__logo)/i', '', (string) $inner );
+		$inner = (string) preg_replace( '/(<\/(?:a|div)>)\s*<br\s*\/?>/i', '$1', (string) $inner );
+		$inner = trim( (string) $inner );
 
-        $wrapper_atts = self::build_wrapper_atts( $atts );
+		if ( '' === $inner ) {
+			return '';
+		}
 
-        $args = [
-            'headline' => $headline,
-            'logos'    => is_array( $logos ) ? $logos : [],
-            'columns'  => $columns,
-        ];
+		$columns = (int) $atts['columns'];
+		if ( $columns < 3 || $columns > 6 ) {
+			$columns = self::DEFAULT_COLUMNS;
+		}
 
-        ob_start();
-        include __DIR__ . '/template.php';
-        return (string) ob_get_clean();
-    }
+		$classes = array( 'bma-c-logo-card' );
+		$extra   = trim( (string) $atts['el_class'] );
+		if ( '' !== $extra ) {
+			$classes[] = $extra;
+		}
 
-    /**
-     * @param array<string,string> $atts
-     * @return array<string,string>
-     */
-    private static function build_wrapper_atts( array $atts ): array {
-        $classes = [ 'bma-c-logo-card' ];
+		$section_atts = sprintf( ' class="%s"', \esc_attr( implode( ' ', $classes ) ) );
+		$el_id        = trim( (string) $atts['el_id'] );
+		if ( '' !== $el_id ) {
+			$section_atts .= sprintf( ' id="%s"', \esc_attr( $el_id ) );
+		}
 
-        foreach ( [ 'align', 'container' ] as $key ) {
-            $value = (string) $atts[ $key ];
-            if ( $value !== '' && preg_match( '/^[a-z0-9_-]+$/i', $value ) ) {
-                $classes[] = "bma-c-logo-card--{$key}-{$value}";
-            }
-        }
-        foreach ( [ 'spacing_top' => 'pt', 'spacing_bottom' => 'pb' ] as $key => $abbr ) {
-            $value = (string) $atts[ $key ];
-            if ( $value !== '' && preg_match( '/^[a-z0-9]+$/i', $value ) ) {
-                $classes[] = "bma-c--{$abbr}-{$value}";
-            }
-        }
+		$headline_html = '';
+		$headline      = (string) $atts['headline'];
+		if ( '' !== trim( $headline ) ) {
+			$headline_html = sprintf(
+				'<h2 class="bma-c-logo-card__headline">%s</h2>',
+				\esc_html( $headline )
+			);
+		}
 
-        $extra = trim( (string) $atts['class'] );
-        if ( $extra !== '' ) {
-            $classes[] = $extra;
-        }
+		return sprintf(
+			'<section%1$s><div class="bma-c-logo-card__inner">%2$s<div class="bma-c-logo-card__list bma-c-logo-card__list--%3$d">%4$s</div></div></section>',
+			$section_atts,
+			$headline_html,
+			$columns,
+			$inner
+		);
+	}
 
-        $wrapper = [
-            'class' => implode( ' ', array_unique( $classes ) ),
-        ];
+	/**
+	 * Render one [bma_logo_card_item] child.
+	 *
+	 * @param array<string,string>|string $atts Shortcode attributes.
+	 * @return string HTML output, or '' when no valid image.
+	 */
+	public static function renderItem( $atts ): string {
+		$atts = \shortcode_atts(
+			array(
+				'image' => '',
+				'link'  => '',
+			),
+			is_array( $atts ) ? $atts : array(),
+			'bma_logo_card_item'
+		);
 
-        $id = trim( (string) $atts['id'] );
-        if ( $id !== '' ) {
-            $wrapper['id'] = $id;
-        }
+		$image_id = (string) $atts['image'];
+		if ( '' === $image_id || ! is_numeric( $image_id ) || (int) $image_id <= 0 ) {
+			return '';
+		}
 
-        return (array) \apply_filters( 'bma_c_logo_card/wrapper_atts', $wrapper, $atts );
-    }
+		$img = \wp_get_attachment_image(
+			(int) $image_id,
+			'full',
+			false,
+			array(
+				'loading' => 'lazy',
+			)
+		);
 
-    /**
-     * @param array<string,mixed> $logo
-     */
-    public static function render_logo( array $logo ): string {
-        $image = ! empty( $logo['image'] ) && is_array( $logo['image'] ) ? $logo['image'] : null;
-        $link  = ! empty( $logo['link'] ) && is_array( $logo['link'] ) ? $logo['link'] : null;
+		if ( '' === (string) $img ) {
+			return '';
+		}
 
-        if ( empty( $image ) || empty( $image['url'] ) ) {
-            return '';
-        }
+		$link = trim( (string) $atts['link'] );
+		if ( '' !== $link ) {
+			return sprintf(
+				'<a href="%s" class="bma-c-logo-card__logo">%s</a>',
+				\esc_url( $link ),
+				$img
+			);
+		}
 
-        $img_tag = sprintf(
-            '<img src="%s" alt="%s" loading="lazy">',
-            \esc_url( $image['url'] ),
-            \esc_attr( $image['alt'] ?? '' )
-        );
+		return sprintf( '<div class="bma-c-logo-card__logo">%s</div>', $img );
+	}
 
-        if ( ! empty( $link ) && ! empty( $link['url'] ) ) {
-            return sprintf(
-                '<a href="%s" class="bma-c-logo-card__logo" target="%s">%s</a>',
-                \esc_url( $link['url'] ),
-                \esc_attr( $link['target'] ?? '_self' ),
-                $img_tag
-            );
-        }
-
-        return sprintf( '<div class="bma-c-logo-card__logo">%s</div>', $img_tag );
-    }
-
-    /**
-     * @param array<string,string> $atts
-     */
-    public static function attrs_to_html( array $atts ): string {
-        $parts = [];
-        foreach ( $atts as $key => $value ) {
-            if ( $value === '' || $value === null ) {
-                continue;
-            }
-            $parts[] = sprintf(
-                '%s="%s"',
-                \esc_attr( (string) $key ),
-                \esc_attr( (string) $value )
-            );
-        }
-        return implode( ' ', $parts );
-    }
+	/**
+	 * Register both parent and child shortcodes.
+	 */
+	public static function register(): void {
+		\add_shortcode( 'bma_logo_card', array( self::class, 'render' ) );
+		\add_shortcode( 'bma_logo_card_item', array( self::class, 'renderItem' ) );
+	}
 }

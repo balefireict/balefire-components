@@ -46,7 +46,7 @@ $bma_simple_image_card_boot = function (): void {
 		\Balefire\Component\SimpleImageCard\SimpleImageCard::register();
 		if ( function_exists( 'vc_map' ) ) {
 			add_action( 'vc_before_init', array( \Balefire\Component\SimpleImageCard\SimpleImageCard::class, 'vcMap' ) );
-			add_action( 'vc_after_init', array( \Balefire\Component\SimpleImageCard\SimpleImageCard::class, 'registerContainerClass' ) );
+			add_action( 'vc_after_init', array( \Balefire\Component\SimpleImageCard\SimpleImageCard::class, 'registerPreviewClasses' ) );
 		}
 };
 

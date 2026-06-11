@@ -100,7 +100,7 @@ $bma_faq_boot = function (): void {
 	\Balefire\Component\Faq\Faq::register();
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\Faq\Faq::class, 'vcMap' ) );
-		add_action( 'vc_after_init', array( \Balefire\Component\Faq\Faq::class, 'registerContainerClass' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\Faq\Faq::class, 'registerPreviewClasses' ) );
 	}
 };
 

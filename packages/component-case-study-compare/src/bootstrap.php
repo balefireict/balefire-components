@@ -35,6 +35,7 @@ $bma_case_study_compare_boot = function (): void {
 	\Balefire\Component\CaseStudyCompare\CaseStudyCompare::register();
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\CaseStudyCompare\CaseStudyCompare::class, 'vcMap' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\CaseStudyCompare\CaseStudyCompare::class, 'registerPreviewClasses' ) );
 	}
 };
 

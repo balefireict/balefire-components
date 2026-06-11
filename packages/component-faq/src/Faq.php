@@ -211,11 +211,11 @@ final class Faq {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA FAQ', 'balefire' ),
+				'name'                    => __( 'FAQ', 'balefire' ),
 				'base'                    => 'bma_faq',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_Faq',
-				'category'                => __( 'BMA Elements', 'balefire' ),
-				'description'             => __( 'Editable FAQ accordion list.', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Editable FAQ accordion list.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-toggle',
 				'as_parent'               => array( 'only' => 'bma_faq_item' ),
 				'content_element'         => true,
@@ -244,9 +244,10 @@ final class Faq {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA FAQ Item', 'balefire' ),
+				'name'            => __( 'FAQ Item', 'balefire' ),
 				'base'            => 'bma_faq_item',
-				'category'        => __( 'BMA Elements', 'balefire' ),
+				'php_class_name'  => 'WPBakeryShortCode_BMA_FaqItem',
+				'category'        => __( 'Custom Elements', 'balefire' ),
 				'description'     => __( 'A single question and answer used inside BMA FAQ.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-toggle',
 				'as_child'        => array( 'only' => 'bma_faq' ),
@@ -268,11 +269,34 @@ final class Faq {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass that the parent
-	 * shortcode needs to be recognized as a container in the editor.
-	 * Hooked on vc_after_init so the parent class is loaded.
+	 * Register the backend-editor classes for the parent container and child
+	 * item. When the shared BMA Bakery Preview infra is present, both get
+	 * readable previews (the FAQ section title, and per-item question/answer
+	 * excerpt). When it is absent (soft dependency), the parent falls back to
+	 * the plain WPBakeryShortCodesContainer subclass it has always used, and
+	 * the child needs no class at all (WPBakery defaults to FishBones).
+	 * Hooked on vc_after_init so the parent classes are loaded.
 	 */
-	public static function registerContainerClass(): void {
+	public static function registerPreviewClasses(): void {
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_Faq',
+				array( 'title' => 'title' )
+			);
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_FaqItem',
+				array(
+					'title' => 'question',
+					'text'  => 'content',
+				)
+			);
+
+			return;
+		}
+
+		// Fallback (Preview infra absent): the parent still needs a plain
+		// container subclass to be recognized as a container in the editor.
+		// The child needs no class — WPBakery defaults to FishBones.
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}

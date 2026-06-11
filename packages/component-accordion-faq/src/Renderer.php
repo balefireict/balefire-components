@@ -1,96 +1,126 @@
 <?php
 /**
- * Renderer for [bma_accordion_faq] shortcode.
+ * Renderer for the [bma_accordion_faq] parent + [bma_accordion_faq_item] child shortcodes.
+ *
+ * Attribute-driven, shortcode-children-only. No ACF source.
+ *
+ * Parent: [bma_accordion_faq title="Frequently Asked Questions"] wraps a series
+ *         of children. Renders the FAQ section.
+ * Child:  [bma_accordion_faq_item question="Question?"]Answer HTML.[/bma_accordion_faq_item]
+ *         Renders one <details> accordion row.
+ *
+ * @package Balefire\Component\AccordionFaq
  */
 
 declare( strict_types=1 );
 
 namespace Balefire\Component\AccordionFaq;
 
+defined( 'ABSPATH' ) || exit;
+
 final class Renderer {
 
-    private static function defaults(): array {
-        return [
-            'align'          => 'center',
-            'container'      => '',
-            'spacing_top'    => '',
-            'spacing_bottom' => '',
-            'id'             => '',
-            'class'          => '',
-        ];
-    }
+	/**
+	 * Render the parent [bma_accordion_faq] shortcode. Wraps the children
+	 * (already processed by do_shortcode) in the FAQ section markup.
+	 *
+	 * @param array       $atts    Shortcode attributes.
+	 * @param string|null $content Inner shortcodes (children).
+	 * @return string HTML output, or '' when there is no child content.
+	 */
+	public static function render( $atts, ?string $content = null ): string {
+		$atts = \shortcode_atts(
+			array(
+				'title'    => '',
+				'el_id'    => '',
+				'el_class' => '',
+			),
+			is_array( $atts ) ? $atts : array(),
+			'bma_accordion_faq'
+		);
 
-    public static function render( $atts, ?string $content = null ): string {
-        $atts = \shortcode_atts(
-            self::defaults(),
-            is_array( $atts ) ? $atts : [],
-            'bma_accordion_faq'
-        );
+		if ( null === $content || '' === trim( (string) $content ) ) {
+			return '';
+		}
 
-        $post_id = \get_the_ID() ?: 0;
+		$inner = do_shortcode( shortcode_unautop( trim( (string) $content ) ) );
+		$inner = (string) preg_replace( '/^\s*(?:<br\s*\/?>\s*)+/i', '', (string) $inner );
+		$inner = (string) preg_replace( '/(?:\s*<br\s*\/?>\s*)+$/i', '', (string) $inner );
+		$inner = (string) preg_replace( '/(<\/details>)\s*(?:<br\s*\/?>\s*)+(<details\b)/i', '$1$2', (string) $inner );
+		$inner = (string) preg_replace( '/<p>(?:\s|&nbsp;)*<\/p>/i', '', (string) $inner );
+		$inner = trim( (string) $inner );
 
-        $headline = \get_field( 'bma_accordion_faq_headline', $post_id ) ?: '';
-        $subhead  = \get_field( 'bma_accordion_faq_subhead', $post_id ) ?: '';
-        $items    = \get_field( 'bma_accordion_faq_items', $post_id ) ?: [];
+		if ( '' === $inner ) {
+			return '';
+		}
 
-        $wrapper_atts = self::build_wrapper_atts( $atts );
+		$classes = array( 'bma-c-accordion-faq' );
+		$extra   = trim( (string) $atts['el_class'] );
+		if ( '' !== $extra ) {
+			$classes[] = $extra;
+		}
 
-        $args = [
-            'headline' => $headline,
-            'subhead'  => $subhead,
-            'items'    => is_array( $items ) ? $items : [],
-        ];
+		$id_attr = '';
+		$el_id   = trim( (string) $atts['el_id'] );
+		if ( '' !== $el_id ) {
+			$id_attr = ' id="' . esc_attr( $el_id ) . '"';
+		}
 
-        ob_start();
-        include __DIR__ . '/template.php';
-        return (string) ob_get_clean();
-    }
+		$title      = trim( (string) $atts['title'] );
+		$title_html = '';
+		if ( '' !== $title ) {
+			$title_html = '<h2 class="bma-c-accordion-faq__headline">' . esc_html( $title ) . '</h2>';
+		}
 
-    private static function build_wrapper_atts( array $atts ): array {
-        $classes = [ 'bma-c-accordion-faq' ];
+		return '<section class="' . esc_attr( implode( ' ', $classes ) ) . '"' . $id_attr . '>'
+			. '<div class="bma-c-accordion-faq__inner">'
+			. $title_html
+			. '<div class="bma-c-accordion-faq__list">' . $inner . '</div>'
+			. '</div>'
+			. '</section>';
+	}
 
-        foreach ( [ 'align', 'container' ] as $key ) {
-            $value = (string) $atts[ $key ];
-            if ( $value !== '' && preg_match( '/^[a-z0-9_-]+$/i', $value ) ) {
-                $classes[] = "bma-c-accordion-faq--{$key}-{$value}";
-            }
-        }
-        foreach ( [ 'spacing_top' => 'pt', 'spacing_bottom' => 'pb' ] as $key => $abbr ) {
-            $value = (string) $atts[ $key ];
-            if ( $value !== '' && preg_match( '/^[a-z0-9]+$/i', $value ) ) {
-                $classes[] = "bma-c--{$abbr}-{$value}";
-            }
-        }
+	/**
+	 * Render one [bma_accordion_faq_item] child.
+	 *
+	 * @param array       $atts    Shortcode attributes.
+	 * @param string|null $content Body HTML (passes between opening/closing tags).
+	 * @return string HTML output, or '' when there is no question.
+	 */
+	public static function renderItem( $atts, ?string $content = null ): string {
+		$atts = \shortcode_atts(
+			array(
+				'question' => '',
+			),
+			is_array( $atts ) ? $atts : array(),
+			'bma_accordion_faq_item'
+		);
 
-        $extra = trim( (string) $atts['class'] );
-        if ( $extra !== '' ) {
-            $classes[] = $extra;
-        }
+		$question = trim( (string) $atts['question'] );
+		if ( '' === $question ) {
+			return '';
+		}
 
-        $wrapper = [
-            'class' => implode( ' ', array_unique( $classes ) ),
-        ];
+		$answer = do_shortcode( shortcode_unautop( (string) $content ) );
+		// WPBakery/the_content can wrap nested shortcode HTML as `</p>...<p>`.
+		$answer = (string) preg_replace( '/^\s*<\/p>\s*/i', '', (string) $answer );
+		$answer = (string) preg_replace( '/\s*<p>\s*$/i', '', (string) $answer );
+		$answer = (string) preg_replace( '/<p>(?:\s|&nbsp;)*<\/p>/i', '', (string) $answer );
+		$answer = trim( wp_kses_post( (string) $answer ) );
 
-        $id = trim( (string) $atts['id'] );
-        if ( $id !== '' ) {
-            $wrapper['id'] = $id;
-        }
+		// FAQ items always render closed (open-by-default unsupported site-wide).
+		return sprintf(
+			'<details class="bma-c-accordion-faq__item"><summary class="bma-c-accordion-faq__question">%s</summary><div class="bma-c-accordion-faq__answer">%s</div></details>',
+			esc_html( $question ),
+			$answer
+		);
+	}
 
-        return (array) \apply_filters( 'bma_c_accordion_faq/wrapper_atts', $wrapper, $atts );
-    }
-
-    public static function attrs_to_html( array $atts ): string {
-        $parts = [];
-        foreach ( $atts as $key => $value ) {
-            if ( $value === '' || $value === null ) {
-                continue;
-            }
-            $parts[] = sprintf(
-                '%s="%s"',
-                \esc_attr( (string) $key ),
-                \esc_attr( (string) $value )
-            );
-        }
-        return implode( ' ', $parts );
-    }
+	/**
+	 * Register both [bma_accordion_faq] and [bma_accordion_faq_item] shortcodes.
+	 */
+	public static function register(): void {
+		\add_shortcode( 'bma_accordion_faq', array( self::class, 'render' ) );
+		\add_shortcode( 'bma_accordion_faq_item', array( self::class, 'renderItem' ) );
+	}
 }

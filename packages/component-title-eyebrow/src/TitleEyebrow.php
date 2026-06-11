@@ -96,12 +96,13 @@ final class TitleEyebrow {
 
 		vc_map(
 			array(
-				'name'        => __( 'BMA Title + Eyebrow', 'balefire' ),
-				'base'        => self::SHORTCODE,
-				'category'    => __( 'BMA Elements', 'balefire' ),
-				'description' => __( 'Section heading with a small uppercase eyebrow above it.', 'balefire' ),
-				'icon'        => 'vc_icon-vc-custom-heading',
-				'params'      => array(
+				'name'           => __( 'Title + Eyebrow', 'balefire' ),
+				'base'           => self::SHORTCODE,
+				'category'       => __( 'Custom Elements', 'balefire' ),
+				'description'    => __( 'BMA — Section heading with a small uppercase eyebrow above it.', 'balefire' ),
+				'icon'           => 'vc_icon-vc-custom-heading',
+				'php_class_name' => 'WPBakeryShortCode_BMA_TitleEyebrow',
+				'params'         => array(
 
 					array(
 						'type'        => 'textfield',
@@ -143,6 +144,31 @@ final class TitleEyebrow {
 					),
 
 				),
+			)
+		);
+	}
+
+	/**
+	 * Register the WPBakery backend-editor preview class.
+	 *
+	 * Wires the single [bma_title_eyebrow] element to the shared BMA preview
+	 * infrastructure so the backend editor shows the heading/eyebrow instead
+	 * of a bare grey bar. Soft dependency: only runs when the Preview class is
+	 * present. Non-container elements need no fallback — WPBakery defaults to
+	 * its FishBones class when the php_class_name does not exist.
+	 *
+	 * Runs on vc_after_init (after vc_map).
+	 */
+	public static function registerPreviewClasses(): void {
+		if ( ! class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			return;
+		}
+
+		\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+			'WPBakeryShortCode_BMA_TitleEyebrow',
+			array(
+				'title' => 'title',
+				'text'  => 'eyebrow',
 			)
 		);
 	}

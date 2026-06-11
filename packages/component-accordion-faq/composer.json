@@ -1,6 +1,6 @@
 {
     "name": "balefireict/component-accordion-faq",
-    "description": "Accordion FAQ section component for Balefire classic-theme builds.",
+    "description": "BMA Accordion FAQ - editable FAQ accordion list. Parent/child WPBakery container, vanilla CSS.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -17,7 +17,7 @@
     "extra": {
         "balefire-component": {
             "slug": "accordion-faq",
-            "type": "field-group",
+            "type": "scaffolding",
             "shortcode": "bma_accordion_faq",
             "css_class": "bma-c-accordion-faq",
             "owns_css": true

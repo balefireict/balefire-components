@@ -318,23 +318,25 @@ final class CaseStudyCompare {
 
 		vc_map(
 			array(
-				'name'        => __( 'BMA Case Study Compare', 'balefire' ),
-				'base'        => 'bma_compare',
-				'category'    => __( 'BMA Elements', 'balefire' ),
-				'description' => __( 'Before/after card-break comparison with transition arrow.', 'balefire' ),
-				'icon'        => 'vc_icon-vc-row',
-				'params'      => $params,
+				'name'           => __( 'Case Study Compare', 'balefire' ),
+				'base'           => 'bma_compare',
+				'category'       => __( 'Custom Elements', 'balefire' ),
+				'description'    => __( 'BMA — Before/after card-break comparison with transition arrow.', 'balefire' ),
+				'icon'           => 'vc_icon-vc-row',
+				'php_class_name' => 'WPBakeryShortCode_BMA_Compare',
+				'params'         => $params,
 			)
 		);
 
 		vc_map(
 			array(
-				'name'        => __( 'BMA Compare Card Break', 'balefire' ),
-				'base'        => 'bma_compare_cards',
-				'category'    => __( 'BMA Cards', 'balefire' ),
-				'description' => __( 'Two card-icon-break cards with a centered arrow between them.', 'balefire' ),
-				'icon'        => 'vc_icon-vc-row',
-				'params'      => $params,
+				'name'           => __( 'Compare Card Break', 'balefire' ),
+				'base'           => 'bma_compare_cards',
+				'category'       => __( 'Custom Elements', 'balefire' ),
+				'description'    => __( 'BMA — Two card-icon-break cards with a centered arrow between them.', 'balefire' ),
+				'icon'           => 'vc_icon-vc-row',
+				'php_class_name' => 'WPBakeryShortCode_BMA_CompareCards',
+				'params'         => $params,
 			)
 		);
 	}
@@ -379,5 +381,29 @@ final class CaseStudyCompare {
 				'description' => __( 'Allows line breaks, <br>, and <strong>.', 'balefire' ),
 			),
 		);
+	}
+
+	/**
+	 * Register preview-enabled backend-editor classes for both compare elements.
+	 *
+	 * Runs on vc_after_init. Soft dependency on component-bakery-preview: when
+	 * the Preview class is present, both single (non-container) elements get a
+	 * thumbnail + title preview in the WPBakery backend editor. When it is
+	 * absent, no fallback is needed — WPBakery defaults non-container elements
+	 * to its built-in FishBones class.
+	 */
+	public static function registerPreviewClasses(): void {
+		if ( ! class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			return;
+		}
+
+		$map = array(
+			'image' => 'left_icon',
+			'title' => 'left_title',
+			'text'  => 'right_title',
+		);
+
+		\Balefire\Component\BakeryPreview\Preview::registerElementClass( 'WPBakeryShortCode_BMA_Compare', $map );
+		\Balefire\Component\BakeryPreview\Preview::registerElementClass( 'WPBakeryShortCode_BMA_CompareCards', $map );
 	}
 }

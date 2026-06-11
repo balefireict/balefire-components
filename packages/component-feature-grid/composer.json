@@ -1,6 +1,6 @@
 {
     "name": "balefireict/component-feature-grid",
-    "description": "Feature grid section component for Balefire classic-theme builds.",
+    "description": "Feature grid section component for Balefire classic-theme builds. Parent/child WPBakery container, attribute-driven, vanilla CSS.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -17,7 +17,7 @@
     "extra": {
         "balefire-component": {
             "slug": "feature-grid",
-            "type": "field-group",
+            "type": "scaffolding",
             "shortcode": "bma_feature_grid",
             "css_class": "bma-c-feature-grid",
             "owns_css": true

@@ -95,10 +95,10 @@ final class LatestBlog {
 
 		vc_map(
 			array(
-				'name'        => __( 'BMA Latest Blog', 'balefire' ),
+				'name'        => __( 'Latest Blog', 'balefire' ),
 				'base'        => 'latest_blog',
-				'category'    => __( 'BMA Elements', 'balefire' ),
-				'description' => __( 'Latest blog posts grid.', 'balefire' ),
+				'category'    => __( 'Custom Elements', 'balefire' ),
+				'description' => __( 'BMA — Latest blog posts grid.', 'balefire' ),
 				'icon'        => 'vc_icon-vc-post-grid',
 				'params'      => array(
 					array(

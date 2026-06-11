@@ -17,7 +17,7 @@
     "extra": {
         "balefire-component": {
             "slug": "testimonial",
-            "type": "field-group",
+            "type": "scaffolding",
             "shortcode": "bma_testimonial",
             "css_class": "bma-c-testimonial",
             "owns_css": true

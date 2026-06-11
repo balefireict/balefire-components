@@ -249,10 +249,10 @@ final class Buttons {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Buttons', 'balefire' ),
+				'name'            => __( 'Buttons', 'balefire' ),
 				'base'            => 'bma_buttons',
-				'category'        => __( 'BMA Elements', 'balefire' ),
-				'description'     => __( 'Up to two buttons with style, size, arrow, and alignment.', 'balefire' ),
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — Up to two buttons with style, size, arrow, and alignment.', 'balefire' ),
 				'icon'            => 'icon-wpb-ui-button',
 				'params'          => array_merge(
 					array(

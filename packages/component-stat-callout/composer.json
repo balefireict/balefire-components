@@ -1,6 +1,6 @@
 {
     "name": "balefireict/component-stat-callout",
-    "description": "Stat callout section component for Balefire classic-theme builds.",
+    "description": "Stat Callout - grid of statistics with large numbers and labels. Parent/child WPBakery container, vanilla CSS.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -17,7 +17,7 @@
     "extra": {
         "balefire-component": {
             "slug": "stat-callout",
-            "type": "field-group",
+            "type": "scaffolding",
             "shortcode": "bma_stat_callout",
             "css_class": "bma-c-stat-callout",
             "owns_css": true

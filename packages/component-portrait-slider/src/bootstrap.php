@@ -86,7 +86,7 @@ $bma_portrait_slider_boot = function (): void {
 	\Balefire\Component\PortraitSlider\PortraitSlider::register();
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\PortraitSlider\PortraitSlider::class, 'vcMap' ) );
-		add_action( 'vc_after_init', array( \Balefire\Component\PortraitSlider\PortraitSlider::class, 'registerContainerClass' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\PortraitSlider\PortraitSlider::class, 'registerPreviewClasses' ) );
 	}
 };
 

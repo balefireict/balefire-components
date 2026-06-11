@@ -135,11 +135,11 @@ final class SimpleImageCard {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Image Card Grid', 'balefire' ),
+				'name'                    => __( 'Image Card Grid', 'balefire' ),
 				'base'                    => 'bma_simple_image_card_grid',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_SimpleImageCard',
-				'category'                => __( 'BMA Cards', 'balefire' ),
-				'description'             => __( 'Image-top card grid.', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Image-top card grid.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-row',
 				'as_parent'               => array( 'only' => 'bma_simple_image_card' ),
 				'content_element'         => true,
@@ -160,11 +160,11 @@ final class SimpleImageCard {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Image Card', 'balefire' ),
+				'name'            => __( 'Image Card', 'balefire' ),
 				'base'            => 'bma_simple_image_card',
 				'php_class_name'  => 'WPBakeryShortCode_BMA_SimpleImageCardItem',
-				'category'        => __( 'BMA Cards', 'balefire' ),
-				'description'     => __( 'A single image-top card (image + title).', 'balefire' ),
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — A single image-top card (image + title).', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_simple_image_card_grid' ),
 				'content_element' => true,
@@ -190,11 +190,35 @@ final class SimpleImageCard {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass that the parent
-	 * shortcode needs to be recognized as a container in the editor.
-	 * Hooked on vc_after_init so the parent class is loaded.
+	 * Register the WPBakery editor classes for the parent container and the
+	 * child card. Hooked on vc_after_init so the WPBakery base classes exist.
+	 *
+	 * When the shared BakeryPreview infra is present (soft dependency), it
+	 * defines both classes: the parent as an (empty-map) container so it is
+	 * recognized as a container in the editor, and the child with a preview
+	 * map (thumbnail + title + body excerpt). When the infra is absent we fall
+	 * back to the original plain eval for the container subclass; the child
+	 * needs no fallback (WPBakery defaults to its FishBones view).
 	 */
-	public static function registerContainerClass(): void {
+	public static function registerPreviewClasses(): void {
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_SimpleImageCard',
+				array()
+			);
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_SimpleImageCardItem',
+				array(
+					'image' => 'image',
+					'title' => 'title',
+					'text'  => 'content',
+				)
+			);
+			return;
+		}
+
+		// Fallback: preview infra absent — plain eval the container subclass so
+		// the parent is still recognized as a container in the editor.
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}

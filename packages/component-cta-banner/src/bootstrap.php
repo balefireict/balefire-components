@@ -2,7 +2,8 @@
 /**
  * Balefire Component: CTA Banner
  *
- * Field-group type component. Reads ACF fields from the current page.
+ * Attribute-driven WPBakery element (no ACF). Content comes from
+ * shortcode attributes + the element's rich-text body ($content).
  */
 
 declare( strict_types=1 );
@@ -31,11 +32,3 @@ const SHORTCODE = 'bma_cta_banner';
         require_once $bakery;
     }
 } );
-
-// Register ACF JSON load path.
-if ( ! \defined( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) || \constant( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) ) {
-    \add_filter( 'acf/settings/load_json', static function ( array $paths ): array {
-        $paths[] = __DIR__ . '/../acf-json';
-        return $paths;
-    } );
-}

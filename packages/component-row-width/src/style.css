@@ -1,0 +1,153 @@
+/* ==========================================================================
+   BMA Row Width — max-width presets for WPBakery rows
+   Source package: balefireict/component-row-width
+
+   Applied via the "Content Width" dropdown on Row / Inner Row settings.
+   Tokens resolve from the theme's :root custom properties when defined,
+   with standalone fallbacks so the component works without them.
+
+   Specificity note: js_composer.min.css loads after the theme bundle and
+   sets `.vc_row { margin-left:-15px; margin-right:-15px }`. At equal
+   specificity it wins and the centered row hangs 15px off-canvas
+   (horizontal scroll). The `.wpb_row` prefix (0,2,0) beats it.
+
+   Custom widths: normal rows carry `style="--bma-row-w:<value>"` injected by
+   the PHP filter; stretched rows keep the outer row full-bleed and cap an
+   injected `.bma-row-width-inner` wrapper instead.
+
+   Note: WPBakery "Stretch row" sets inline width/max-width on the row.
+   The component therefore never caps the stretched row directly; it caps
+   `.bma-row-width-inner` so backgrounds stay full-bleed.
+   ========================================================================== */
+
+.wpb_row.bma-row-w-full,
+.vc_row_inner.bma-row-w-full {
+    max-width: var(--w-full, 100%);
+    margin-inline: auto;
+}
+
+.wpb_row.bma-row-w-lg,
+.vc_row_inner.bma-row-w-lg {
+    max-width: var(--max-w-lg, 1080px);
+    margin-inline: auto;
+}
+
+.wpb_row.bma-row-w-md-lg,
+.vc_row_inner.bma-row-w-md-lg {
+    max-width: var(--max-w-md-lg, 950px);
+    margin-inline: auto;
+}
+
+.wpb_row.bma-row-w-md,
+.vc_row_inner.bma-row-w-md {
+    max-width: var(--max-w-md, 850px);
+    margin-inline: auto;
+}
+
+.wpb_row.bma-row-w-sm,
+.vc_row_inner.bma-row-w-sm {
+    max-width: var(--max-w-sm, 512px);
+    margin-inline: auto;
+}
+
+.wpb_row.bma-row-w-custom,
+.vc_row_inner.bma-row-w-custom {
+    max-width: var(--bma-row-w, 100%);
+    margin-inline: auto;
+}
+
+/* Stretched rows stay full-bleed; the selected width caps this injected inner wrapper. */
+.wpb_row.bma-row-has-inner-width > .bma-row-width-inner {
+    display: flow-root;
+    width: 100%;
+    margin-inline: auto;
+}
+
+.wpb_row.vc_row-flex.bma-row-has-inner-width > .bma-row-width-inner {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wpb_row.vc_row-flex.bma-row-has-inner-width > .bma-row-width-inner > .vc_column_container {
+    display: flex;
+}
+
+.wpb_row.vc_row-flex.bma-row-has-inner-width > .bma-row-width-inner > .vc_column_container > .vc_column-inner {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    z-index: 1;
+}
+
+.wpb_row.vc_row-o-content-top.bma-row-has-inner-width > .bma-row-width-inner > .vc_column_container > .vc_column-inner {
+    justify-content: flex-start;
+}
+
+.wpb_row.vc_row-o-content-middle.bma-row-has-inner-width > .bma-row-width-inner > .vc_column_container > .vc_column-inner {
+    justify-content: center;
+}
+
+.wpb_row.vc_row-o-content-bottom.bma-row-has-inner-width > .bma-row-width-inner > .vc_column_container > .vc_column-inner {
+    justify-content: flex-end;
+}
+
+.wpb_row.vc_row-o-content-top.bma-row-has-inner-width:not(.vc_row-o-equal-height) > .bma-row-width-inner > .vc_column_container {
+    align-items: flex-start;
+}
+
+.wpb_row.vc_row-o-content-middle.bma-row-has-inner-width:not(.vc_row-o-equal-height) > .bma-row-width-inner > .vc_column_container {
+    align-items: center;
+}
+
+.wpb_row.vc_row-o-content-bottom.bma-row-has-inner-width:not(.vc_row-o-equal-height) > .bma-row-width-inner > .vc_column_container {
+    align-items: flex-end;
+}
+
+.wpb_row.vc_row-o-columns-stretch.bma-row-has-inner-width > .bma-row-width-inner {
+    align-content: stretch;
+}
+
+.wpb_row.vc_row-o-columns-top.bma-row-has-inner-width > .bma-row-width-inner {
+    align-content: flex-start;
+}
+
+.wpb_row.vc_row-o-columns-middle.bma-row-has-inner-width > .bma-row-width-inner {
+    align-content: center;
+}
+
+.wpb_row.vc_row-o-columns-bottom.bma-row-has-inner-width > .bma-row-width-inner {
+    align-content: flex-end;
+}
+
+.wpb_row.bma-row-w-full > .bma-row-width-inner {
+    max-width: var(--w-full, 100%);
+}
+
+.wpb_row.bma-row-w-lg > .bma-row-width-inner {
+    max-width: var(--max-w-lg, 1080px);
+}
+
+.wpb_row.bma-row-w-md-lg > .bma-row-width-inner {
+    max-width: var(--max-w-md-lg, 950px);
+}
+
+.wpb_row.bma-row-w-md > .bma-row-width-inner {
+    max-width: var(--max-w-md, 850px);
+}
+
+.wpb_row.bma-row-w-sm > .bma-row-width-inner {
+    max-width: var(--max-w-sm, 512px);
+}
+
+.wpb_row.bma-row-w-custom > .bma-row-width-inner {
+    max-width: var(--bma-row-w, 100%);
+}
+
+/* Safety net: a stretched row must never be width-capped directly. The PHP filter
+   caps the injected inner wrapper instead. Inline width from the vc_full_width JS
+   needs the !important here. */
+[data-vc-full-width].wpb_row[class*="bma-row-w-"] {
+    max-width: none !important;
+    margin-inline: 0 !important;
+}

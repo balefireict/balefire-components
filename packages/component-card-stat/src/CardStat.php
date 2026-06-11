@@ -208,11 +208,11 @@ final class CardStat {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Card Stat Grid', 'balefire' ),
+				'name'                    => __( 'Card Stat Grid', 'balefire' ),
 				'base'                    => 'bma_card_stat_grid',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_CardStat',
-				'category'                => __( 'BMA Cards', 'balefire' ),
-				'description'             => __( 'Industry stat cards (icon + title + two stats).', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Industry stat cards (icon + title + two stats).', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-row',
 				'as_parent'               => array( 'only' => 'bma_card_stat' ),
 				'content_element'         => true,
@@ -233,10 +233,11 @@ final class CardStat {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Card Stat', 'balefire' ),
+				'name'            => __( 'Card Stat', 'balefire' ),
 				'base'            => 'bma_card_stat',
-				'category'        => __( 'BMA Cards', 'balefire' ),
-				'description'     => __( 'A single industry stat card.', 'balefire' ),
+				'php_class_name'  => 'WPBakeryShortCode_BMA_CardStatItem',
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — A single industry stat card.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_card_stat_grid' ),
 				'content_element' => true,
@@ -300,10 +301,35 @@ final class CardStat {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass so the parent grid is
-	 * recognized as a container in the editor. Hooked on vc_after_init.
+	 * Register the backend-editor preview classes for the parent grid
+	 * container and the child stat card. Hooked on vc_after_init.
+	 *
+	 * When the shared BakeryPreview infra is present, both elements get
+	 * thumbnail/title/excerpt previews; the parent grid uses an empty map
+	 * (container chrome only). When the infra is absent (soft dependency),
+	 * the parent grid falls back to the plain WPBakeryShortCodesContainer
+	 * subclass so it is still recognized as a container, while the child
+	 * card needs no fallback (WPBakery defaults it to FishBones).
 	 */
-	public static function registerContainerClass(): void {
+	public static function registerPreviewClasses(): void {
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_CardStat',
+				array()
+			);
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_CardStatItem',
+				array(
+					'image' => 'icon',
+					'title' => 'title',
+					'text'  => 'content',
+				)
+			);
+			return;
+		}
+
+		// Fallback: shared preview infra absent. Keep the original plain
+		// container registration so the parent grid still works as a container.
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}

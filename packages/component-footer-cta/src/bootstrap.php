@@ -35,6 +35,7 @@ $bma_footer_cta_boot = function (): void {
 	\Balefire\Component\FooterCta\FooterCta::register();
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\FooterCta\FooterCta::class, 'vcMap' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\FooterCta\FooterCta::class, 'registerPreviewClasses' ) );
 	}
 };
 

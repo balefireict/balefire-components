@@ -1,105 +1,137 @@
 <?php
 /**
  * Renderer for [bma_testimonial] shortcode.
+ *
+ * Attribute-driven (no ACF). The quote comes from the element's rich-text
+ * body ($content); attribution/role/company/image come from shortcode atts.
  */
 
 declare( strict_types=1 );
 
 namespace Balefire\Component\Testimonial;
 
+defined( 'ABSPATH' ) || exit;
+
 final class Renderer {
 
-    private static function defaults(): array {
-        return [
-            'align'          => 'center',
-            'container'      => '',
-            'spacing_top'    => '',
-            'spacing_bottom' => '',
-            'id'             => '',
-            'class'          => '',
-            'quote'          => '',
-            'attribution'    => '',
-            'role'           => '',
-            'company'        => '',
-            'image'          => '',
-        ];
-    }
+	/**
+	 * @return array<string, string>
+	 */
+	private static function defaults(): array {
+		return [
+			'align'       => 'center',
+			'variant'     => '',
+			'id'          => '',
+			'class'       => '',
+			'attribution' => '',
+			'role'        => '',
+			'company'     => '',
+			'image'       => '',
+		];
+	}
 
-    public static function render( $atts, ?string $content = null ): string {
-        $atts = \shortcode_atts(
-            self::defaults(),
-            is_array( $atts ) ? $atts : [],
-            'bma_testimonial'
-        );
+	/**
+	 * @param array<string,string>|string $atts
+	 */
+	public static function render( $atts, ?string $content = null ): string {
+		$atts = \shortcode_atts(
+			self::defaults(),
+			is_array( $atts ) ? $atts : [],
+			'bma_testimonial'
+		);
 
-        $post_id = \get_the_ID() ?: 0;
+		$wrapper_atts = self::build_wrapper_atts( $atts );
 
-        $quote       = (string) ( $atts['quote'] ?? \get_field( 'bma_testimonial_quote', $post_id ) ?? '' );
-        $attribution = (string) ( $atts['attribution'] ?? \get_field( 'bma_testimonial_attribution', $post_id ) ?? '' );
-        $role        = (string) ( $atts['role'] ?? \get_field( 'bma_testimonial_role', $post_id ) ?? '' );
-        $company     = (string) ( $atts['company'] ?? \get_field( 'bma_testimonial_company', $post_id ) ?? '' );
-        $image       = \is_array( $atts['image'] ?? null ) ? $atts['image'] : ( \get_field( 'bma_testimonial_image', $post_id ) ?: null );
+		// Rich quote body comes through $content.
+		$quote = '';
+		if ( null !== $content && '' !== trim( $content ) ) {
+			$quote = \do_shortcode( \wpautop( $content ) );
+		}
 
-        $wrapper_atts = self::build_wrapper_atts( $atts );
+		$args = [
+			'quote'       => $quote,
+			'attribution' => (string) $atts['attribution'],
+			'role'        => (string) $atts['role'],
+			'company'     => (string) $atts['company'],
+			'image'       => self::render_image( (string) $atts['image'] ),
+		];
 
-        $args = [
-            'quote'       => $quote,
-            'attribution' => $attribution,
-            'role'        => $role,
-            'company'     => $company,
-            'image'       => $image,
-        ];
+		ob_start();
+		include __DIR__ . '/template.php';
+		return (string) ob_get_clean();
+	}
 
-        ob_start();
-        include __DIR__ . '/template.php';
-        return (string) ob_get_clean();
-    }
+	/**
+	 * Build the <img> markup from an attachment ID.
+	 */
+	public static function render_image( string $image_id ): string {
+		$image_id = trim( $image_id );
+		if ( '' === $image_id || ! is_numeric( $image_id ) || (int) $image_id <= 0 ) {
+			return '';
+		}
 
-    private static function build_wrapper_atts( array $atts ): array {
-        $classes = [ 'bma-c-testimonial' ];
+		return (string) \wp_get_attachment_image(
+			(int) $image_id,
+			'thumbnail',
+			false,
+			[
+				'class'   => 'bma-c-testimonial__img',
+				'loading' => 'lazy',
+			]
+		);
+	}
 
-        foreach ( [ 'align', 'container' ] as $key ) {
-            $value = (string) $atts[ $key ];
-            if ( $value !== '' && preg_match( '/^[a-z0-9_-]+$/i', $value ) ) {
-                $classes[] = "bma-c-testimonial--{$key}-{$value}";
-            }
-        }
-        foreach ( [ 'spacing_top' => 'pt', 'spacing_bottom' => 'pb' ] as $key => $abbr ) {
-            $value = (string) $atts[ $key ];
-            if ( $value !== '' && preg_match( '/^[a-z0-9]+$/i', $value ) ) {
-                $classes[] = "bma-c--{$abbr}-{$value}";
-            }
-        }
+	/**
+	 * @param array<string,string> $atts
+	 * @return array<string,string>
+	 */
+	private static function build_wrapper_atts( array $atts ): array {
+		$classes = [ 'bma-c-testimonial' ];
 
-        $extra = trim( (string) $atts['class'] );
-        if ( $extra !== '' ) {
-            $classes[] = $extra;
-        }
+		$variant = (string) $atts['variant'];
+		if ( $variant !== '' && preg_match( '/^[a-z0-9_-]+$/i', $variant ) ) {
+			$classes[] = "bma-c-testimonial--{$variant}";
+		}
 
-        $wrapper = [
-            'class' => implode( ' ', array_unique( $classes ) ),
-        ];
+		$align = (string) $atts['align'];
+		if ( $align !== '' && preg_match( '/^[a-z0-9_-]+$/i', $align ) ) {
+			$classes[] = "bma-c-testimonial--align-{$align}";
+		}
 
-        $id = trim( (string) $atts['id'] );
-        if ( $id !== '' ) {
-            $wrapper['id'] = $id;
-        }
+		$extra = trim( (string) $atts['class'] );
+		if ( $extra !== '' ) {
+			$classes[] = $extra;
+		}
 
-        return (array) \apply_filters( 'bma_c_testimonial/wrapper_atts', $wrapper, $atts );
-    }
+		$wrapper = [
+			'class' => implode( ' ', array_unique( $classes ) ),
+		];
 
-    public static function attrs_to_html( array $atts ): string {
-        $parts = [];
-        foreach ( $atts as $key => $value ) {
-            if ( $value === '' || $value === null ) {
-                continue;
-            }
-            $parts[] = sprintf(
-                '%s="%s"',
-                \esc_attr( (string) $key ),
-                \esc_attr( (string) $value )
-            );
-        }
-        return implode( ' ', $parts );
-    }
+		$id = trim( (string) $atts['id'] );
+		if ( $id !== '' ) {
+			$wrapper['id'] = $id;
+		}
+
+		return (array) \apply_filters( 'bma_c_testimonial/wrapper_atts', $wrapper, $atts );
+	}
+
+	/**
+	 * Renders the array as a quoted HTML attribute string.
+	 *
+	 * @param array<string,string> $atts
+	 */
+	public static function attrs_to_html( array $atts ): string {
+		$parts = [];
+		foreach ( $atts as $key => $value ) {
+			if ( $value === '' || $value === null ) {
+				continue;
+			}
+			$parts[] = sprintf(
+				'%s="%s"',
+				\esc_attr( (string) $key ),
+				\esc_attr( (string) $value )
+			);
+		}
+		return implode( ' ', $parts );
+	}
 }

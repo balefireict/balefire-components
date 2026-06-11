@@ -1,16 +1,16 @@
 /**
  * balefireict/component-hr styles.
  *
- * Replaces the Tailwind utilities (flex justify-center) that the rockerbox
- * markup relied on. There were no dedicated .bma-hr rules in the rockerbox
- * resources/css — the utilities did all the work — so this is the minimal
- * vanilla equivalent.
+ * CSS-only horizontal rule: fixed size, centered, solid color.
  *
  * Consumers import this file:
  *   @import "~/vendor/balefireict/component-hr/src/style.css";
  */
 
 .bma-hr {
-	display: flex;
-	justify-content: center;
+    width: var(--bma-hr-width, 135px);
+    height: var(--bma-hr-height, 4px);
+    margin-inline: auto;
+    border-radius: 999px;
+    background: var(--bma-hr-color, #d3d6e2);
 }

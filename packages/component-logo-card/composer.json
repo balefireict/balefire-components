@@ -1,6 +1,6 @@
 {
     "name": "balefireict/component-logo-card",
-    "description": "Logo card / partner logo strip component for Balefire classic-theme builds.",
+    "description": "BMA Logo Card - partner logo strip with linked logos. Parent/child WPBakery container, vanilla CSS.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -17,7 +17,7 @@
     "extra": {
         "balefire-component": {
             "slug": "logo-card",
-            "type": "field-group",
+            "type": "scaffolding",
             "shortcode": "bma_logo_card",
             "css_class": "bma-c-logo-card",
             "owns_css": true

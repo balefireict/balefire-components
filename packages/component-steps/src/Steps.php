@@ -184,11 +184,11 @@ final class Steps {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Steps', 'balefire' ),
+				'name'                    => __( 'Steps', 'balefire' ),
 				'base'                    => 'bma_steps',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_Steps',
-				'category'                => __( 'BMA Cards', 'balefire' ),
-				'description'             => __( 'Numbered steps grid (icon, title, body).', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Numbered steps grid (icon, title, body).', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-row',
 				'as_parent'               => array( 'only' => 'bma_step' ),
 				'content_element'         => true,
@@ -209,10 +209,11 @@ final class Steps {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Step', 'balefire' ),
+				'name'            => __( 'Step', 'balefire' ),
 				'base'            => 'bma_step',
-				'category'        => __( 'BMA Cards', 'balefire' ),
-				'description'     => __( 'A single step card (icon, title, body).', 'balefire' ),
+				'php_class_name'  => 'WPBakeryShortCode_BMA_Step',
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — A single step card (icon, title, body).', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_steps' ),
 				'content_element' => true,
@@ -239,14 +240,39 @@ final class Steps {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass so the editor treats
-	 * the parent as a container and its children remain editable. Hooked on
-	 * vc_after_init so the base class is loaded.
+	 * Register the backend-editor preview classes for the parent container and
+	 * the child element. Hooked on vc_after_init so the WPBakery base classes
+	 * are loaded.
+	 *
+	 * When the shared BakeryPreview infra is present it builds preview-enabled
+	 * subclasses (thumbnail + title/excerpt in the editor). The parent is a
+	 * container with an empty map (no preview content of its own, just keeps
+	 * the children editable); the child maps icon => thumbnail, title, and the
+	 * textarea_html body as the excerpt. When the soft-dep Preview class is
+	 * absent, the parent falls back to the plain WPBakeryShortCodesContainer
+	 * subclass (the child needs no fallback — WPBakery defaults to FishBones).
 	 */
-	public static function registerContainerClass(): void {
+	public static function registerPreviewClasses(): void {
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}
+
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_Steps',
+				array()
+			);
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_Step',
+				array(
+					'image' => 'icon',
+					'title' => 'title',
+					'text'  => 'content',
+				)
+			);
+			return;
+		}
+
 		if ( ! class_exists( 'WPBakeryShortCode_BMA_Steps' ) ) {
 			eval( 'class WPBakeryShortCode_BMA_Steps extends \\WPBakeryShortCodesContainer {}' );
 		}

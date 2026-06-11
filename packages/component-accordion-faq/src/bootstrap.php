@@ -1,36 +1,46 @@
 <?php
 /**
- * Balefire Component: Accordion FAQ
+ * balefireict/component-accordion-faq — bootstrap.
+ *
+ * Registers the parent + child shortcodes, wires vc_map on vc_before_init,
+ * and registers the WPBakeryShortCodesContainer subclass on vc_after_init.
+ *
+ * Auto-loaded by Composer (autoload.files in composer.json).
+ *
+ * @package Balefire\Component\AccordionFaq
  */
 
 declare( strict_types=1 );
 
 namespace Balefire\Component\AccordionFaq;
 
-if ( ! defined( 'ABSPATH' ) ) {
-    return;
-}
+defined( 'ABSPATH' ) || exit;
 
-const SLUG      = 'accordion-faq';
-const SHORTCODE = 'bma_accordion_faq';
+const SLUG = 'accordion-faq';
 
 \add_action( 'init', static function (): void {
-    \add_shortcode( SHORTCODE, [ Renderer::class, 'render' ] );
+	Renderer::register();
 } );
 
 \add_action( 'vc_before_init', static function (): void {
-    if ( ! function_exists( 'vc_map' ) ) {
-        return;
-    }
-    $bakery = __DIR__ . '/bakery.php';
-    if ( is_readable( $bakery ) ) {
-        require_once $bakery;
-    }
+	if ( ! function_exists( 'vc_map' ) ) {
+		return;
+	}
+	$bakery = __DIR__ . '/bakery.php';
+	if ( is_readable( $bakery ) ) {
+		require_once $bakery;
+	}
+	if ( function_exists( 'bma_accordion_faq_vc_map' ) ) {
+		bma_accordion_faq_vc_map();
+	}
 } );
 
-if ( ! \defined( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) || \constant( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) ) {
-    \add_filter( 'acf/settings/load_json', static function ( array $paths ): array {
-        $paths[] = __DIR__ . '/../acf-json';
-        return $paths;
-    } );
-}
+\add_action( 'vc_after_init', static function (): void {
+	$bakery = __DIR__ . '/bakery.php';
+	if ( is_readable( $bakery ) ) {
+		require_once $bakery;
+	}
+	if ( function_exists( 'bma_accordion_faq_register_container_class' ) ) {
+		bma_accordion_faq_register_container_class();
+	}
+} );

@@ -4,8 +4,9 @@
  *
  * Defines thin global function wrappers (keeping the original rockerbox
  * function names), registers the parent grid + child card + icon shortcodes,
- * wires vc_map on vc_before_init, and registers the
- * WPBakeryShortCodesContainer subclass on vc_after_init.
+ * wires vc_map on vc_before_init, and registers the backend-editor
+ * preview classes (or the plain WPBakeryShortCodesContainer fallback)
+ * on vc_after_init.
  *
  * Auto-loaded by Composer (autoload.files in composer.json).
  *
@@ -46,7 +47,7 @@ $bma_card_stat_boot = function (): void {
 	\Balefire\Component\CardStat\CardStat::register();
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\CardStat\CardStat::class, 'vcMap' ) );
-		add_action( 'vc_after_init', array( \Balefire\Component\CardStat\CardStat::class, 'registerContainerClass' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\CardStat\CardStat::class, 'registerPreviewClasses' ) );
 	}
 };
 

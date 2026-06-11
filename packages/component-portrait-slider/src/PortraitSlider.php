@@ -241,11 +241,11 @@ final class PortraitSlider {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Portrait Slider', 'balefire' ),
+				'name'                    => __( 'Portrait Slider', 'balefire' ),
 				'base'                    => 'bma_portrait_slider',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_PortraitSlider',
-				'category'                => __( 'BMA Elements', 'balefire' ),
-				'description'             => __( 'Swipeable portrait image cards.', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Swipeable portrait image cards.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-images-carousel',
 				'as_parent'               => array( 'only' => 'bma_portrait_slide' ),
 				'content_element'         => true,
@@ -258,10 +258,11 @@ final class PortraitSlider {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Portrait Slide', 'balefire' ),
+				'name'            => __( 'Portrait Slide', 'balefire' ),
 				'base'            => 'bma_portrait_slide',
-				'category'        => __( 'BMA Elements', 'balefire' ),
-				'description'     => __( 'A single portrait slider card.', 'balefire' ),
+				'php_class_name'  => 'WPBakeryShortCode_BMA_PortraitSlide',
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — A single portrait slider card.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_portrait_slider' ),
 				'content_element' => true,
@@ -294,13 +295,38 @@ final class PortraitSlider {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass so the parent is
-	 * recognized as a container in the editor. Hooked on vc_after_init.
+	 * Register the parent container subclass and the child preview element
+	 * class so the elements render correctly in the WPBakery editor.
+	 *
+	 * When the shared BakeryPreview infra is present, the parent registers as
+	 * a preview-enabled container and the child gets a thumbnail + title
+	 * preview. When it is absent (soft dep), the parent falls back to the
+	 * plain eval'd WPBakeryShortCodesContainer subclass and the child needs
+	 * no fallback (WPBakery defaults non-container elements to FishBones).
+	 *
+	 * Hooked on vc_after_init.
 	 */
-	public static function registerContainerClass(): void {
+	public static function registerPreviewClasses(): void {
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}
+
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_PortraitSlider',
+				array()
+			);
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_PortraitSlide',
+				array(
+					'image' => 'image',
+					'title' => 'title',
+				)
+			);
+			return;
+		}
+
+		// Fallback: plain container subclass (child needs none).
 		if ( ! class_exists( 'WPBakeryShortCode_BMA_PortraitSlider' ) ) {
 			eval( 'class WPBakeryShortCode_BMA_PortraitSlider extends \\WPBakeryShortCodesContainer {}' );
 		}

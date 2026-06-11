@@ -242,12 +242,13 @@ final class Image {
 
 		vc_map(
 			array(
-				'name'        => __( 'BMA Image', 'balefire' ),
-				'base'        => 'bma_image',
-				'category'    => __( 'BMA Elements', 'balefire' ),
-				'description' => __( 'Single image with fit, crop, and aspect ratio controls.', 'balefire' ),
-				'icon'        => 'vc_icon-vc-single-image',
-				'params'      => array(
+				'name'           => __( 'Image', 'balefire' ),
+				'base'           => 'bma_image',
+				'category'       => __( 'Custom Elements', 'balefire' ),
+				'description'    => __( 'BMA — Single image with fit, crop, and aspect ratio controls.', 'balefire' ),
+				'icon'           => 'vc_icon-vc-single-image',
+				'php_class_name' => 'WPBakeryShortCode_BMA_Image',
+				'params'         => array(
 
 					array(
 						'type'        => 'attach_image',
@@ -316,5 +317,27 @@ final class Image {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Register the WPBakery backend-editor preview class for [bma_image].
+	 *
+	 * Runs on vc_after_init. Soft-depends on the shared BakeryPreview infra:
+	 * when \Balefire\Component\BakeryPreview\Preview is present it registers a
+	 * preview-enabled element class (thumbnail from the `id` attach_image
+	 * param). When absent, no fallback is needed — WPBakery defaults a missing
+	 * php_class_name to its FishBones element renderer.
+	 *
+	 * @return void
+	 */
+	public static function registerPreviewClasses(): void {
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_Image',
+				array(
+					'image' => 'id',
+				)
+			);
+		}
 	}
 }

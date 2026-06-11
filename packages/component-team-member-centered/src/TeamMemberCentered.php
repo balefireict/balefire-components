@@ -152,11 +152,11 @@ final class TeamMemberCentered {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Team Grid', 'balefire' ),
+				'name'                    => __( 'Team Grid', 'balefire' ),
 				'base'                    => 'bma_team_grid',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_TeamMemberCentered',
-				'category'                => __( 'BMA Cards', 'balefire' ),
-				'description'             => __( 'Centered team-member grid (circular photos).', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Centered team-member grid (circular photos).', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-row',
 				'as_parent'               => array( 'only' => 'bma_team_member' ),
 				'content_element'         => true,
@@ -182,10 +182,11 @@ final class TeamMemberCentered {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Team Member', 'balefire' ),
+				'name'            => __( 'Team Member', 'balefire' ),
 				'base'            => 'bma_team_member',
-				'category'        => __( 'BMA Cards', 'balefire' ),
-				'description'     => __( 'A single centered team member (photo, name, role).', 'balefire' ),
+				'php_class_name'  => 'WPBakeryShortCode_BMA_TeamMember',
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — A single centered team member (photo, name, role).', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'bma_team_grid' ),
 				'content_element' => true,
@@ -211,14 +212,40 @@ final class TeamMemberCentered {
 	}
 
 	/**
-	 * Register the WPBakeryShortCodesContainer subclass that the parent
-	 * shortcode needs to be recognized as a container in the editor.
-	 * Hooked on vc_after_init so the parent class is loaded.
+	 * Register the WPBakery backend-editor classes for the parent container
+	 * and the child element. Hooked on vc_after_init so the WPBakery base
+	 * classes are loaded.
+	 *
+	 * When the shared BakeryPreview infra is present it generates
+	 * preview-enabled classes (thumbnail + name/role excerpt) for both the
+	 * parent container and the child. The Preview class is a soft dependency:
+	 * when it is absent the parent container falls back to the plain eval'd
+	 * WPBakeryShortCodesContainer subclass (so the editor still recognizes it
+	 * as a container), and the child needs no fallback — WPBakery defaults to
+	 * the FishBones view when the php_class_name class does not exist.
 	 */
-	public static function registerContainerClass(): void {
+	public static function registerPreviewClasses(): void {
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}
+
+		if ( class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
+				'WPBakeryShortCode_BMA_TeamMemberCentered',
+				array()
+			);
+			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+				'WPBakeryShortCode_BMA_TeamMember',
+				array(
+					'image' => 'image',
+					'title' => 'name',
+					'text'  => 'role',
+				)
+			);
+			return;
+		}
+
+		// Soft-dep fallback: keep the parent recognized as a container.
 		if ( ! class_exists( 'WPBakeryShortCode_BMA_TeamMemberCentered' ) ) {
 			eval( 'class WPBakeryShortCode_BMA_TeamMemberCentered extends \\WPBakeryShortCodesContainer {}' );
 		}

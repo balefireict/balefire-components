@@ -4,7 +4,7 @@
  *
  * Available in scope:
  *   $wrapper_atts (array)  root element attributes
- *   $args         (array)  resolved content args
+ *   $args         (array)  resolved content args (headline, body, cta)
  */
 
 if ( ! defined( 'ABSPATH' ) ) { return; }
@@ -15,16 +15,16 @@ use Balefire\Component\CtaBanner\Renderer;
     <div class="bma-c-cta-banner__inner">
 
         <?php if ( ! empty( $args['headline'] ) ) : ?>
-            <h2 class="bma-c-cta-banner__headline"><?php echo wp_kses_post( $args['headline'] ); ?></h2>
+            <h2 class="bma-c-cta-banner__headline"><?php echo esc_html( $args['headline'] ); ?></h2>
         <?php endif; ?>
 
-        <?php if ( ! empty( $args['subhead'] ) ) : ?>
-            <p class="bma-c-cta-banner__subhead"><?php echo esc_html( $args['subhead'] ); ?></p>
+        <?php if ( ! empty( $args['body'] ) ) : ?>
+            <div class="bma-c-cta-banner__body"><?php echo wp_kses_post( $args['body'] ); ?></div>
         <?php endif; ?>
 
         <?php if ( ! empty( $args['cta'] ) ) : ?>
             <div class="bma-c-cta-banner__action">
-                <?php echo Renderer::render_cta( is_array( $args['cta'] ) ? $args['cta'] : null ); ?>
+                <?php echo $args['cta']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
             </div>
         <?php endif; ?>
 

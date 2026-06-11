@@ -59,7 +59,7 @@ $bma_steps_boot = function (): void {
 	\Balefire\Component\Steps\Steps::register();
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\Steps\Steps::class, 'vcMap' ) );
-		add_action( 'vc_after_init', array( \Balefire\Component\Steps\Steps::class, 'registerContainerClass' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\Steps\Steps::class, 'registerPreviewClasses' ) );
 	}
 };
 

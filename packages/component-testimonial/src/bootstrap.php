@@ -1,6 +1,9 @@
 <?php
 /**
  * Balefire Component: Testimonial
+ *
+ * Attribute-driven WPBakery element (no ACF). The quote comes from the
+ * element's rich-text body ($content); other fields from shortcode atts.
  */
 
 declare( strict_types=1 );
@@ -14,10 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 const SLUG      = 'testimonial';
 const SHORTCODE = 'bma_testimonial';
 
+// Shortcode registration.
 \add_action( 'init', static function (): void {
     \add_shortcode( SHORTCODE, [ Renderer::class, 'render' ] );
 } );
 
+// WPBakery element registration (guarded).
 \add_action( 'vc_before_init', static function (): void {
     if ( ! function_exists( 'vc_map' ) ) {
         return;
@@ -27,10 +32,3 @@ const SHORTCODE = 'bma_testimonial';
         require_once $bakery;
     }
 } );
-
-if ( ! \defined( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) || \constant( 'BALEFIRE_COMPONENTS_LOAD_ACF_JSON' ) ) {
-    \add_filter( 'acf/settings/load_json', static function ( array $paths ): array {
-        $paths[] = __DIR__ . '/../acf-json';
-        return $paths;
-    } );
-}

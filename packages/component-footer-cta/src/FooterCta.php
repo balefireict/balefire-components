@@ -315,10 +315,11 @@ final class FooterCta {
 
 		vc_map(
 			array(
-				'name'        => __( 'BMA Footer CTA', 'balefire' ),
-				'base'        => 'bma_footer_cta',
-				'category'    => __( 'BMA Elements', 'balefire' ),
-				'description' => __( 'Centered footer CTA content. Use inside the CTA gradient row.', 'balefire' ),
+				'name'           => __( 'Footer CTA', 'balefire' ),
+				'base'           => 'bma_footer_cta',
+				'php_class_name' => 'WPBakeryShortCode_BMA_FooterCta',
+				'category'       => __( 'Custom Elements', 'balefire' ),
+				'description' => __( 'BMA — Centered footer CTA content. Use inside the CTA gradient row.', 'balefire' ),
 				'icon'        => 'vc_icon-vc-button',
 				'params'      => array(
 					array(
@@ -375,6 +376,31 @@ final class FooterCta {
 						'group'      => __( 'Buttons', 'balefire' ),
 					),
 				),
+			)
+		);
+	}
+
+	/**
+	 * Register preview-enabled WPBakery backend-editor classes.
+	 *
+	 * Non-container single element: when the shared BakeryPreview infra is
+	 * present, register WPBakeryShortCode_BMA_FooterCta so the backend editor
+	 * shows the title + content excerpt. No fallback is needed — WPBakery
+	 * defaults the element to its FishBones renderer when the class is absent.
+	 *
+	 * Runs on vc_after_init (after vc_map). Soft dependency: never require the
+	 * BakeryPreview package.
+	 */
+	public static function registerPreviewClasses(): void {
+		if ( ! class_exists( '\\Balefire\\Component\\BakeryPreview\\Preview' ) ) {
+			return;
+		}
+
+		\Balefire\Component\BakeryPreview\Preview::registerElementClass(
+			'WPBakeryShortCode_BMA_FooterCta',
+			array(
+				'title' => 'title',
+				'text'  => 'content',
 			)
 		);
 	}

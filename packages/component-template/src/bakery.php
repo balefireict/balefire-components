@@ -13,11 +13,11 @@ if ( ! defined( 'ABSPATH' ) || ! function_exists( 'vc_map' ) ) {
 }
 
 vc_map( [
-    'name'        => __( 'BMA: Template', 'balefire-components' ),
+    'name'        => __( 'Template', 'balefire-components' ),
     'base'        => 'bma_template',
-    'category'    => __( 'Balefire', 'balefire-components' ),
+    'category'    => __( 'Custom Elements', 'balefire-components' ),
     'icon'        => 'icon-vc-balefire',
-    'description' => __( 'Template scaffolding component.', 'balefire-components' ),
+    'description' => __( 'BMA — Template scaffolding component.', 'balefire-components' ),
     'params'      => [
         [
             'type'        => 'dropdown',

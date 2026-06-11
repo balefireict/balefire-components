@@ -205,11 +205,11 @@ final class BrandIconCards {
 
 		vc_map(
 			array(
-				'name'                    => __( 'BMA Brand Icon Cards', 'balefire' ),
+				'name'                    => __( 'Brand Icon Cards', 'balefire' ),
 				'base'                    => 'brand_icon_cards',
 				'php_class_name'          => 'WPBakeryShortCode_BMA_BrandIconCards',
-				'category'                => __( 'BMA Elements', 'balefire' ),
-				'description'             => __( 'Grid of brand / icon cards with logo, media, title, body, and link.', 'balefire' ),
+				'category'                => __( 'Custom Elements', 'balefire' ),
+				'description'             => __( 'BMA — Grid of brand / icon cards with logo, media, title, body, and link.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-media-grid',
 				'as_parent'               => array( 'only' => 'brand_icon_card' ),
 				'content_element'         => true,
@@ -230,10 +230,10 @@ final class BrandIconCards {
 
 		vc_map(
 			array(
-				'name'            => __( 'BMA Brand Icon Card', 'balefire' ),
+				'name'            => __( 'Brand Icon Card', 'balefire' ),
 				'base'            => 'brand_icon_card',
-				'category'        => __( 'BMA Elements', 'balefire' ),
-				'description'     => __( 'Single brand/icon card.', 'balefire' ),
+				'category'        => __( 'Custom Elements', 'balefire' ),
+				'description'     => __( 'BMA — Single brand/icon card.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
 				'as_child'        => array( 'only' => 'brand_icon_cards' ),
 				'content_element' => true,
