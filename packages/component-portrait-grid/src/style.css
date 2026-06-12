@@ -1,0 +1,151 @@
+/**
+ * balefireict/component-portrait-grid.
+ *
+ * Three-column portrait image tiles based on David Tours layouts/sections/portrait-grid.svg:
+ * default state = image with a dark wash and bottom-left title; hover/focus state =
+ * full color overlay while the title rises via margin-block-end.
+ *
+ * The wrapper also emits bma-auto-grid / auto-grid-* classes. Those shared grid
+ * utilities are owned by component-auto-grid; this file owns the tile styling.
+ */
+
+.bma-portrait-grid {
+    --bma-portrait-grid-card-radius: 5px;
+    --bma-portrait-grid-title-color: #ffffff;
+    --bma-portrait-grid-overlay-color: #00338f;
+    --bma-portrait-grid-overlay-opacity: 0.862;
+    --bma-portrait-grid-dark-wash-opacity: 0.5;
+    --bma-portrait-grid-title-left: 32px;
+    --bma-portrait-grid-title-bottom: 35px;
+    --bma-portrait-grid-title-lift: 3rem;
+}
+
+.bma-portrait-grid__item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 368 / 467;
+    min-height: 320px;
+    border-radius: var(--bma-portrait-grid-card-radius);
+    background-color: #000000;
+    color: var(--bma-portrait-grid-title-color);
+    isolation: isolate;
+    text-decoration: none;
+}
+
+.bma-portrait-grid__item:hover,
+.bma-portrait-grid__item:focus-visible {
+    color: var(--bma-portrait-grid-title-color);
+    text-decoration: none;
+}
+
+.bma-portrait-grid__item:focus-visible {
+    outline: 3px solid var(--bma-portrait-grid-overlay-color);
+    outline-offset: 4px;
+}
+
+.bma-portrait-grid__media,
+.bma-portrait-grid__img,
+.bma-portrait-grid__wash,
+.bma-portrait-grid__color,
+.bma-portrait-grid__shade {
+    position: absolute;
+    inset: 0;
+}
+
+.bma-portrait-grid__media {
+    z-index: 0;
+}
+
+.bma-portrait-grid__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 350ms ease;
+}
+
+.bma-portrait-grid__wash {
+    z-index: 1;
+    background: #000000;
+    opacity: var(--bma-portrait-grid-dark-wash-opacity);
+    transition: opacity 350ms ease;
+}
+
+.bma-portrait-grid__color {
+    z-index: 2;
+    background: var(--bma-portrait-grid-overlay-color);
+    opacity: 0;
+    transition: opacity 350ms ease;
+}
+
+.bma-portrait-grid__shade {
+    z-index: 3;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 66%, rgba(0, 0, 0, 0.82) 100%);
+    opacity: 1;
+    pointer-events: none;
+}
+
+.bma-portrait-grid__title {
+    position: absolute;
+    z-index: 4;
+    inset-inline-start: var(--bma-portrait-grid-title-left);
+    inset-inline-end: 32px;
+    bottom: var(--bma-portrait-grid-title-bottom);
+    margin: 0;
+    margin-block-end: 0;
+    color: var(--bma-portrait-grid-title-color);
+    font-family:
+        Montserrat,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: clamp(1.625rem, 2.35vw, 1.875rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-align: left;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.65);
+    transition:
+        margin-block-end 350ms ease,
+        text-shadow 350ms ease;
+}
+
+.bma-portrait-grid__item:hover .bma-portrait-grid__img,
+.bma-portrait-grid__item:focus-visible .bma-portrait-grid__img,
+.bma-portrait-grid__item:focus-within .bma-portrait-grid__img {
+    transform: scale(1.035);
+}
+
+.bma-portrait-grid__item:hover .bma-portrait-grid__wash,
+.bma-portrait-grid__item:focus-visible .bma-portrait-grid__wash,
+.bma-portrait-grid__item:focus-within .bma-portrait-grid__wash {
+    opacity: 0;
+}
+
+.bma-portrait-grid__item:hover .bma-portrait-grid__color,
+.bma-portrait-grid__item:focus-visible .bma-portrait-grid__color,
+.bma-portrait-grid__item:focus-within .bma-portrait-grid__color {
+    opacity: var(--bma-portrait-grid-overlay-opacity);
+}
+
+.bma-portrait-grid__item:hover .bma-portrait-grid__title,
+.bma-portrait-grid__item:focus-visible .bma-portrait-grid__title,
+.bma-portrait-grid__item:focus-within .bma-portrait-grid__title {
+    margin-block-end: var(--bma-portrait-grid-title-lift);
+    text-shadow: none;
+}
+
+@media (max-width: 781px) {
+    .bma-portrait-grid__item {
+        min-height: 360px;
+    }
+
+    .bma-portrait-grid__title {
+        inset-inline-start: 24px;
+        inset-inline-end: 24px;
+        bottom: 28px;
+    }
+}
