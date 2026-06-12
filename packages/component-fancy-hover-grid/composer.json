@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-fancy-hover-grid",
+    "description": "BMA Fancy Hover Grid - 3-column portrait image tiles with bottom-left titles and color overlay hover animation. Parent/child WPBakery container, vanilla CSS.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\FancyHoverGrid\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "fancy-hover-grid",
+            "type": "scaffolding",
+            "shortcode": "bma_fancy_hover_grid",
+            "css_class": "bma-fancy-hover-grid",
+            "owns_css": true
+        }
+    }
+}

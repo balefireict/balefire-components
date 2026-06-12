@@ -1,24 +1,24 @@
 <?php
 /**
- * BMA Portrait Grid shortcode (parent grid + child tile).
+ * BMA Fancy Hover Grid shortcode (parent grid + child tile).
  *
- * Parent: [bma_portrait_grid] wraps child portrait tiles, or builds tiles
+ * Parent: [bma_fancy_hover_grid] wraps child portrait tiles, or builds tiles
  * automatically from a post loop / ACF relationship field via the `source` att.
- * Child:  [bma_portrait_grid_item image="" title="" text="" link=""]
+ * Child:  [bma_fancy_hover_grid_item image="" title="" text="" link=""]
  *
- * @package Balefire\Component\PortraitGrid
+ * @package Balefire\Component\FancyHoverGrid
  */
 
 declare( strict_types=1 );
 
-namespace Balefire\Component\PortraitGrid;
+namespace Balefire\Component\FancyHoverGrid;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Static renderer for the portrait tile grid.
  */
-final class PortraitGrid {
+final class FancyHoverGrid {
 
 	/**
 	 * Valid aspect tokens (mirrors the bma-image pattern).
@@ -50,10 +50,11 @@ final class PortraitGrid {
 				'aspect'          => 'portrait',
 				'overlay_color'   => '#00338f',
 				'overlay_opacity' => '0.862',
+				'hover_blur'      => '3px',
 				'class'           => '',
 			),
 			$atts,
-			'bma_portrait_grid'
+			'bma_fancy_hover_grid'
 		);
 
 		$source = in_array( $atts['source'], array( 'manual', 'posts', 'acf', 'terms' ), true ) ? $atts['source'] : 'manual';
@@ -70,8 +71,8 @@ final class PortraitGrid {
 		}
 
 		$classes = array(
-			'bma-portrait-grid',
-			'bma-portrait-grid--aspect-' . $aspect,
+			'bma-fancy-hover-grid',
+			'bma-fancy-hover-grid--aspect-' . $aspect,
 			'bma-auto-grid',
 			'auto-grid-cols-1',
 			'md:auto-grid-cols-2',
@@ -85,8 +86,9 @@ final class PortraitGrid {
 
 		$style = self::cssVarStyle(
 			array(
-				'--bma-portrait-grid-overlay-color'   => self::attr( $atts, 'overlay_color' ),
-				'--bma-portrait-grid-overlay-opacity' => self::attr( $atts, 'overlay_opacity' ),
+				'--bma-fancy-hover-grid-overlay-color'   => self::attr( $atts, 'overlay_color' ),
+				'--bma-fancy-hover-grid-overlay-opacity' => self::attr( $atts, 'overlay_opacity' ),
+				'--bma-fancy-hover-grid-hover-blur'      => self::attr( $atts, 'hover_blur' ),
 			)
 		);
 
@@ -111,7 +113,7 @@ final class PortraitGrid {
 
 		$inner = do_shortcode( shortcode_unautop( trim( (string) $content ) ) );
 		$inner = preg_replace( '/^\s*<br\s*\/?>\s*/i', '', (string) $inner );
-		$inner = preg_replace( '/<br\s*\/?>\s*(?=<(?:a|div)\s+class="bma-portrait-grid__item\b)/i', '', (string) $inner );
+		$inner = preg_replace( '/<br\s*\/?>\s*(?=<(?:a|div)\s+class="bma-fancy-hover-grid__item\b)/i', '', (string) $inner );
 		$inner = preg_replace( '/(<\/(?:a|div)>)\s*<br\s*\/?>/i', '$1', (string) $inner );
 
 		return (string) $inner;
@@ -156,7 +158,7 @@ final class PortraitGrid {
 			 * @param int   $post_id Source post ID.
 			 * @param array $atts    Parent shortcode atts.
 			 */
-			$data = apply_filters( 'bma_portrait_grid_post_tile', $data, $post_id, $atts );
+			$data = apply_filters( 'bma_fancy_hover_grid_post_tile', $data, $post_id, $atts );
 
 			$out .= self::tileHtml(
 				array(
@@ -224,7 +226,7 @@ final class PortraitGrid {
 			 * @param \WP_Term $term Source term.
 			 * @param array    $atts Parent shortcode atts.
 			 */
-			$data = apply_filters( 'bma_portrait_grid_term_tile', $data, $term, $atts );
+			$data = apply_filters( 'bma_fancy_hover_grid_term_tile', $data, $term, $atts );
 
 			$out .= self::tileHtml(
 				array(
@@ -456,7 +458,7 @@ final class PortraitGrid {
 				'class'         => '',
 			),
 			$atts,
-			'bma_portrait_grid_item'
+			'bma_fancy_hover_grid_item'
 		);
 
 		$title = trim( (string) self::attr( $atts, 'title' ) );
@@ -490,26 +492,26 @@ final class PortraitGrid {
 		$title = (string) $tile['title'];
 		$text  = (string) $tile['text'];
 
-		$classes = array( 'bma-portrait-grid__item' );
+		$classes = array( 'bma-fancy-hover-grid__item' );
 		if ( '' !== (string) $tile['class'] ) {
 			$classes[] = sanitize_html_class( (string) $tile['class'] );
 		}
 
 		$style_vars = array();
 		if ( '' !== trim( (string) $tile['overlay_color'] ) ) {
-			$style_vars['--bma-portrait-grid-overlay-color'] = (string) $tile['overlay_color'];
+			$style_vars['--bma-fancy-hover-grid-overlay-color'] = (string) $tile['overlay_color'];
 		}
 		$style = self::cssVarStyle( $style_vars );
 
-		$inner  = '<span class="bma-portrait-grid__media">' . $tile['image_html'] . '</span>';
-		$inner .= '<span class="bma-portrait-grid__wash" aria-hidden="true"></span>';
-		$inner .= '<span class="bma-portrait-grid__color" aria-hidden="true"></span>';
-		$inner .= '<span class="bma-portrait-grid__shade" aria-hidden="true"></span>';
+		$inner  = '<span class="bma-fancy-hover-grid__media">' . $tile['image_html'] . '</span>';
+		$inner .= '<span class="bma-fancy-hover-grid__wash" aria-hidden="true"></span>';
+		$inner .= '<span class="bma-fancy-hover-grid__color" aria-hidden="true"></span>';
+		$inner .= '<span class="bma-fancy-hover-grid__shade" aria-hidden="true"></span>';
 		if ( '' !== $title ) {
-			$inner .= '<h3 class="bma-portrait-grid__title">' . esc_html( $title ) . '</h3>';
+			$inner .= '<h3 class="bma-fancy-hover-grid__title">' . esc_html( $title ) . '</h3>';
 		}
 		if ( '' !== $text ) {
-			$inner .= '<p class="bma-portrait-grid__text">' . esc_html( $text ) . '</p>';
+			$inner .= '<p class="bma-fancy-hover-grid__text">' . esc_html( $text ) . '</p>';
 		}
 
 		if ( '' !== $url ) {
@@ -536,14 +538,14 @@ final class PortraitGrid {
 
 	/** Register shortcodes, including manual typo/hyphen aliases. */
 	public static function register(): void {
-		add_shortcode( 'bma_portrait_grid', 'bma_portrait_grid_shortcode' );
-		add_shortcode( 'bma_portrait_grid_item', 'bma_portrait_grid_item_shortcode' );
-		add_shortcode( 'bma_protrait_grid', 'bma_portrait_grid_shortcode' );
-		add_shortcode( 'bma_protrait_grid_item', 'bma_portrait_grid_item_shortcode' );
-		add_shortcode( 'bma-portrait-grid', 'bma_portrait_grid_shortcode' );
-		add_shortcode( 'bma-portrait-grid-item', 'bma_portrait_grid_item_shortcode' );
-		add_shortcode( 'bma-protrait-grid', 'bma_portrait_grid_shortcode' );
-		add_shortcode( 'bma-protrait-grid-item', 'bma_portrait_grid_item_shortcode' );
+		add_shortcode( 'bma_fancy_hover_grid', 'bma_fancy_hover_grid_shortcode' );
+		add_shortcode( 'bma_fancy_hover_grid_item', 'bma_fancy_hover_grid_item_shortcode' );
+		add_shortcode( 'bma_protrait_grid', 'bma_fancy_hover_grid_shortcode' );
+		add_shortcode( 'bma_protrait_grid_item', 'bma_fancy_hover_grid_item_shortcode' );
+		add_shortcode( 'bma-fancy-hover-grid', 'bma_fancy_hover_grid_shortcode' );
+		add_shortcode( 'bma-fancy-hover-grid-item', 'bma_fancy_hover_grid_item_shortcode' );
+		add_shortcode( 'bma-protrait-grid', 'bma_fancy_hover_grid_shortcode' );
+		add_shortcode( 'bma-protrait-grid-item', 'bma_fancy_hover_grid_item_shortcode' );
 	}
 
 	/** Register WPBakery elements. */
@@ -567,38 +569,46 @@ final class PortraitGrid {
 
 		vc_map(
 			array(
-				'name'                    => __( 'Portrait Grid', 'balefire' ),
-				'base'                    => 'bma_portrait_grid',
-				'php_class_name'          => 'WPBakeryShortCode_BMA_PortraitGrid',
+				'name'                    => __( 'Fancy Hover Grid', 'balefire' ),
+				'base'                    => 'bma_fancy_hover_grid',
+				'php_class_name'          => 'WPBakeryShortCode_BMA_FancyHoverGrid',
 				'category'                => __( 'Custom Elements', 'balefire' ),
 				'description'             => __( 'BMA — 3-column portrait image grid with color overlay hover.', 'balefire' ),
 				'icon'                    => 'vc_icon-vc-media-grid',
-				'as_parent'               => array( 'only' => 'bma_portrait_grid_item' ),
+				'as_parent'               => array( 'only' => 'bma_fancy_hover_grid_item' ),
 				'content_element'         => true,
 				'show_settings_on_create' => true,
 				'is_container'            => true,
 				'js_view'                 => 'VcColumnView',
 				'params'                  => array(
 					array(
+						'type'        => 'textfield',
+						'heading'     => __( 'Title', 'balefire' ),
+						'param_name'  => 'title',
+						'description' => __( 'Label shown in the page builder only — not rendered on the front end.', 'balefire' ),
+					),
+					array(
 						'type'        => 'dropdown',
 						'heading'     => __( 'Content source', 'balefire' ),
 						'param_name'  => 'source',
 						'std'         => 'manual',
+						'admin_label' => true,
 						'value'       => array(
 							__( 'Manual tiles', 'balefire' )     => 'manual',
 							__( 'Post loop', 'balefire' )        => 'posts',
 							__( 'ACF relationship', 'balefire' ) => 'acf',
 							__( 'Taxonomy terms', 'balefire' )   => 'terms',
 						),
-						'description' => __( 'Manual = add Portrait Tile elements inside this grid. Post loop / ACF relationship / Taxonomy terms build the tiles automatically.', 'balefire' ),
+						'description' => __( 'Manual = add Fancy Hover Tile elements inside this grid. Post loop / ACF relationship / Taxonomy terms build the tiles automatically.', 'balefire' ),
 					),
 					array(
-						'type'       => 'dropdown',
-						'heading'    => __( 'Post type', 'balefire' ),
-						'param_name' => 'post_type',
-						'std'        => 'post',
-						'value'      => $post_type_options,
-						'dependency' => array(
+						'type'        => 'dropdown',
+						'heading'     => __( 'Post type', 'balefire' ),
+						'param_name'  => 'post_type',
+						'std'         => 'post',
+						'admin_label' => true,
+						'value'       => $post_type_options,
+						'dependency'  => array(
 							'element' => 'source',
 							'value'   => array( 'posts' ),
 						),
@@ -608,6 +618,7 @@ final class PortraitGrid {
 						'heading'     => __( 'Taxonomy', 'balefire' ),
 						'param_name'  => 'taxonomy',
 						'std'         => 'category',
+						'admin_label' => true,
 						'value'       => $taxonomy_options,
 						'description' => __( 'Each term becomes a tile. Image, title, and text come from the term\'s Relationship Info fields, falling back to the term name and description.', 'balefire' ),
 						'dependency'  => array(
@@ -636,6 +647,7 @@ final class PortraitGrid {
 						'type'        => 'textfield',
 						'heading'     => __( 'ACF relationship field name', 'balefire' ),
 						'param_name'  => 'acf_field',
+						'admin_label' => true,
 						'description' => __( 'Field name of an ACF Relationship (or Post Object) field on the current page/post.', 'balefire' ),
 						'dependency'  => array(
 							'element' => 'source',
@@ -713,6 +725,13 @@ final class PortraitGrid {
 						'description' => __( 'Use a decimal from 0 to 1.', 'balefire' ),
 					),
 					array(
+						'type'        => 'textfield',
+						'heading'     => __( 'Hover backdrop blur', 'balefire' ),
+						'param_name'  => 'hover_blur',
+						'value'       => '3px',
+						'description' => __( 'Blur behind the color overlay on hover, in px or rem (e.g. 3px, 0.25rem). Set 0 to disable.', 'balefire' ),
+					),
+					array(
 						'type'       => 'textfield',
 						'heading'    => __( 'Extra class', 'balefire' ),
 						'param_name' => 'class',
@@ -723,13 +742,13 @@ final class PortraitGrid {
 
 		vc_map(
 			array(
-				'name'            => __( 'Portrait Tile', 'balefire' ),
-				'base'            => 'bma_portrait_grid_item',
-				'php_class_name'  => 'WPBakeryShortCode_BMA_PortraitGridItem',
+				'name'            => __( 'Fancy Hover Tile', 'balefire' ),
+				'base'            => 'bma_fancy_hover_grid_item',
+				'php_class_name'  => 'WPBakeryShortCode_BMA_FancyHoverGridItem',
 				'category'        => __( 'Custom Elements', 'balefire' ),
 				'description'     => __( 'BMA — A single portrait image tile with title, text, and link.', 'balefire' ),
 				'icon'            => 'vc_icon-vc-single-image',
-				'as_child'        => array( 'only' => 'bma_portrait_grid' ),
+				'as_child'        => array( 'only' => 'bma_fancy_hover_grid' ),
 				'content_element' => true,
 				'params'          => array(
 					array(
@@ -773,11 +792,13 @@ final class PortraitGrid {
 	public static function registerPreviewClasses(): void {
 		if ( class_exists( '\Balefire\Component\BakeryPreview\Preview' ) ) {
 			\Balefire\Component\BakeryPreview\Preview::registerContainerClass(
-				'WPBakeryShortCode_BMA_PortraitGrid',
-				array()
+				'WPBakeryShortCode_BMA_FancyHoverGrid',
+				array(
+					'title' => 'title',
+				)
 			);
 			\Balefire\Component\BakeryPreview\Preview::registerElementClass(
-				'WPBakeryShortCode_BMA_PortraitGridItem',
+				'WPBakeryShortCode_BMA_FancyHoverGridItem',
 				array(
 					'image' => 'image',
 					'title' => 'title',
@@ -790,8 +811,8 @@ final class PortraitGrid {
 		if ( ! class_exists( 'WPBakeryShortCodesContainer' ) ) {
 			return;
 		}
-		if ( ! class_exists( 'WPBakeryShortCode_BMA_PortraitGrid' ) ) {
-			eval( 'class WPBakeryShortCode_BMA_PortraitGrid extends \\WPBakeryShortCodesContainer {}' );
+		if ( ! class_exists( 'WPBakeryShortCode_BMA_FancyHoverGrid' ) ) {
+			eval( 'class WPBakeryShortCode_BMA_FancyHoverGrid extends \\WPBakeryShortCodesContainer {}' );
 		}
 	}
 
@@ -823,6 +844,7 @@ final class PortraitGrid {
 		$names = array(
 			'overlay_color',
 			'overlay_opacity',
+			'hover_blur',
 			'post_type',
 			'taxonomy',
 			'max_posts',
@@ -898,7 +920,7 @@ final class PortraitGrid {
 				'large',
 				false,
 				array(
-					'class'    => 'bma-portrait-grid__img',
+					'class'    => 'bma-fancy-hover-grid__img',
 					'alt'      => $alt,
 					'loading'  => 'lazy',
 					'decoding' => 'async',
@@ -908,7 +930,7 @@ final class PortraitGrid {
 			return $html ? $html : '';
 		}
 
-		return '<img class="bma-portrait-grid__img" src="' . esc_url( $image ) . '" alt="' . esc_attr( $title ) . '" loading="lazy" decoding="async" />';
+		return '<img class="bma-fancy-hover-grid__img" src="' . esc_url( $image ) . '" alt="' . esc_attr( $title ) . '" loading="lazy" decoding="async" />';
 	}
 
 	/**
@@ -925,6 +947,14 @@ final class PortraitGrid {
 				$opacity = self::sanitizeOpacity( $value );
 				if ( '' !== $opacity ) {
 					$decls[] = $name . ':' . $opacity;
+				}
+				continue;
+			}
+
+			if ( str_ends_with( $name, '-blur' ) ) {
+				$length = self::sanitizeCssLength( $value );
+				if ( '' !== $length ) {
+					$decls[] = $name . ':' . $length;
 				}
 				continue;
 			}
@@ -960,6 +990,26 @@ final class PortraitGrid {
 		}
 
 		return rtrim( rtrim( sprintf( '%.3F', $opacity ), '0' ), '.' );
+	}
+
+	/**
+	 * Sanitize a CSS length (px/rem/em). Bare numbers are treated as px.
+	 *
+	 * @param string $value Raw length.
+	 * @return string Safe length or ''.
+	 */
+	private static function sanitizeCssLength( string $value ): string {
+		$value = trim( $value );
+		if ( '' === $value ) {
+			return '';
+		}
+		if ( is_numeric( $value ) ) {
+			return $value . 'px';
+		}
+		if ( preg_match( '/^[0-9]*\.?[0-9]+(px|rem|em)$/', $value ) ) {
+			return $value;
+		}
+		return '';
 	}
 
 	/**

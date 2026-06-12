@@ -1,0 +1,217 @@
+/**
+ * balefireict/component-fancy-hover-grid.
+ *
+ * Three-column portrait image tiles based on David Tours layouts/sections/fancy-hover-grid.svg:
+ * default state = image with a dark wash and bottom-left title; hover/focus state =
+ * full color overlay while the title rises via margin-block-end.
+ *
+ * The wrapper also emits bma-auto-grid / auto-grid-* classes. Those shared grid
+ * utilities are owned by component-auto-grid; this file owns the tile styling.
+ */
+
+.bma-fancy-hover-grid {
+    --bma-fancy-hover-grid-card-radius: 5px;
+    --bma-fancy-hover-grid-title-color: #ffffff;
+    --bma-fancy-hover-grid-overlay-color: #00338f;
+    --bma-fancy-hover-grid-overlay-opacity: 0.862;
+    --bma-fancy-hover-grid-hover-blur: 3px;
+    --bma-fancy-hover-grid-dark-wash-opacity: 0.5;
+    --bma-fancy-hover-grid-title-left: 32px;
+    --bma-fancy-hover-grid-title-bottom: 35px;
+    --bma-fancy-hover-grid-title-lift: 3rem;
+    --bma-fancy-hover-grid-aspect: 368 / 467;
+    --bma-fancy-hover-grid-min-h: 320px;
+}
+
+/* ---- Aspect ratio modifiers (mirrors bma-image) ---- */
+.bma-fancy-hover-grid--aspect-portrait {
+    --bma-fancy-hover-grid-aspect: 368 / 467;
+}
+
+.bma-fancy-hover-grid--aspect-square {
+    --bma-fancy-hover-grid-aspect: 1 / 1;
+    --bma-fancy-hover-grid-min-h: 0px;
+}
+
+.bma-fancy-hover-grid--aspect-3-4 {
+    --bma-fancy-hover-grid-aspect: 3 / 4;
+    --bma-fancy-hover-grid-min-h: 0px;
+}
+
+.bma-fancy-hover-grid--aspect-4-3 {
+    --bma-fancy-hover-grid-aspect: 4 / 3;
+    --bma-fancy-hover-grid-min-h: 0px;
+}
+
+.bma-fancy-hover-grid--aspect-16-9 {
+    --bma-fancy-hover-grid-aspect: 16 / 9;
+    --bma-fancy-hover-grid-min-h: 0px;
+}
+
+.bma-fancy-hover-grid--aspect-21-9 {
+    --bma-fancy-hover-grid-aspect: 21 / 9;
+    --bma-fancy-hover-grid-min-h: 0px;
+}
+
+.bma-fancy-hover-grid--aspect-auto {
+    --bma-fancy-hover-grid-aspect: auto;
+    --bma-fancy-hover-grid-min-h: 0px;
+}
+
+.bma-fancy-hover-grid__item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: var(--bma-fancy-hover-grid-aspect, 368 / 467);
+    min-height: var(--bma-fancy-hover-grid-min-h, 320px);
+    border-radius: var(--bma-fancy-hover-grid-card-radius);
+    background-color: #000000;
+    color: var(--bma-fancy-hover-grid-title-color);
+    isolation: isolate;
+    text-decoration: none;
+}
+
+.bma-fancy-hover-grid__item:hover,
+.bma-fancy-hover-grid__item:focus-visible {
+    color: var(--bma-fancy-hover-grid-title-color);
+    text-decoration: none;
+}
+
+.bma-fancy-hover-grid__item:focus-visible {
+    outline: 3px solid var(--bma-fancy-hover-grid-overlay-color);
+    outline-offset: 4px;
+}
+
+.bma-fancy-hover-grid__media,
+.bma-fancy-hover-grid__img,
+.bma-fancy-hover-grid__wash,
+.bma-fancy-hover-grid__color,
+.bma-fancy-hover-grid__shade {
+    position: absolute;
+    inset: 0;
+}
+
+.bma-fancy-hover-grid__media {
+    z-index: 0;
+}
+
+.bma-fancy-hover-grid__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 350ms ease;
+}
+
+.bma-fancy-hover-grid__wash {
+    z-index: 1;
+    background: #000000;
+    opacity: var(--bma-fancy-hover-grid-dark-wash-opacity);
+    transition: opacity 350ms ease;
+}
+
+.bma-fancy-hover-grid__color {
+    z-index: 2;
+    /* Element opacity stays 1: animating opacity on the same element as a
+       backdrop-filter breaks the blur in Chromium. Fade the tint via
+       background-color instead and bake the overlay opacity into it. */
+    background-color: transparent;
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+    transition:
+        background-color 350ms ease,
+        backdrop-filter 350ms ease,
+        -webkit-backdrop-filter 350ms ease;
+}
+
+.bma-fancy-hover-grid__shade {
+    z-index: 3;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 66%, rgba(0, 0, 0, 0.82) 100%);
+    opacity: 1;
+    pointer-events: none;
+}
+
+.bma-fancy-hover-grid__title {
+    position: absolute;
+    z-index: 4;
+    inset-inline-start: var(--bma-fancy-hover-grid-title-left);
+    inset-inline-end: 32px;
+    bottom: var(--bma-fancy-hover-grid-title-bottom);
+    margin: 0;
+    margin-block-end: 0;
+    color: var(--bma-fancy-hover-grid-title-color);
+    text-align: left;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.65);
+    transition:
+        margin-block-end 350ms ease,
+        text-shadow 350ms ease;
+}
+
+.bma-fancy-hover-grid__text {
+    position: absolute;
+    z-index: 4;
+    inset-inline-start: var(--bma-fancy-hover-grid-title-left);
+    inset-inline-end: 32px;
+    bottom: var(--bma-fancy-hover-grid-title-bottom);
+    margin: 0;
+    color: var(--bma-fancy-hover-grid-title-color);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+        opacity 350ms ease,
+        transform 350ms ease;
+    pointer-events: none;
+}
+
+.bma-fancy-hover-grid__item:hover .bma-fancy-hover-grid__img,
+.bma-fancy-hover-grid__item:focus-visible .bma-fancy-hover-grid__img,
+.bma-fancy-hover-grid__item:focus-within .bma-fancy-hover-grid__img {
+    transform: scale(1.035);
+}
+
+.bma-fancy-hover-grid__item:hover .bma-fancy-hover-grid__wash,
+.bma-fancy-hover-grid__item:focus-visible .bma-fancy-hover-grid__wash,
+.bma-fancy-hover-grid__item:focus-within .bma-fancy-hover-grid__wash {
+    opacity: 0;
+}
+
+.bma-fancy-hover-grid__item:hover .bma-fancy-hover-grid__color,
+.bma-fancy-hover-grid__item:focus-visible .bma-fancy-hover-grid__color,
+.bma-fancy-hover-grid__item:focus-within .bma-fancy-hover-grid__color {
+    background-color: color-mix(
+        in srgb,
+        var(--bma-fancy-hover-grid-overlay-color) calc(var(--bma-fancy-hover-grid-overlay-opacity) * 100%),
+        transparent
+    );
+    backdrop-filter: blur(var(--bma-fancy-hover-grid-hover-blur, 3px));
+    -webkit-backdrop-filter: blur(var(--bma-fancy-hover-grid-hover-blur, 3px));
+}
+
+.bma-fancy-hover-grid__item:hover .bma-fancy-hover-grid__title,
+.bma-fancy-hover-grid__item:focus-visible .bma-fancy-hover-grid__title,
+.bma-fancy-hover-grid__item:focus-within .bma-fancy-hover-grid__title {
+    margin-block-end: var(--bma-fancy-hover-grid-title-lift);
+    text-shadow: none;
+}
+
+.bma-fancy-hover-grid__item:hover .bma-fancy-hover-grid__text,
+.bma-fancy-hover-grid__item:focus-visible .bma-fancy-hover-grid__text,
+.bma-fancy-hover-grid__item:focus-within .bma-fancy-hover-grid__text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 781px) {
+    .bma-fancy-hover-grid--aspect-portrait .bma-fancy-hover-grid__item {
+        min-height: 360px;
+    }
+
+    .bma-fancy-hover-grid__title {
+        inset-inline-start: 24px;
+        inset-inline-end: 24px;
+        bottom: 28px;
+    }
+}
