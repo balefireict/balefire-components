@@ -18,14 +18,51 @@
     --bma-portrait-grid-title-left: 32px;
     --bma-portrait-grid-title-bottom: 35px;
     --bma-portrait-grid-title-lift: 3rem;
+    --bma-portrait-grid-aspect: 368 / 467;
+    --bma-portrait-grid-min-h: 320px;
+}
+
+/* ---- Aspect ratio modifiers (mirrors bma-image) ---- */
+.bma-portrait-grid--aspect-portrait {
+    --bma-portrait-grid-aspect: 368 / 467;
+}
+
+.bma-portrait-grid--aspect-square {
+    --bma-portrait-grid-aspect: 1 / 1;
+    --bma-portrait-grid-min-h: 0px;
+}
+
+.bma-portrait-grid--aspect-3-4 {
+    --bma-portrait-grid-aspect: 3 / 4;
+    --bma-portrait-grid-min-h: 0px;
+}
+
+.bma-portrait-grid--aspect-4-3 {
+    --bma-portrait-grid-aspect: 4 / 3;
+    --bma-portrait-grid-min-h: 0px;
+}
+
+.bma-portrait-grid--aspect-16-9 {
+    --bma-portrait-grid-aspect: 16 / 9;
+    --bma-portrait-grid-min-h: 0px;
+}
+
+.bma-portrait-grid--aspect-21-9 {
+    --bma-portrait-grid-aspect: 21 / 9;
+    --bma-portrait-grid-min-h: 0px;
+}
+
+.bma-portrait-grid--aspect-auto {
+    --bma-portrait-grid-aspect: auto;
+    --bma-portrait-grid-min-h: 0px;
 }
 
 .bma-portrait-grid__item {
     position: relative;
     display: block;
     overflow: hidden;
-    aspect-ratio: 368 / 467;
-    min-height: 320px;
+    aspect-ratio: var(--bma-portrait-grid-aspect, 368 / 467);
+    min-height: var(--bma-portrait-grid-min-h, 320px);
     border-radius: var(--bma-portrait-grid-card-radius);
     background-color: #000000;
     color: var(--bma-portrait-grid-title-color);
@@ -113,6 +150,25 @@
         text-shadow 350ms ease;
 }
 
+.bma-portrait-grid__text {
+    position: absolute;
+    z-index: 4;
+    inset-inline-start: var(--bma-portrait-grid-title-left);
+    inset-inline-end: 32px;
+    bottom: var(--bma-portrait-grid-title-bottom);
+    margin: 0;
+    color: var(--bma-portrait-grid-title-color);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+        opacity 350ms ease,
+        transform 350ms ease;
+    pointer-events: none;
+}
+
 .bma-portrait-grid__item:hover .bma-portrait-grid__img,
 .bma-portrait-grid__item:focus-visible .bma-portrait-grid__img,
 .bma-portrait-grid__item:focus-within .bma-portrait-grid__img {
@@ -138,8 +194,15 @@
     text-shadow: none;
 }
 
+.bma-portrait-grid__item:hover .bma-portrait-grid__text,
+.bma-portrait-grid__item:focus-visible .bma-portrait-grid__text,
+.bma-portrait-grid__item:focus-within .bma-portrait-grid__text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @media (max-width: 781px) {
-    .bma-portrait-grid__item {
+    .bma-portrait-grid--aspect-portrait .bma-portrait-grid__item {
         min-height: 360px;
     }
 
