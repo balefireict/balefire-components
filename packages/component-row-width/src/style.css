@@ -7,9 +7,13 @@
    with standalone fallbacks so the component works without them.
 
    Specificity note: js_composer.min.css loads after the theme bundle and
-   sets `.vc_row { margin-left:-15px; margin-right:-15px }`. At equal
-   specificity it wins and the centered row hangs 15px off-canvas
-   (horizontal scroll). The `.wpb_row` prefix (0,2,0) beats it.
+   sets `.vc_row { margin-left:-15px; margin-right:-15px }` (0,1,0) AND
+   `.vc_row.vc_column-gap-N { margin-left/right:-Npx }` (0,2,0) for rows
+   with a column gap. At equal specificity js_composer wins on source
+   order and the centered row hangs off-canvas / pins left. The width
+   presets therefore use `.vc_row.wpb_row.` (0,3,0) to beat both
+   regardless of load order. (Dev Vite injects theme CSS last, which
+   masks the tie locally — always verify against a built bundle.)
 
    Custom widths: normal rows carry `style="--bma-row-w:<value>"` injected by
    the PHP filter; stretched rows keep the outer row full-bleed and cap an
@@ -20,37 +24,43 @@
    `.bma-row-width-inner` so backgrounds stay full-bleed.
    ========================================================================== */
 
-.wpb_row.bma-row-w-full,
+.vc_row.wpb_row.bma-row-w-full,
+.vc_row.vc_row_inner.bma-row-w-full,
 .vc_row_inner.bma-row-w-full {
     max-width: var(--w-full, 100%);
     margin-inline: auto;
 }
 
-.wpb_row.bma-row-w-lg,
+.vc_row.wpb_row.bma-row-w-lg,
+.vc_row.vc_row_inner.bma-row-w-lg,
 .vc_row_inner.bma-row-w-lg {
     max-width: var(--max-w-lg, 1080px);
     margin-inline: auto;
 }
 
-.wpb_row.bma-row-w-md-lg,
+.vc_row.wpb_row.bma-row-w-md-lg,
+.vc_row.vc_row_inner.bma-row-w-md-lg,
 .vc_row_inner.bma-row-w-md-lg {
     max-width: var(--max-w-md-lg, 950px);
     margin-inline: auto;
 }
 
-.wpb_row.bma-row-w-md,
+.vc_row.wpb_row.bma-row-w-md,
+.vc_row.vc_row_inner.bma-row-w-md,
 .vc_row_inner.bma-row-w-md {
     max-width: var(--max-w-md, 850px);
     margin-inline: auto;
 }
 
-.wpb_row.bma-row-w-sm,
+.vc_row.wpb_row.bma-row-w-sm,
+.vc_row.vc_row_inner.bma-row-w-sm,
 .vc_row_inner.bma-row-w-sm {
     max-width: var(--max-w-sm, 512px);
     margin-inline: auto;
 }
 
-.wpb_row.bma-row-w-custom,
+.vc_row.wpb_row.bma-row-w-custom,
+.vc_row.vc_row_inner.bma-row-w-custom,
 .vc_row_inner.bma-row-w-custom {
     max-width: var(--bma-row-w, 100%);
     margin-inline: auto;
