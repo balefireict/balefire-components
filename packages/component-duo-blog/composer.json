@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-duo-blog",
+    "description": "BMA Duo Blog - latest blog posts as large image-cover cards in a 2-column grid (bottom gradient, white title, Read More button). [bma_duo_blog] shortcode + WPBakery vc_map.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\DuoBlog\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "duo-blog",
+            "type": "scaffolding",
+            "shortcode": "bma_duo_blog",
+            "css_class": "bma-duo-blog",
+            "owns_css": true
+        }
+    }
+}
