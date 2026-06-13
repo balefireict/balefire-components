@@ -165,6 +165,22 @@ final class Image {
 	}
 
 	/**
+	 * Validate a thumbnail size name against registered sizes, falling
+	 * back to 'full'.
+	 *
+	 * @param string $value Raw size value.
+	 * @return string Validated registered size name or 'full'.
+	 */
+	public static function sizeName( string $value ): string {
+		$value = trim( $value );
+		if ( '' === $value || 'full' === $value ) {
+			return 'full';
+		}
+		$sizes = function_exists( 'get_intermediate_image_sizes' ) ? get_intermediate_image_sizes() : array();
+		return in_array( $value, $sizes, true ) ? $value : 'full';
+	}
+
+	/**
 	 * Render the [bma_image] shortcode.
 	 *
 	 * @param array $atts Shortcode attributes.
@@ -173,11 +189,15 @@ final class Image {
 	public static function render( array $atts ): string {
 		$atts = shortcode_atts(
 			array(
-				'id'      => '',
-				'fit'     => 'object-cover',
-				'crop'    => 'object-center',
-				'aspect'  => 'aspect-video',
-				'rounded' => 'true',
+				'id'          => '',
+				'size'        => 'full',
+				'fit'         => 'object-cover',
+				'crop'        => 'object-center',
+				'aspect'      => 'aspect-video',
+				'rounded'     => 'true',
+				'link'        => 'false',
+				'link_url'    => '',
+				'link_target' => '',
 			),
 			$atts,
 			'bma_image'
@@ -188,7 +208,8 @@ final class Image {
 			return '';
 		}
 
-		$image_url = wp_get_attachment_image_url( $image_id, 'full' );
+		$size      = self::sizeName( (string) $atts['size'] );
+		$image_url = wp_get_attachment_image_url( $image_id, $size );
 		$image_alt = (string) get_post_meta( $image_id, '_wp_attachment_image_alt', true );
 		if ( ! $image_url ) {
 			return '';
@@ -221,12 +242,28 @@ final class Image {
 			$img_classes[] = $crop_mod;
 		}
 
-		return sprintf(
-			'<figure class="%s"><img decoding="async" src="%s" alt="%s" class="%s" loading="lazy" /></figure>',
-			esc_attr( implode( ' ', $figure_classes ) ),
+		$img_html = sprintf(
+			'<img decoding="async" src="%s" alt="%s" class="%s" loading="lazy" />',
 			esc_url( $image_url ),
 			esc_attr( $image_alt ),
 			esc_attr( implode( ' ', $img_classes ) )
+		);
+
+		$link     = filter_var( $atts['link'], FILTER_VALIDATE_BOOLEAN );
+		$link_url = trim( (string) $atts['link_url'] );
+		if ( $link && '' !== $link_url ) {
+			$img_html = sprintf(
+				'<a href="%s" class="bma-image__link"%s>%s</a>',
+				esc_url( $link_url ),
+				'_blank' === $atts['link_target'] ? ' target="_blank" rel="noopener noreferrer"' : '',
+				$img_html
+			);
+		}
+
+		return sprintf(
+			'<figure class="%s">%s</figure>',
+			esc_attr( implode( ' ', $figure_classes ) ),
+			$img_html
 		);
 	}
 
@@ -240,12 +277,17 @@ final class Image {
 			return;
 		}
 
+		$size_options = array( __( 'Full (original)', 'balefire' ) => 'full' );
+		foreach ( get_intermediate_image_sizes() as $size_name ) {
+			$size_options[ ucwords( str_replace( array( '-', '_' ), ' ', $size_name ) ) ] = $size_name;
+		}
+
 		vc_map(
 			array(
 				'name'           => __( 'Image', 'balefire' ),
 				'base'           => 'bma_image',
 				'category'       => __( 'Custom Elements', 'balefire' ),
-				'description'    => __( 'BMA — Single image with fit, crop, and aspect ratio controls.', 'balefire' ),
+				'description'    => __( 'BMA — Single image with fit, crop, aspect ratio, size, and optional link controls.', 'balefire' ),
 				'icon'           => 'vc_icon-vc-single-image',
 				'php_class_name' => 'WPBakeryShortCode_BMA_Image',
 				'params'         => array(
@@ -255,6 +297,15 @@ final class Image {
 						'heading'     => __( 'Image', 'balefire' ),
 						'param_name'  => 'id',
 						'description' => __( 'Select an image from the media library.', 'balefire' ),
+					),
+
+					array(
+						'type'        => 'dropdown',
+						'heading'     => __( 'Image Size', 'balefire' ),
+						'param_name'  => 'size',
+						'value'       => $size_options,
+						'std'         => 'full',
+						'description' => __( 'Registered thumbnail size to render.', 'balefire' ),
 					),
 
 					array(
@@ -312,6 +363,39 @@ final class Image {
 						'param_name' => 'rounded',
 						'value'      => array( __( 'Yes', 'balefire' ) => 'true' ),
 						'std'        => 'true',
+					),
+
+					array(
+						'type'       => 'checkbox',
+						'heading'    => __( 'Link Image', 'balefire' ),
+						'param_name' => 'link',
+						'value'      => array( __( 'Yes', 'balefire' ) => 'true' ),
+						'std'        => '',
+					),
+
+					array(
+						'type'        => 'textfield',
+						'heading'     => __( 'Link URL', 'balefire' ),
+						'param_name'  => 'link_url',
+						'dependency'  => array(
+							'element' => 'link',
+							'value'   => array( 'true' ),
+						),
+					),
+
+					array(
+						'type'       => 'dropdown',
+						'heading'    => __( 'Link Target', 'balefire' ),
+						'param_name' => 'link_target',
+						'value'      => array(
+							__( 'Same window', 'balefire' ) => '',
+							__( 'New window', 'balefire' )  => '_blank',
+						),
+						'std'        => '',
+						'dependency' => array(
+							'element' => 'link',
+							'value'   => array( 'true' ),
+						),
 					),
 
 				),

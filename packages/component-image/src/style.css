@@ -17,6 +17,13 @@
     height: auto;
 }
 
+/* Optional link wrapper — keep the full-height chain figure > a > img
+   intact so aspect-ratio + object-fit behave the same when linked. */
+.bma-image__link {
+    display: block;
+    height: 100%;
+}
+
 /* When the figure carries an aspect-ratio modifier, the image fills it. */
 .bma-image[class*="bma-image--aspect-"] .bma-image__img {
     width: 100%;

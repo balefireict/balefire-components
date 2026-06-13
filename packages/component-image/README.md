@@ -11,21 +11,29 @@ that reproduces the same visual result.
 
 ## Shortcodes registered
 
-- `[bma_image id="123" fit="object-cover" crop="object-center" aspect="aspect-video" rounded="true"]`
+- `[bma_image id="123" size="full" fit="object-cover" crop="object-center" aspect="aspect-video" rounded="true" link="false" link_url="" link_target=""]`
 
-Defaults: `fit=object-cover`, `crop=object-center`, `aspect=aspect-video`,
-`rounded=true`. An empty/invalid `id` (or an attachment that resolves to no URL)
-renders nothing.
+Defaults: `size=full`, `fit=object-cover`, `crop=object-center`,
+`aspect=aspect-video`, `rounded=true`, `link=false`. An empty/invalid `id`
+(or an attachment that resolves to no URL) renders nothing.
+
+- `size` — any registered thumbnail size name; unknown names fall back to
+  `full`.
+- `link` — `true` wraps the image in an anchor. Renders only when
+  `link_url` is also set; `link_target="_blank"` opens a new window (adds
+  `rel="noopener noreferrer"`).
 
 ## Params (vc_map)
 
-Editor UX is unchanged from rockerbox:
-
 - `id` — attach_image (media library)
+- `size` — dropdown built from `get_intermediate_image_sizes()` at map
+  time (Full + thumbnail/medium/large/etc. as registered on the site)
 - `fit` — dropdown: object-cover / object-contain / object-fill / object-none / default
 - `crop` — dropdown: object-center + 8 edge/corner positions
 - `aspect` — dropdown: aspect-video / aspect-square / aspect-4/3 / aspect-3/4 / aspect-16/9 / aspect-21/9 / aspect-auto / default (none)
 - `rounded` — checkbox
+- `link` — checkbox (default off). Link URL + Link Target params show
+  only when checked (vc dependency).
 
 ## Emitted markup
 
@@ -35,8 +43,19 @@ Editor UX is unchanged from rockerbox:
 </figure>
 ```
 
+Linked:
+
+```html
+<figure class="bma-image bma-image--aspect-video bma-image--rounded">
+  <a href="…" class="bma-image__link" target="_blank" rel="noopener noreferrer">
+    <img class="bma-image__img bma-image--cover" … />
+  </a>
+</figure>
+```
+
 Aspect-ratio and rounded modifiers sit on the `<figure>`; fit and crop modifiers
-sit on the `<img>`.
+sit on the `<img>`. The `.bma-image__link` wrapper is display:block +
+height:100% so aspect/fit behave identically when linked.
 
 ## Global function wrappers
 
