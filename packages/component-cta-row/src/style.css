@@ -1,0 +1,131 @@
+/*
+ * balefireict/component-cta-row styles — [bma_cta_row].
+ *
+ * Built from davidtours layouts/sections/bg-cta.svg (1280x417):
+ *   overlay   linear gradient, upper-right black 0.77 -> lower-left
+ *             #454545 0.89 (SVG stops 0.796/0.922 x rect opacity 0.966)
+ *   heading   DM Serif Display 57px #fff, soft drop shadow
+ *   body      Montserrat 20px #fff
+ *   button    261x72, #c8102e, radius 3, Montserrat Bold 23px #fff
+ *   phone     Montserrat Medium 31px #fff, 0.04em tracking, centered
+ *             under the button
+ *
+ * The consumer sets the BACKGROUND IMAGE — drop the element in a WPBakery
+ * stretch row and hardcode background-image on .bma-cta-row (or the extra
+ * class) in theme CSS. Cover sizing/positioning is pre-set here; the
+ * component owns only the gradient overlay (::before).
+ *
+ * Layout: large screens = flex row, space-between, vertically centered.
+ * Small screens = stacked columns, everything centered.
+ *
+ * No theme design-token lookups (no --color- or --space- vars) per the
+ * monorepo rule — explicit values; --font-* fallbacks let a consumer
+ * retypeset.
+ */
+
+.bma-cta-row {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-block: clamp(3.5rem, 3rem + 4vw, 6rem);
+    color: #fff;
+}
+
+.bma-cta-row__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2rem, 1.5rem + 3vw, 3.5rem);
+    max-width: 1080px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 2rem);
+    text-align: center;
+}
+
+.bma-cta-row__heading {
+    margin: 0 0 0.35em;
+    font-family: var(--font-heading, "DM Serif Display", Georgia, serif);
+    font-size: clamp(2.25rem, 1.8rem + 2.2vw, 3.5625rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #fff;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.55);
+}
+
+.bma-cta-row__body {
+    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.55;
+    color: #fff;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.55);
+    max-width: 36em;
+}
+
+.bma-cta-row__body :last-child {
+    margin-block-end: 0;
+}
+
+.bma-cta-row__action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* Custom-sized button per the layout: 261x72, red, bold 23px. */
+.bma-cta-row__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16.3125rem; /* 261px */
+    min-height: 4.5rem; /* 72px */
+    padding: 0.75rem 2rem;
+    background: #c8102e;
+    color: #fff;
+    border-radius: 3px;
+    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-size: clamp(1.125rem, 1.05rem + 0.4vw, 1.4375rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: background-color 0.25s ease-in-out;
+}
+
+.bma-cta-row__btn:hover,
+.bma-cta-row__btn:focus-visible {
+    background: #84081c;
+    color: #fff;
+}
+
+.bma-cta-row__phone {
+    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-size: clamp(1.375rem, 1.2rem + 0.85vw, 1.9375rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #fff;
+    text-decoration: none;
+}
+
+.bma-cta-row__phone:hover,
+.bma-cta-row__phone:focus-visible {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Large screens: row, space-between, vertically centered, text left. */
+@media (min-width: 900px) {
+    .bma-cta-row__inner {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+
+    .bma-cta-row__content {
+        max-width: 60%;
+    }
+}
