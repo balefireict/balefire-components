@@ -1,0 +1,208 @@
+/*
+ * balefireict/component-reviews-slider styles — [vmg_reviews_slider].
+ *
+ * Engine: the inline carousel script shipped by ReviewsSlider sets data-pos
+ * on each .reviews-slide (active | hidden); this file owns the crossfade.
+ * Slides stack in one grid cell and fade in place — height is driven by the
+ * tallest quote so the nav arrows stay put.
+ *
+ * Values from layouts/sections/reviews-slider.svg:
+ *   eyebrow       Montserrat 19px #bdc3c7, uppercase, tracked
+ *   stars         #f9cc3d on a #697983 pill
+ *   quote         serif ~25px #fff, centered
+ *   author        Montserrat italic 17px #bdc3c7
+ *   edge chevrons #dedede @ 0.19 opacity
+ *
+ * No theme design-token lookups (no --color- or --space- vars) per the
+ * monorepo rule — explicit values + component-scoped custom properties with
+ * fallbacks. The --font-* fallbacks let a consumer theme retypeset.
+ *
+ * BARE output: no background, no padding-controlling wrapper. The text colors
+ * assume a DARK section — drop this in a full-width WPBakery row and style the
+ * row background (the consumer owns bg, blur, padding). position:relative stays
+ * so the absolute nav chevrons anchor to the slider.
+ */
+
+.reviews-slider {
+    position: relative;
+}
+
+.reviews-slider__inner {
+    max-width: 820px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.reviews-slider__eyebrow {
+    margin: auto;
+    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-size: 19px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #bdc3c7;
+}
+
+/* All slides stack in one cell; opacity crossfades the active one in. */
+.reviews-slider__track {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.reviews-slide {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+    width: 100%;
+    margin-block: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease,
+        visibility 0.5s;
+}
+
+.reviews-slide[data-pos="active"] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+/* Gold stars on a subtle slate pill (SVG Rectangle_1083 #697983 rx15). */
+.reviews-slide__stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15em;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    background-color: rgba(105, 121, 131, 0.55);
+    color: #f9cc3d;
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.reviews-slide__star {
+    display: inline-block;
+}
+
+.reviews-slide__quote {
+    margin: 0;
+    max-width: 40ch;
+    font-family: var(--font-heading, Georgia, "Times New Roman", serif);
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    color: #fff;
+    text-wrap: balance;
+}
+
+.reviews-slide__footer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.reviews-slide__author {
+    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.0625rem);
+    font-style: italic;
+    color: #bdc3c7;
+}
+
+.reviews-slide__source {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+}
+
+.reviews-slide__source-icon {
+    display: block;
+}
+
+.reviews-slide__source--text {
+    line-height: 1;
+    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-size: 0.9375rem;
+    color: #bdc3c7;
+}
+
+.reviews-slide__source--text a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.reviews-slide__source--text a:hover {
+    text-decoration: underline;
+}
+
+/* Faint edge chevrons (SVG Path_55/56 #dedede @ 0.193). */
+.reviews-slider__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 0;
+    background: none;
+    color: #dedede;
+    opacity: 0.45;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.reviews-slider__nav:hover,
+.reviews-slider__nav:focus-visible {
+    opacity: 1;
+}
+
+.reviews-slider__prev {
+    left: clamp(0.5rem, 3vw, 2.5rem);
+}
+.reviews-slider__next {
+    right: clamp(0.5rem, 3vw, 2.5rem);
+}
+
+/* Single-review: nothing to navigate, so the engine hides the arrows. */
+.reviews-slider[data-single] .reviews-slider__nav {
+    display: none;
+}
+
+/* Arrows stay hidden until the htmx fragment lands and the engine binds
+   (data-reviews-bound) — no orphaned chevrons while slides are in flight. */
+.reviews-slider:not([data-reviews-bound]) .reviews-slider__nav {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .reviews-slider__track {
+        box-sizing: border-box;
+        padding-inline: 3rem;
+    }
+
+    .reviews-slider__nav {
+        padding: 10px;
+    }
+
+    .reviews-slider__prev {
+        left: -10px;
+    }
+    .reviews-slider__next {
+        right: -10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reviews-slide {
+        transition: opacity 0.2s ease;
+        transform: none;
+    }
+}
