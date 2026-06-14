@@ -113,7 +113,9 @@ final class Buttons {
 		);
 
 		$show_arrow = filter_var( $atts['arrow'], FILTER_VALIDATE_BOOLEAN );
-		$label      = rtrim( $label, " \t\n\r\0\x0B→" );
+		// Strip trailing arrow characters from the label (multibyte-safe).
+		// PHP rtrim() can't strip multibyte chars reliably.
+		$label = preg_replace( '/[\s\x{2192}\x{202F}]+$/u', '', $label );
 
 		$inner = $icon_html . esc_html( $label );
 		if ( $show_arrow ) {
