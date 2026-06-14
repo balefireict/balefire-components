@@ -102,9 +102,11 @@ final class Buttons {
 
 		$text_color = strtolower( trim( (string) $atts['text_color'] ) );
 		if ( 'transparent' === $style ) {
-			$classes[] = 'white' === $text_color
-				? 'btn-transparent--white'
-				: 'btn-transparent--default';
+			$allowed_text_colors = array( 'default', 'white', 'primary', 'secondary' );
+			if ( ! in_array( $text_color, $allowed_text_colors, true ) ) {
+				$text_color = 'default';
+			}
+			$classes[] = 'btn-transparent--' . $text_color;
 		}
 
 		$icon_html = self::renderIcon(
@@ -227,8 +229,10 @@ final class Buttons {
 		);
 
 		$text_color_choices = array(
-			__( 'Default (theme dark)', 'balefire' ) => 'default',
-			__( 'White', 'balefire' )                => 'white',
+			__( 'Default (theme dark)', 'balefire' )        => 'default',
+			__( 'White', 'balefire' )                       => 'white',
+			__( 'Primary (theme primary)', 'balefire' )     => 'primary',
+			__( 'Secondary (theme secondary)', 'balefire' ) => 'secondary',
 		);
 
 		$icon_choices = array(

@@ -32,11 +32,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.1em;
-    height: 1.1em;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
     vertical-align: middle;
-    margin-right: 0.3em;
+    margin-right: 0.4em;
+    margin-block-start: -3.5px;
 }
 
 .bma-buttons .btn-icon svg {
