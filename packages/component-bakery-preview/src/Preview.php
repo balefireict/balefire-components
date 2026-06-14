@@ -54,6 +54,13 @@ final class Preview {
 	private static bool $css_hooked = false;
 
 	/**
+	 * Whether the backend-editor sync JS has been hooked.
+	 *
+	 * @var bool
+	 */
+	private static bool $js_hooked = false;
+
+	/**
 	 * Look up the preview config for a generated class.
 	 *
 	 * @param string $class_name Generated class name.
@@ -97,6 +104,7 @@ final class Preview {
 		}
 		self::$config[ $class_name ] = $map;
 		self::hookCss();
+		self::hookJs();
 
 		if ( class_exists( $class_name, false ) ) {
 			return;
@@ -232,5 +240,245 @@ final class Preview {
 .bma-vc-preview__body{font-size:11px;line-height:1.4;color:#6b7280;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .wpb_bma_element .wpb_element_wrapper > .bma-vc-preview{margin-top:0;}
 </style>';
+	}
+
+	/**
+	 * Hook the backend-editor sync JS once, on the WPBakery editor screen.
+	 *
+	 * WHY THIS EXISTS: WPBakery server-renders each element's backend template
+	 * exactly once, via Vc_Shortcodes_Manager::template() which calls
+	 * contentAdmin( array(), $content ) with EMPTY atts. vc_map_get_attributes()
+	 * then fills the vc_map `value` defaults, so our server-rendered
+	 * `.bma-vc-preview` card is frozen at the DEFAULT title/text/thumbnail. JS
+	 * clones that template per instance and only re-hydrates WPBakery's own
+	 * recognized holders (.wpb_vc_param_value inputs + .admin_label_* spans) from
+	 * the live Backbone model — it never touches our custom preview div. Result:
+	 * the admin_label shows the saved value while the preview shows the default.
+	 * This JS closes that gap by syncing the preview card from the live model.
+	 */
+	public static function hookJs(): void {
+		if ( self::$js_hooked ) {
+			return;
+		}
+		self::$js_hooked = true;
+		add_action( 'admin_print_footer_scripts', array( self::class, 'printJs' ), 100 );
+	}
+
+	/**
+	 * Build a { shortcode_base: { image, title, text } } config from the
+	 * per-class config, resolving each generated class back to its shortcode
+	 * base via the WPBakery map.
+	 *
+	 * @return array<string, array{image?: string, title?: string, text?: string}>
+	 */
+	private static function jsConfigByBase(): array {
+		if ( array() === self::$config || ! class_exists( 'WPBMap' ) ) {
+			return array();
+		}
+
+		// Map php_class_name => base from the registered shortcodes.
+		$shortcodes = \WPBMap::getShortCodes();
+		if ( ! is_array( $shortcodes ) ) {
+			return array();
+		}
+
+		$class_to_base = array();
+		foreach ( $shortcodes as $base => $settings ) {
+			if ( isset( $settings['php_class_name'] ) ) {
+				$class_to_base[ $settings['php_class_name'] ] = $base;
+			}
+		}
+
+		$by_base = array();
+		foreach ( self::$config as $class_name => $map ) {
+			if ( isset( $class_to_base[ $class_name ] ) ) {
+				$by_base[ $class_to_base[ $class_name ] ] = $map;
+			}
+		}
+
+		return $by_base;
+	}
+
+	/**
+	 * Output the backend-editor preview-sync JS once, in the editor footer.
+	 */
+	public static function printJs(): void {
+		// Only the post/page edit screens can host the WPBakery backend editor.
+		if ( function_exists( 'get_current_screen' ) ) {
+			$screen = get_current_screen();
+			if ( null !== $screen && 'post' !== $screen->base ) {
+				return;
+			}
+		}
+
+		$by_base = self::jsConfigByBase();
+		if ( array() === $by_base ) {
+			return;
+		}
+
+		$config_json = wp_json_encode( $by_base );
+		if ( false === $config_json ) {
+			return;
+		}
+
+		?>
+<script id="bma-vc-preview-sync">
+( function ( $ ) {
+	'use strict';
+	if ( typeof window.vc === 'undefined' || ! window.vc.events || ! window.vc.shortcodes ) {
+		return;
+	}
+
+	var CONFIG = <?php echo $config_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — JSON-encoded config. ?>;
+	var thumbCache = {};
+
+	function stripTags( value ) {
+		if ( ! value ) {
+			return '';
+		}
+		return $( '<div/>' ).html( String( value ) ).text().replace( /\s+/g, ' ' ).trim();
+	}
+
+	function excerpt( value ) {
+		var text = stripTags( value );
+		return text.length > 120 ? text.slice( 0, 120 ) + '\u2026' : text;
+	}
+
+	function setThumb( $thumb, attachId ) {
+		if ( ! attachId ) {
+			$thumb.remove();
+			return;
+		}
+		if ( thumbCache[ attachId ] ) {
+			$thumb.html( '<img src="' + thumbCache[ attachId ] + '" alt="" />' );
+			return;
+		}
+		$.ajax( {
+			type: 'POST',
+			url: window.ajaxurl,
+			data: {
+				action: 'wpb_single_image_src',
+				content: attachId,
+				size: 'thumbnail',
+				_vcnonce: window.vcAdminNonce
+			},
+			dataType: 'html'
+		} ).done( function ( src ) {
+			if ( ! src ) {
+				return;
+			}
+			thumbCache[ attachId ] = src;
+			$thumb.html( '<img src="' + src + '" alt="" />' );
+		} );
+	}
+
+	function syncModel( model ) {
+		if ( ! model || ! model.get ) {
+			return;
+		}
+		var base = model.get( 'shortcode' );
+		var cfg = CONFIG[ base ];
+		if ( ! cfg ) {
+			return;
+		}
+
+		var $node = $( '[data-model-id="' + model.id + '"]' );
+		if ( ! $node.length ) {
+			return;
+		}
+		var $wrap = $node.children( '.wpb_element_wrapper, .vc_element-wrapper' ).first();
+		if ( ! $wrap.length ) {
+			return;
+		}
+
+		var params = model.get( 'params' ) || {};
+
+		var title = cfg.title ? stripTags( params[ cfg.title ] ) : '';
+
+		var body = '';
+		if ( cfg.text ) {
+			body = ( 'content' === cfg.text ) ? ( params.content || '' ) : ( params[ cfg.text ] || '' );
+			body = excerpt( body );
+		}
+
+		var attachId = '';
+		if ( cfg.image ) {
+			attachId = String( params[ cfg.image ] || '' ).replace( /[^0-9]/g, '' );
+		}
+
+		var $preview = $wrap.children( '.bma-vc-preview' ).first();
+
+		if ( ! title && ! body && ! attachId ) {
+			$preview.remove();
+			return;
+		}
+
+		if ( ! $preview.length ) {
+			$preview = $( '<div class="bma-vc-preview"></div>' );
+			var $title = $wrap.children( '.wpb_element_title' ).first();
+			if ( $title.length ) {
+				$preview.insertAfter( $title );
+			} else {
+				$wrap.prepend( $preview );
+			}
+		}
+
+		var $thumb = $preview.children( '.bma-vc-preview__thumb' ).first();
+		if ( attachId ) {
+			if ( ! $thumb.length ) {
+				$thumb = $( '<span class="bma-vc-preview__thumb"></span>' ).prependTo( $preview );
+			}
+			setThumb( $thumb, attachId );
+		} else {
+			$thumb.remove();
+		}
+
+		var $text = $preview.children( '.bma-vc-preview__text' ).first();
+		if ( title || body ) {
+			if ( ! $text.length ) {
+				$text = $( '<span class="bma-vc-preview__text"></span>' ).appendTo( $preview );
+			}
+			var html = '';
+			if ( title ) {
+				html += '<strong class="bma-vc-preview__title"></strong>';
+			}
+			if ( body ) {
+				html += '<span class="bma-vc-preview__body"></span>';
+			}
+			$text.html( html );
+			if ( title ) {
+				$text.children( '.bma-vc-preview__title' ).text( title );
+			}
+			if ( body ) {
+				$text.children( '.bma-vc-preview__body' ).text( body );
+			}
+		} else {
+			$text.remove();
+		}
+	}
+
+	function syncAll() {
+		if ( ! window.vc.shortcodes || ! window.vc.shortcodes.each ) {
+			return;
+		}
+		window.vc.shortcodes.each( syncModel );
+	}
+
+	// Live updates: WPBakery defers this event after every element's params
+	// change AND on each element's initial render.
+	Object.keys( CONFIG ).forEach( function ( base ) {
+		window.vc.events.on( 'backend.shortcodeViewChangeParams:' + base, syncAll );
+	} );
+
+	// New / cloned elements.
+	window.vc.events.on( 'shortcodes:add', syncModel );
+
+	// Initial passes — the tree may build after our script runs.
+	$( syncAll );
+	$( window ).on( 'load', syncAll );
+	window.setTimeout( syncAll, 1200 );
+}( window.jQuery ) );
+</script>
+		<?php
 	}
 }
