@@ -71,7 +71,7 @@ final class Buttons {
 				'label'      => '',
 				'url'        => '',
 				'style'      => 'primary',
-				'size'       => '',
+				'size'       => 'md',
 				'arrow'      => 'false',
 				'text_color' => 'default',
 				'icon'       => '',
@@ -222,7 +222,7 @@ final class Buttons {
 		);
 
 		$size_choices = array(
-			__( 'Default', 'balefire' ) => '',
+			__( 'Default', 'balefire' ) => 'md',
 			__( 'Small', 'balefire' )   => 'sm',
 		);
 
@@ -303,7 +303,7 @@ final class Buttons {
 						'heading'    => __( 'Size', 'balefire' ),
 						'param_name' => 'size',
 						'value'      => $size_choices,
-						'std'        => '',
+						'std'        => 'md',
 					),
 					array(
 						'type'       => 'checkbox',
