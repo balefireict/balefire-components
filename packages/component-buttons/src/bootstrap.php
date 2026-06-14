@@ -2,8 +2,8 @@
 /**
  * balefireict/component-buttons — bootstrap.
  *
- * Defines a thin global function wrapper, registers the [bma_buttons]
- * shortcode, and wires the WPBakery vc_map on vc_before_init.
+ * Registers the parent [bma_buttons] + child [bma_button] shortcodes and
+ * their WPBakery elements (parent container + child button).
  *
  * Auto-loaded by Composer (autoload.files in composer.json).
  *
@@ -16,39 +16,39 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'bma_buttons_render' ) ) {
 	/**
-	 * Render the [bma_buttons] shortcode. Programmatic equivalent of
-	 * do_shortcode('[bma_buttons ...]') — returns the HTML string.
+	 * Render the parent [bma_buttons] shortcode.
 	 *
-	 * @param array $atts Shortcode attributes (same as the shortcode).
-	 * @return string HTML output, or '' when no buttons have label+url.
+	 * @param array  $atts    Shortcode attributes.
+	 * @param string $content Child [bma_button] shortcodes.
+	 * @return string HTML output.
 	 */
-	function bma_buttons_render( array $atts ): string {
-		return \Balefire\Component\Buttons\Buttons::render( $atts );
+	function bma_buttons_render( $atts, $content = null ): string {
+		return \Balefire\Component\Buttons\Buttons::render( (array) $atts, $content );
 	}
 }
 
-if ( ! function_exists( 'bma_buttons_is_external_url' ) ) {
+if ( ! function_exists( 'bma_button_render' ) ) {
 	/**
-	 * True if $url points to a different host than the current site.
+	 * Render a single child [bma_button] shortcode.
 	 *
-	 * @param string $url URL to test.
-	 * @return bool
+	 * @param array $atts Shortcode attributes.
+	 * @return string HTML output.
 	 */
-	function bma_buttons_is_external_url( string $url ): bool {
-		return \Balefire\Component\Buttons\Buttons::isExternalUrl( $url );
+	function bma_button_render( array $atts ): string {
+		return \Balefire\Component\Buttons\Buttons::renderButton( $atts );
 	}
 }
 
-$bma_buttons_boot = function (): void {
-		\Balefire\Component\Buttons\Buttons::register();
-		if ( function_exists( 'vc_map' ) ) {
-			add_action( 'vc_before_init', array( \Balefire\Component\Buttons\Buttons::class, 'vcMap' ) );
-		}
+$bma_buttons_boot = static function (): void {
+	\Balefire\Component\Buttons\Buttons::register();
+	if ( function_exists( 'vc_map' ) ) {
+		add_action( 'vc_before_init', array( \Balefire\Component\Buttons\Buttons::class, 'vcMap' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\Buttons\Buttons::class, 'registerPreviewClasses' ) );
+	}
 };
 
 // WP load order: plugins_loaded fires BEFORE theme functions.php. When this
-// autoloader is required from a theme, the hook has already fired - boot now.
-// vc_before_init hooks 'init', which is always later, so vcMap still lands.
+// autoloader is required from a theme, the hook has already fired — boot now.
 if ( did_action( 'plugins_loaded' ) ) {
 	$bma_buttons_boot();
 } else {
