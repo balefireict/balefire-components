@@ -310,9 +310,9 @@ final class Buttons {
 			),
 			array(
 				'type'       => 'attach_image',
-				'heading'    => __( 'Custom Icon (when Icon = Custom)', 'balefire' ),
+				'heading'    => __( 'Custom Icon Image', 'balefire' ),
 				'param_name' => 'icon_custom',
-				'dependency' => array( 'element' => 'icon', 'value' => array( 'custom' ) ),
+				'description' => __( 'Upload an icon. Only used when Icon (above) is set to Custom.', 'balefire' ),
 			),
 		);
 
