@@ -1,57 +1,68 @@
 # balefireict/component-buttons
 
-BMA Buttons shortcode — renders 1-2 buttons with style, size, alignment,
-optional arrow, and "open in new tab" auto-detection for external links.
-First shortcode in the monorepo; sets the pattern for all subsequent
-shortcode packages.
+BMA Buttons shortcode — renders a repeater of buttons with alignment,
+per-button style/size/arrow/text-color, optional icons (calendar, phone,
+or custom upload), and "open in new tab" auto-detection for external links.
 
 ## Provides
 
-- `[bma_buttons align="center|left|right" btn1_label="..." btn1_url="..." ...]`
+- `[bma_buttons align="center|left|right" buttons="..."]`
 - Global function `bma_buttons_render( array $atts )` for programmatic use
-- WPBakery `vc_map` registration under category "BMA Elements"
+- WPBakery `vc_map` registration with `param_group` repeater
 
 ### Attributes
 
 - `align` — `center` (default), `left`, `right`
-- `btn1_label`, `btn1_url` — required for first button to render
-- `btn1_style` — `primary` (default), `secondary`, `white`, `black`, `transparent`
-- `btn1_size` — `""` (default, medium) or `sm` (small)
-- `btn1_arrow` — `true` to append ` →` to the label
-- `btn1_text_color` — for `transparent` style: `default` or `white`
-- `btn2_*` — same set for the optional second button. Renders only if both
-  label and url are provided.
+- `buttons` — WPBakery `param_group` repeater. Each row supports:
+  - `label` — button text (required)
+  - `url` — link URL (required)
+  - `style` — `primary` (default), `secondary`, `white`, `black`, `transparent`
+  - `size` — `""` (default) or `sm`
+  - `arrow` — `true` to append → after label
+  - `text_color` — for `transparent` style: `default` or `white`
+  - `icon` — `""` (none), `calendar`, `phone`, `custom`
+  - `icon_custom` — attachment ID (when `icon` is `custom`)
 
 External links (different host than `home_url()`) automatically get
 `target="_blank" rel="noopener noreferrer"`. Fragment-only, scheme-relative,
 and non-HTTP-scheme links (mailto, tel, etc.) stay in-tab.
 
+## Icons
+
+Built-in SVG icons render inline before the label text:
+- **Calendar** — from David Tours layout-buttons.svg (calendar with checkmark)
+- **Phone** — from David Tours layout-buttons-alt.svg (device outline)
+- **Custom** — uploads any image/SVG from the media library
+
+Icons inherit `currentColor` for fill, matching the button text color.
+
 ## CSS
 
-`src/style.css` ships the `.bma-buttons` flex wrapper. The `.btn` base
-styles, modifiers, and gradients are assumed to come from the consumer
-theme's own button CSS. Balefire-base has these in
-`resources/css/wp-button-overrides.css`.
+`src/style.css` ships the `.bma-buttons` flex wrapper + `.btn-icon` inline
+layout. The `.btn` base styles, modifiers, and gradients come from the
+consumer theme's own button CSS.
 
 ## Source of truth
 
 `Balefire\Component\Buttons\Buttons` (PSR-4). Exposes:
 - `Buttons::render( array $atts ): string` — shortcode callback
-- `Buttons::renderButton(...)` — single-button render (reusable)
+- `Buttons::renderButton( array $row ): string` — single-button render (reusable)
+- `Buttons::renderIcon( string $icon, string $icon_custom ): string` — inline SVG icon
+- `Buttons::parseButtons( string|array $raw ): array` — param_group parser
 - `Buttons::isExternalUrl( string $url ): bool` — external link detector
 - `Buttons::register(): void` — add_shortcode
 - `Buttons::vcMap(): void` — vc_map (registered via bootstrap on vc_before_init)
 
 ## Dependencies
 
-None. Uses WordPress `home_url()` and `esc_url()`.
+None. Uses WordPress `home_url()`, `esc_url()`, `wp_get_attachment_image()`.
 
 ## Consuming
 
 ```json
 {
     "repositories": [
-        { "type": "path", "url": "../balefire-components/packages/bma-buttons", "options": { "symlink": true } }
+        { "type": "path", "url": "../balefire-components/packages/component-buttons", "options": { "symlink": true } }
     ],
     "require": {
         "balefireict/component-buttons": "*"
@@ -66,9 +77,3 @@ None. Uses WordPress `home_url()` and `esc_url()`.
 
 The bootstrap is auto-loaded by Composer. No `require` calls needed in
 the theme's `functions.php`.
-
-## Ported from
-
-`rockerbox/wp-content/themes/balefire/inc/shortcodes/bma-buttons.php` —
-same shortcode attrs and same render function. Added `vc_map` registration
-(rockerbox version was attribute-driven only).
