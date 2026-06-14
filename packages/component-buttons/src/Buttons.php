@@ -306,10 +306,14 @@ final class Buttons {
 						'std'        => 'md',
 					),
 					array(
-						'type'       => 'checkbox',
+						'type'       => 'dropdown',
 						'heading'    => __( 'Show Arrow (→)', 'balefire' ),
 						'param_name' => 'arrow',
-						'value'      => array( __( 'Yes', 'balefire' ) => 'true' ),
+						'value'      => array(
+							__( 'No', 'balefire' )  => 'false',
+							__( 'Yes', 'balefire' ) => 'true',
+						),
+						'std'        => 'false',
 					),
 					array(
 						'type'       => 'dropdown',
