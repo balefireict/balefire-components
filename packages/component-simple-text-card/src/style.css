@@ -1,0 +1,73 @@
+/**
+ * balefireict/component-simple-text-card — text-only info card.
+ *
+ * Source: layouts/sections/simple-text-card.svg (pickup schedule cards).
+ *
+ * All visual values are CSS custom properties with theme-var defaults.
+ * The shortcode overrides any of them inline via WPBakery params.
+ *
+ * Markup (hand-placed or via [bma_simple_text_card] shortcode):
+ *   <div class="simple-text-card">
+ *       <p class="simple-text-card__eyebrow">10:50 AM — Feasterville</p>
+ *       <h3 class="simple-text-card__title">2400 Old Lincoln Highway</h3>
+ *       <div class="simple-text-card__body">Right past the Radisson…</div>
+ *   </div>
+ */
+
+.simple-text-card {
+    --stc-bg: var(--vmg-gray-50);
+    --stc-fg: var(--color-fg);
+    --stc-eyebrow: var(--vmg-red-dark);
+    --stc-padding-y: var(--space-md-xl);
+    --stc-padding-x: var(--space-lg-xl);
+    --stc-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs-2xs);
+    padding: var(--stc-padding-y) var(--stc-padding-x);
+    background-color: var(--stc-bg);
+    color: var(--stc-fg);
+    border-radius: var(--stc-radius);
+    text-align: left;
+}
+
+/* Text-align modifiers */
+.simple-text-card--center {
+    text-align: center;
+}
+.simple-text-card--right {
+    text-align: right;
+}
+
+/* Eyebrow — accent label (time, category, etc.) */
+.simple-text-card__eyebrow {
+    margin: auto 0;
+    font-family: var(--font-body);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--stc-eyebrow);
+}
+
+/* Title — main heading. Montserrat (not serif heading font) per SVG. */
+.simple-text-card__title {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--stc-fg);
+}
+
+/* Body — description / detail text */
+.simple-text-card__body {
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--stc-fg);
+}
+
+.simple-text-card__body p {
+    margin: 0;
+}
+.simple-text-card__body p + p {
+    margin-top: var(--space-3xs);
+}
