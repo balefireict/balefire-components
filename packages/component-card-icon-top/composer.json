@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-card-icon-top",
+    "description": "BMA Card Icon Top - 3-column grid of cards with a top icon image, h3 title, and WYSIWYG body text. Parent/child WPBakery container, vanilla CSS (BEM, no theme tokens).",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\CardIconTop\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "card-icon-top",
+            "type": "scaffolding",
+            "shortcode": "bma_card_icon_top",
+            "css_class": "card-icon-top",
+            "owns_css": true
+        }
+    }
+}

@@ -1,0 +1,83 @@
+/**
+ * balefireict/component-card-icon-top — icon-top info card grid.
+ *
+ * Source: layouts/layouts-elements/card-icon-top.svg
+ * (casino / pickup cards: icon, red h3 title, Arrival/Departure/Location body).
+ *
+ * Markup (via [bma_card_icon_top] + [bma_card_icon_top_item]):
+ *   <div class="card-icon-top">
+ *       <div class="card-icon-top__item">
+ *           <div class="card-icon-top__icon"><img class="card-icon-top__img" ... /></div>
+ *           <h3 class="card-icon-top__title">Resorts Casino</h3>
+ *           <div class="card-icon-top__body"><p><strong>Arrival:</strong> 12:35 PM</p>...</div>
+ *       </div>
+ *   </div>
+ */
+
+/* Grid wrapper — owns its own centered container (per component spec). */
+.card-icon-top {
+    max-width: 1050px;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+/* 3 columns at tablet/desktop (matches the SVG 3-card layout). */
+@media (min-width: 768px) {
+    .card-icon-top {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Card */
+.card-icon-top__item {
+    background: #fff;
+    border-radius: 5px;
+    padding: 40px 32px 32px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Icon */
+.card-icon-top__icon {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 16px;
+}
+
+.card-icon-top__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Title — h3, red per SVG (#84081c), Montserrat SemiBold 24px. */
+.card-icon-top__title {
+    margin: 0 0 16px;
+    color: #84081c;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+/* Body — rich text (Arrival / Departure / Location). */
+.card-icon-top__body {
+    font-size: 19px;
+    line-height: 1.5;
+    color: #1a1a1a;
+}
+
+.card-icon-top__body p {
+    margin: 0;
+}
+
+.card-icon-top__body p + p {
+    margin-top: 12px;
+}
+
+.card-icon-top__body strong {
+    font-weight: 700;
+}

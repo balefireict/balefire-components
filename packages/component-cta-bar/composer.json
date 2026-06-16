@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-cta-bar",
+    "description": "BMA CTA Bar - solid-background two-column CTA bar with heading, subtext, and an icon button. Single-element WPBakery shortcode, vanilla CSS (BEM, explicit values).",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\CtaBar\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "cta-bar",
+            "type": "scaffolding",
+            "shortcode": "bma_cta_bar",
+            "css_class": "cta-bar",
+            "owns_css": true
+        }
+    }
+}
