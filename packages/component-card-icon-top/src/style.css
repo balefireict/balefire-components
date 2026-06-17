@@ -14,13 +14,13 @@
  *   </div>
  */
 
-/* Grid wrapper — owns its own centered container (per component spec). */
+/* Grid wrapper — owns its own centered container (per component spec).
+   Row-gap is larger than column-gap so the icon (which breaks the top
+   plane at -2.5rem / 40px) never clips the card above in multi-row grids. */
 .card-icon-top {
-    max-width: 1050px;
-    margin-inline: auto;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 56px 50px;
 }
 
 /* 3 columns at tablet/desktop (matches the SVG 3-card layout). */
@@ -32,52 +32,39 @@
 
 /* Card */
 .card-icon-top__item {
-    background: #fff;
+    position: relative;
+    background: var(--white);
     border-radius: 5px;
-    padding: 40px 32px 32px;
+    padding: 4.1rem 0.75rem 2rem;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* Icon */
+/* Icon — breaks the top plane of the card (absolute, z-index above card). */
 .card-icon-top__icon {
+    position: absolute;
+    top: -4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: auto;
+    max-width: 120px;
+    z-index: 2;
     width: 120px;
     height: 120px;
-    margin-bottom: 16px;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 3px white;
+    border-radius: 5px 5px 0 0;
 }
 
 .card-icon-top__img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-}
-
-/* Title — h3, red per SVG (#84081c), Montserrat SemiBold 24px. */
-.card-icon-top__title {
-    margin: 0 0 16px;
-    color: #84081c;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-/* Body — rich text (Arrival / Departure / Location). */
-.card-icon-top__body {
-    font-size: 19px;
-    line-height: 1.5;
-    color: #1a1a1a;
-}
-
-.card-icon-top__body p {
-    margin: 0;
-}
-
-.card-icon-top__body p + p {
-    margin-top: 12px;
-}
-
-.card-icon-top__body strong {
-    font-weight: 700;
 }

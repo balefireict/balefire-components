@@ -2,7 +2,7 @@
  * balefireict/component-cta-bar — solid-background CTA bar.
  *
  * Source: layouts/sections printable-schedule mock.
- * Solid #2e266d bar, white heading + subtext left, #6f779d icon button right.
+ * Solid bar, heading + subtext left, icon button right.
  *
  * Markup (via [bma_cta_bar]):
  *   <div class="cta-bar">
@@ -14,22 +14,23 @@
  *           <a class="cta-bar__btn" href="..."><svg .../> <span>Printable Schedule</span></a>
  *       </div>
  *   </div>
+ *
+ * STRUCTURE ONLY — colors, padding, font sizes, border-radius live in the
+ * consuming theme's shortcodes.css.
  */
 
-/* Bar — owns its full-width solid background. */
+/* Bar — owns its full-width background. */
 .cta-bar {
-    background: #2e266d;
+    /* background-color set by theme */
 }
 
-/* Inner — capped + centered to align with sibling 1050px grids. */
+/* Inner — capped + centered to align with sibling grids. */
 .cta-bar__inner {
-    max-width: 1050px;
-    margin-inline: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    padding: 33px 24px;
+    /* padding set by theme */
 }
 
 /* Left column */
@@ -41,52 +42,69 @@
 
 .cta-bar__heading {
     margin: 0;
-    color: #fff;
-    font-size: 19px;
-    font-weight: 700;
-    line-height: 1.3;
+    /* color, font-size, font-weight, line-height set by theme */
 }
 
 .cta-bar__body {
-    color: #fff;
-    font-size: 19px;
-    font-weight: 400;
-    line-height: 1.3;
+    /* color, font-size, font-weight, line-height set by theme */
 }
 
 .cta-bar__body p {
     margin: 0;
 }
 
-/* Button — solid #6f779d pill with calendar icon. */
+/* Button */
 .cta-bar__btn {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: #6f779d;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    line-height: 1;
     text-decoration: none;
-    border-radius: 3px;
-    padding: 15px 28px;
     white-space: nowrap;
     flex-shrink: 0;
     transition: opacity 0.15s ease;
+    /* background, color, font-size, font-weight, letter-spacing,
+       border-radius, padding set by theme */
 }
 
 .cta-bar__btn:hover,
 .cta-bar__btn:focus {
-    color: #fff;
-    opacity: 0.88;
+    text-decoration: none;
+    /* color, opacity set by theme */
 }
 
-.cta-bar__icon {
+/* Icons — same .btn-icon class as component-buttons so both share styles. */
+.cta-bar__btn .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 20px;
     height: 20px;
     flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.cta-bar__btn .btn-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.cta-bar__btn .btn-icon-custom {
+    width: auto;
+    height: 1.1em;
+    max-width: 1.5em;
+}
+
+/* Icon-before gets right margin, icon-after gets left margin. */
+.cta-bar__btn .btn-icon + span {
+    margin-left: 0;
+}
+
+.cta-bar__btn span + .btn-icon {
+    margin-left: 0.4em;
+}
+
+.cta-bar__btn .btn-icon:first-child {
+    margin-right: 0.4em;
 }
 
 /* Stack on mobile */
