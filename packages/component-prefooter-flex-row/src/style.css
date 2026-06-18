@@ -1,5 +1,5 @@
 /*
- * balefireict/component-cta-row styles — [bma_cta_row].
+ * balefireict/component-prefooter-flex-row styles — [bma_prefooter_flex_row].
  *
  * Built from davidtours layouts/sections/bg-cta.svg (1280x417):
  *   overlay   linear gradient, upper-right black 0.77 -> lower-left
@@ -11,7 +11,7 @@
  *             under the button
  *
  * The consumer sets the BACKGROUND IMAGE — drop the element in a WPBakery
- * stretch row and hardcode background-image on .bma-cta-row (or the extra
+ * stretch row and hardcode background-image on .bma-prefooter-flex-row (or the extra
  * class) in theme CSS. Cover sizing/positioning is pre-set here; the
  * component owns only the gradient overlay (::before).
  *
@@ -23,7 +23,7 @@
  * retypeset.
  */
 
-.bma-cta-row {
+.bma-prefooter-flex-row {
     position: relative;
     background-size: cover;
     background-position: center;
@@ -32,7 +32,7 @@
     color: #fff;
 }
 
-.bma-cta-row__inner {
+.bma-prefooter-flex-row__inner {
     position: relative;
     z-index: 1;
     display: flex;
@@ -45,7 +45,7 @@
     text-align: center;
 }
 
-.bma-cta-row__heading {
+.bma-prefooter-flex-row__heading {
     margin: 0 0 0.35em;
     font-family: var(--font-heading, "DM Serif Display", Georgia, serif);
     font-size: clamp(2.25rem, 1.8rem + 2.2vw, 3.5625rem);
@@ -55,7 +55,7 @@
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.55);
 }
 
-.bma-cta-row__body {
+.bma-prefooter-flex-row__body {
     font-family: var(--font-body, Montserrat, system-ui, sans-serif);
     font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
     line-height: 1.55;
@@ -64,11 +64,11 @@
     max-width: 36em;
 }
 
-.bma-cta-row__body :last-child {
+.bma-prefooter-flex-row__body :last-child {
     margin-block-end: 0;
 }
 
-.bma-cta-row__action {
+.bma-prefooter-flex-row__action {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -77,7 +77,7 @@
 }
 
 /* Custom-sized button per the layout: 261x72, red, bold 23px. */
-.bma-cta-row__btn {
+.bma-prefooter-flex-row__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -95,13 +95,13 @@
     transition: background-color 0.25s ease-in-out;
 }
 
-.bma-cta-row__btn:hover,
-.bma-cta-row__btn:focus-visible {
+.bma-prefooter-flex-row__btn:hover,
+.bma-prefooter-flex-row__btn:focus-visible {
     background: #84081c;
     color: #fff;
 }
 
-.bma-cta-row__phone {
+.bma-prefooter-flex-row__phone {
     font-family: var(--font-body, Montserrat, system-ui, sans-serif);
     font-size: clamp(1.375rem, 1.2rem + 0.85vw, 1.9375rem);
     font-weight: 500;
@@ -110,22 +110,22 @@
     text-decoration: none;
 }
 
-.bma-cta-row__phone:hover,
-.bma-cta-row__phone:focus-visible {
+.bma-prefooter-flex-row__phone:hover,
+.bma-prefooter-flex-row__phone:focus-visible {
     color: #fff;
     text-decoration: underline;
 }
 
 /* Large screens: row, space-between, vertically centered, text left. */
 @media (min-width: 900px) {
-    .bma-cta-row__inner {
+    .bma-prefooter-flex-row__inner {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         text-align: left;
     }
 
-    .bma-cta-row__content {
+    .bma-prefooter-flex-row__content {
         max-width: 60%;
     }
 }

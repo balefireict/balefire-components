@@ -56,6 +56,32 @@
     margin-inline: auto;
 }
 
+/*
+   Capped rows need an edge gutter when the viewport is narrower than the cap.
+   max-width + margin:auto centers at desktop, but at <= the cap it becomes
+   full viewport width. With globally-zeroed Bakery column gutters, content then
+   kisses the screen edge. Width-minus-container-pad keeps the row centered AND
+   preserves mobile breathing room without reintroducing random VC column gutters.
+*/
+.vc_row.wpb_row.bma-row-w-lg,
+.vc_row.wpb_row.bma-row-w-md-lg,
+.vc_row.wpb_row.bma-row-w-md,
+.vc_row.wpb_row.bma-row-w-sm,
+.vc_row.wpb_row.bma-row-w-custom,
+.vc_row.vc_row_inner.bma-row-w-lg,
+.vc_row.vc_row_inner.bma-row-w-md-lg,
+.vc_row.vc_row_inner.bma-row-w-md,
+.vc_row.vc_row_inner.bma-row-w-sm,
+.vc_row.vc_row_inner.bma-row-w-custom,
+.vc_row_inner.bma-row-w-lg,
+.vc_row_inner.bma-row-w-md-lg,
+.vc_row_inner.bma-row-w-md,
+.vc_row_inner.bma-row-w-sm,
+.vc_row_inner.bma-row-w-custom {
+    box-sizing: border-box;
+    width: calc(100% - (var(--container-pad, 1.25rem) * 2));
+}
+
 .vc_row.wpb_row.bma-row-w-sm,
 .vc_row.vc_row_inner.bma-row-w-sm,
 .vc_row_inner.bma-row-w-sm,
@@ -158,6 +184,15 @@
 
 .wpb_row.bma-row-w-custom > .bma-row-width-inner {
     max-width: var(--bma-row-w, 100%);
+}
+
+.wpb_row.bma-row-w-lg > .bma-row-width-inner,
+.wpb_row.bma-row-w-md-lg > .bma-row-width-inner,
+.wpb_row.bma-row-w-md > .bma-row-width-inner,
+.wpb_row.bma-row-w-sm > .bma-row-width-inner,
+.wpb_row.bma-row-w-custom > .bma-row-width-inner {
+    box-sizing: border-box;
+    width: calc(100% - (var(--container-pad, 1.25rem) * 2));
 }
 
 /* Safety net: a stretched row must never be width-capped directly. The PHP filter

@@ -1,0 +1,74 @@
+{
+    "key": "group_acffg_prefooter_flex_row",
+    "title": "Prefooter Flex Row",
+    "fields": [
+        {
+            "key": "field_acffg_prefooter_flex_row_show",
+            "label": "Show Prefooter Flex Row",
+            "name": "acffg_prefooter_flex_row_show",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Display the site-wide Prefooter Flex Row below this page's content. The heading, body, and button are managed centrally in General Business \u2192 Prefooter Flex Row.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Show Prefooter Flex Row on this page",
+            "default_value": 0,
+            "ui_on_text": "Show",
+            "ui_off_text": "Hide",
+            "ui": 1
+        },
+        {
+            "key": "field_acffg_prefooter_flex_row_bg_image",
+            "label": "Background Image URL",
+            "name": "acffg_prefooter_flex_row_bg_image",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Full URL to the background image. Passed as inline style on the section.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_acffg_prefooter_flex_row_show",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "https://...",
+            "allow_in_bindings": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 450,
+    "position": "side",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Per-page toggle for the [bma_prefooter_flex_row] full-bleed CTA section. Content is sourced from General Business options.",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1781737309
+}
