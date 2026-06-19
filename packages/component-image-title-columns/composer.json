@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-image-title-columns",
+    "description": "BMA Image Title Columns - responsive flex grid of image tiles with a centered title beneath each. Parent/child WPBakery container. Owns its own grid (1 col <768, 3 cols 768-1279, 4 cols >=1280; uneven last row centers).",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\ImageTitleColumns\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "image-title-columns",
+            "type": "scaffolding",
+            "shortcode": "bma_image_title_columns",
+            "css_class": "image-title-columns",
+            "owns_css": true
+        }
+    }
+}

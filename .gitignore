@@ -8,6 +8,11 @@
 **/*.min.css
 **/*.min.js
 
+# Exception: vendored third-party libraries shipped inside component asset
+# dirs are source, not build output — they must ship with the package.
+!packages/*/src/assets/*.min.js
+!packages/*/src/assets/*.min.css
+
 # Node
 **/node_modules/
 **/package-lock.json

@@ -1,0 +1,45 @@
+/**
+ * balefireict/component-gallery-grid - ACF image gallery grid + lightbox.
+ *
+ * Source: [bma_gallery_grid] reads an ACF Gallery field (default
+ * acffg_gallery_grid) and renders a CSS-grid of thumbnails that open in
+ * fslightbox. fslightbox JS is enqueued ONLY when the shortcode renders
+ * (wp_enqueue_script in render()), so it never loads on non-gallery pages.
+ *
+ * fslightbox (banthagroup fork, v3.7.5) is self-contained: the JS bundle
+ * injects its own CSS at runtime, so there is no separate .min.css to load.
+ *
+ * Markup:
+ *   <div class="gallery-grid" style="--gallery-grid-cols:3">
+ *     <a class="gallery-grid__item" href="full.jpg" data-fslightbox="gallery-grid-123-1">
+ *       <img src="thumb.jpg" alt="..." loading="lazy" />
+ *     </a>
+ *   </div>
+ */
+
+/* ---- Grid wrapper ---- */
+/* CSS grid, column count tunable via the --gallery-grid-cols custom property
+   (set inline from the columns shortcode att). Default 3 cols, 10px gap. */
+.gallery-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--gallery-grid-cols, 3), 1fr);
+	gap: 10px;
+}
+
+/* ---- Thumbnail tiles ---- */
+.gallery-grid__item {
+	display: block;
+	line-height: 0;
+	cursor: zoom-in;
+}
+
+.gallery-grid__item img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* Lightbox disabled: drop the zoom cursor (no click action). */
+.gallery-grid--no-lightbox .gallery-grid__item {
+	cursor: default;
+}

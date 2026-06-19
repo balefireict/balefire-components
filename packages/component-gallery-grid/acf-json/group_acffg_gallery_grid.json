@@ -1,0 +1,83 @@
+{
+    "key": "group_acffg_gallery_grid",
+    "title": "Gallery Grid",
+    "fields": [
+        {
+            "key": "field_acffg_gallery_grid",
+            "label": "Image Gallery",
+            "name": "acffg_gallery_grid",
+            "aria-label": "",
+            "type": "gallery",
+            "instructions": "Select the images for this gallery grid. Each image opens full-size in a lightbox (fslightbox) when clicked. Used by the [bma_gallery_grid] shortcode.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "menu_order": 0,
+            "_name": "acffg_gallery_grid",
+            "_valid": 1,
+            "parent": "group_acffg_gallery_grid",
+            "return_format": "array",
+            "library": "all",
+            "min": "",
+            "max": "",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "insert": "append"
+        },
+        {
+            "key": "field_acffg_gallery_grid_disable_lightbox",
+            "label": "Disable Lightbox",
+            "name": "acffg_gallery_grid_disable_lightbox",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Show thumbnails only \u2014 no click-to-zoom lightbox, and the fslightbox script is not loaded on this page. Use this for small source images (e.g. 640x480 fleet photos) where a lightbox adds nothing. Can be overridden per-element via the shortcode's disable_lightbox attribute.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "menu_order": 1,
+            "_name": "acffg_gallery_grid_disable_lightbox",
+            "_valid": 1,
+            "parent": "group_acffg_gallery_grid",
+            "message": "Disable lightbox (thumbnails only)",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Disabled",
+            "ui_off_text": "Enabled"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 460,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "ACF Gallery field consumed by the [bma_gallery_grid] component shortcode (component-gallery-grid). Renders a responsive image grid with a fslightbox lightbox.",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1782100000
+}

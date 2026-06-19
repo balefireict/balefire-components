@@ -1,0 +1,26 @@
+{
+    "name": "balefireict/component-gallery-grid",
+    "description": "BMA Gallery Grid - ACF-gallery-driven responsive image grid with fslightbox lightbox. Straight shortcode [bma_gallery_grid]. fslightbox JS enqueued only when the shortcode renders. Owns its own grid CSS (CSS grid, default 3 cols / 10px gap).",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balefire\\Component\\GalleryGrid\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "extra": {
+        "balefire-component": {
+            "slug": "gallery-grid",
+            "type": "field-group",
+            "shortcode": "bma_gallery_grid",
+            "css_class": "gallery-grid",
+            "owns_css": true
+        }
+    }
+}
