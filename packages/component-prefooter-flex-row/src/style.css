@@ -1,26 +1,30 @@
 /*
  * balefireict/component-prefooter-flex-row styles — [bma_prefooter_flex_row].
  *
- * Built from davidtours layouts/sections/bg-cta.svg (1280x417):
- *   overlay   linear gradient, upper-right black 0.77 -> lower-left
- *             #454545 0.89 (SVG stops 0.796/0.922 x rect opacity 0.966)
- *   heading   DM Serif Display 57px #fff, soft drop shadow
- *   body      Montserrat 20px #fff
- *   button    261x72, #c8102e, radius 3, Montserrat Bold 23px #fff
- *   phone     Montserrat Medium 31px #fff, 0.04em tracking, centered
- *             under the button
+ * PURE SCAFFOLDING — layout and structure only. Every visual value (text
+ * color, overlay gradient, fonts, weights, text-shadow, button colors) is read
+ * from --pffr-* custom properties that the CONSUMER THEME must define. The
+ * component ships no design defaults.
  *
- * The consumer sets the BACKGROUND IMAGE — drop the element in a WPBakery
- * stretch row and hardcode background-image on .bma-prefooter-flex-row (or the extra
- * class) in theme CSS. Cover sizing/positioning is pre-set here; the
- * component owns only the gradient overlay (::before).
+ * Contract (set these on .bma-prefooter-flex-row in your theme):
+ *   --pffr-color            base text color (section, heading, body, phone)
+ *   --pffr-overlay          ::before gradient (darkens the bg image)
+ *   --pffr-heading-font     heading font-family
+ *   --pffr-heading-weight   heading font-weight
+ *   --pffr-text-shadow      heading + body text-shadow
+ *   --pffr-body-font        body / button / phone font-family
+ *   --pffr-btn-bg           button background
+ *   --pffr-btn-bg-hover     button :hover background
+ *   --pffr-btn-color        button text color
+ *   --pffr-btn-weight       button font-weight
+ *   --pffr-phone-weight     phone font-weight
  *
  * Layout: large screens = flex row, space-between, vertically centered.
  * Small screens = stacked columns, everything centered.
  *
- * No theme design-token lookups (no --color- or --space- vars) per the
- * monorepo rule — explicit values; --font-* fallbacks let a consumer
- * retypeset.
+ * The consumer sets the BACKGROUND IMAGE — drop the element in a WPBakery
+ * stretch row and set background-image on .bma-prefooter-flex-row in theme CSS.
+ * Cover sizing/positioning is pre-set here.
  */
 
 .bma-prefooter-flex-row {
@@ -29,24 +33,14 @@
     background-position: center;
     background-repeat: no-repeat;
     padding-block: clamp(3.5rem, 3rem + 4vw, 6rem);
-    color: #fff;
+    color: var(--pffr-color);
 }
 
-/*
- * Gradient overlay — matches SVG Rectangle_1207 + linear-gradient.
- * Upper-right: rgba(0,0,0,0.77)  (SVG stop 0.796 x rect opacity 0.966)
- * Lower-left:  rgba(69,69,69,0.89) (SVG #454545 stop 0.922 x 0.966)
- * Direction:   SVG gradient x1=0.73 y1=0.15 -> x2=0.38 y2=0.79 ≈ 215deg
- */
 .bma-prefooter-flex-row::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        215deg,
-        rgba(0, 0, 0, 0.77) 0%,
-        rgba(69, 69, 69, 0.89) 100%
-    );
+    background: var(--pffr-overlay);
     z-index: 0;
 }
 
@@ -59,26 +53,27 @@
     gap: clamp(2rem, 1.5rem + 3vw, 3.5rem);
     max-width: 1080px;
     margin-inline: auto;
+    margin-block: auto;
     padding-inline: clamp(1.25rem, 4vw, 2rem);
     text-align: center;
 }
 
 .bma-prefooter-flex-row__heading {
     margin: 0 0 0.35em;
-    font-family: var(--font-heading, "DM Serif Display", Georgia, serif);
+    font-family: var(--pffr-heading-font);
     font-size: clamp(2.25rem, 1.8rem + 2.2vw, 3.5625rem);
-    font-weight: 400;
+    font-weight: var(--pffr-heading-weight);
     line-height: 1.1;
-    color: #fff;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.55);
+    color: var(--pffr-color);
+    text-shadow: var(--pffr-text-shadow);
 }
 
 .bma-prefooter-flex-row__body {
-    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-family: var(--pffr-body-font);
     font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
     line-height: 1.55;
-    color: #fff;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.55);
+    color: var(--pffr-color);
+    text-shadow: var(--pffr-text-shadow);
     max-width: 36em;
 }
 
@@ -94,7 +89,6 @@
     flex-shrink: 0;
 }
 
-/* Custom-sized button per the layout: 261x72, red, bold 23px. */
 .bma-prefooter-flex-row__btn {
     display: inline-flex;
     align-items: center;
@@ -102,12 +96,12 @@
     min-width: 16.3125rem; /* 261px */
     min-height: 4.5rem; /* 72px */
     padding: 0.75rem 2rem;
-    background: #c8102e;
-    color: #fff;
+    background: var(--pffr-btn-bg);
+    color: var(--pffr-btn-color);
     border-radius: 3px;
-    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-family: var(--pffr-body-font);
     font-size: clamp(1.125rem, 1.05rem + 0.4vw, 1.4375rem);
-    font-weight: 700;
+    font-weight: var(--pffr-btn-weight);
     line-height: 1.2;
     text-decoration: none;
     transition: background-color 0.25s ease-in-out;
@@ -115,32 +109,34 @@
 
 .bma-prefooter-flex-row__btn:hover,
 .bma-prefooter-flex-row__btn:focus-visible {
-    background: #84081c;
-    color: #fff;
+    background: var(--pffr-btn-bg-hover);
+    color: var(--pffr-btn-color);
 }
 
 .bma-prefooter-flex-row__phone {
-    font-family: var(--font-body, Montserrat, system-ui, sans-serif);
+    font-family: var(--pffr-body-font);
     font-size: clamp(1.375rem, 1.2rem + 0.85vw, 1.9375rem);
-    font-weight: 500;
+    font-weight: var(--pffr-phone-weight);
     letter-spacing: 0.04em;
-    color: #fff;
+    color: var(--pffr-color);
     text-decoration: none;
 }
 
 .bma-prefooter-flex-row__phone:hover,
 .bma-prefooter-flex-row__phone:focus-visible {
-    color: #fff;
+    color: var(--pffr-color);
     text-decoration: underline;
 }
 
 /* Large screens: row, space-between, vertically centered, text left. */
-@media (min-width: 900px) {
+@media (min-width: 990px) {
     .bma-prefooter-flex-row__inner {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         text-align: left;
+        margin-block: auto;
+        min-height: 225px;
     }
 
     .bma-prefooter-flex-row__content {
