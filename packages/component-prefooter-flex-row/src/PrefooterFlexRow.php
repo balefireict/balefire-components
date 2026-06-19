@@ -50,7 +50,81 @@ final class PrefooterFlexRow {
 	}
 
 	/**
-	 * Resolve an explicit attribute, otherwise an ACF options field.
+	 * Fetch an ACF field from the current loop post, when available.
+	 *
+	 * Returns '' when not in a loop, ACF is missing, the field is empty,
+	 * or the field is at its default (ACF stores nothing for default_value
+	 * until the post is saved, so this gracefully falls through to options).
+	 *
+	 * @param string $field Field name.
+	 * @return mixed
+	 */
+	private static function post_value( string $field ) {
+		$field = trim( $field );
+		if ( '' === $field || ! function_exists( 'get_field' ) || ! function_exists( 'get_the_ID' ) ) {
+			return '';
+		}
+
+		$post_id = get_the_ID();
+		if ( ! $post_id ) {
+			return '';
+		}
+
+		$value = get_field( $field, $post_id );
+		if ( null === $value || false === $value ) {
+			return '';
+		}
+
+		if ( is_string( $value ) && '' === trim( $value ) ) {
+			return '';
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Read the default_value from the ACF field config.
+	 *
+	 * ACF does NOT apply `default_value` on frontend get_field() reads — it is
+	 * only used as the initial form value in wp-admin. So when no per-page or
+	 * options value is stored, we fall back to the field config's default.
+	 *
+	 * @param string $field Field name (or key).
+	 * @return mixed '' when no default is configured.
+	 */
+	private static function field_default( string $field ) {
+		$field = trim( $field );
+		if ( '' === $field || ! function_exists( 'acf_get_field' ) ) {
+			return '';
+		}
+
+		$config = acf_get_field( $field );
+		if ( ! $config || ! array_key_exists( 'default_value', $config ) ) {
+			return '';
+		}
+
+		$default = $config['default_value'];
+		if ( null === $default || false === $default ) {
+			return '';
+		}
+		if ( is_string( $default ) && '' === trim( $default ) ) {
+			return '';
+		}
+
+		return $default;
+	}
+
+	/**
+	 * Resolve an explicit attribute, otherwise a per-page ACF field, then ACF
+	 * options, then the field config's default_value.
+	 *
+	 * Resolution order: manual shortcode att -> per-page field on the current
+	 * post -> site-wide options field -> ACF default_value from the field
+	 * config. The per-page step lets the group_acffg_prefooter_flex_row field
+	 * group override centrally-managed content per page without the consumer
+	 * partial having to pass every att. The default_value fallback is what
+	 * makes the section render correctly out of the box before an editor has
+	 * saved anything.
 	 *
 	 * @param array  $atts       Shortcode attributes.
 	 * @param string $att        Attribute name.
@@ -69,7 +143,18 @@ final class PrefooterFlexRow {
 
 		$field = $atts[ $field_att ] ?? $fallback;
 		$field = is_string( $field ) && '' !== trim( $field ) ? trim( $field ) : $fallback;
-		return self::option( $field );
+
+		$per_page = self::post_value( $field );
+		if ( '' !== $per_page ) {
+			return $per_page;
+		}
+
+		$opt = self::option( $field );
+		if ( '' !== $opt ) {
+			return $opt;
+		}
+
+		return self::field_default( $field );
 	}
 
 	/**
@@ -136,8 +221,15 @@ final class PrefooterFlexRow {
 
 		$target = trim( (string) $atts['cta_target'] );
 		if ( '' === $target ) {
-			$new_tab = self::option( (string) $atts['cta_new_tab_field'] );
-			$target  = ( true === $new_tab || '1' === (string) $new_tab || '_blank' === (string) $new_tab ) ? '_blank' : '';
+			$new_tab_field = (string) $atts['cta_new_tab_field'];
+			$new_tab       = self::post_value( $new_tab_field );
+			if ( '' === $new_tab ) {
+				$new_tab = self::option( $new_tab_field );
+			}
+			if ( '' === $new_tab ) {
+				$new_tab = self::field_default( $new_tab_field );
+			}
+			$target = ( true === $new_tab || '1' === (string) $new_tab || '_blank' === (string) $new_tab ) ? '_blank' : '';
 		}
 		$target = '_blank' === $target ? '_blank' : '';
 

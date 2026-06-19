@@ -32,6 +32,24 @@
     color: #fff;
 }
 
+/*
+ * Gradient overlay — matches SVG Rectangle_1207 + linear-gradient.
+ * Upper-right: rgba(0,0,0,0.77)  (SVG stop 0.796 x rect opacity 0.966)
+ * Lower-left:  rgba(69,69,69,0.89) (SVG #454545 stop 0.922 x 0.966)
+ * Direction:   SVG gradient x1=0.73 y1=0.15 -> x2=0.38 y2=0.79 ≈ 215deg
+ */
+.bma-prefooter-flex-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        215deg,
+        rgba(0, 0, 0, 0.77) 0%,
+        rgba(69, 69, 69, 0.89) 100%
+    );
+    z-index: 0;
+}
+
 .bma-prefooter-flex-row__inner {
     position: relative;
     z-index: 1;

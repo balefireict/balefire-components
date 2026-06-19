@@ -8,7 +8,7 @@
             "name": "acffg_prefooter_flex_row_show",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "Display the site-wide Prefooter Flex Row below this page's content. The heading, body, and button are managed centrally in General Business \u2192 Prefooter Flex Row.",
+            "instructions": "Display the Prefooter Flex Row below this page's content. Default content is pre-filled from the David Tours reference and can be overridden per page below. The phone number is sourced automatically from General Business.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -16,11 +16,15 @@
                 "class": "",
                 "id": ""
             },
+            "menu_order": 0,
+            "_name": "acffg_prefooter_flex_row_show",
+            "_valid": 1,
+            "parent": "group_acffg_prefooter_flex_row",
             "message": "Show Prefooter Flex Row on this page",
             "default_value": 0,
+            "ui": 1,
             "ui_on_text": "Show",
-            "ui_off_text": "Hide",
-            "ui": 1
+            "ui_off_text": "Hide"
         },
         {
             "key": "field_acffg_prefooter_flex_row_bg_image",
@@ -28,7 +32,7 @@
             "name": "acffg_prefooter_flex_row_bg_image",
             "aria-label": "",
             "type": "url",
-            "instructions": "Full URL to the background image. Passed as inline style on the section.",
+            "instructions": "Optional. Full URL to a page-specific background image. Passed as inline style on the section. Leave empty to use the theme default.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -44,9 +48,163 @@
                 "class": "",
                 "id": ""
             },
+            "menu_order": 1,
+            "_name": "acffg_prefooter_flex_row_bg_image",
+            "_valid": 1,
+            "parent": "group_acffg_prefooter_flex_row",
             "default_value": "",
             "placeholder": "https://...",
             "allow_in_bindings": 0
+        },
+        {
+            "key": "field_acffg_prefooter_flex_row_heading",
+            "label": "Heading",
+            "name": "acffg_prefooter_flex_row_heading",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Main headline text for the CTA section.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_acffg_prefooter_flex_row_show",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "menu_order": 2,
+            "_name": "acffg_prefooter_flex_row_heading",
+            "_valid": 1,
+            "parent": "group_acffg_prefooter_flex_row",
+            "default_value": "Effortless travel",
+            "placeholder": ""
+        },
+        {
+            "key": "field_acffg_prefooter_flex_row_body",
+            "label": "Body",
+            "name": "acffg_prefooter_flex_row_body",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "Supporting body copy under the heading. Basic HTML allowed.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_acffg_prefooter_flex_row_show",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "menu_order": 3,
+            "_name": "acffg_prefooter_flex_row_body",
+            "_valid": 1,
+            "parent": "group_acffg_prefooter_flex_row",
+            "default_value": "Your journey, your schedule. Contact our team today for a level of service that anticipates your every need.",
+            "tabs": "visual",
+            "toolbar": "full",
+            "media_upload": 0
+        },
+        {
+            "key": "field_acffg_prefooter_flex_row_button_label",
+            "label": "Button Label",
+            "name": "acffg_prefooter_flex_row_button_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Text shown on the CTA button.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_acffg_prefooter_flex_row_show",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "menu_order": 4,
+            "_name": "acffg_prefooter_flex_row_button_label",
+            "_valid": 1,
+            "parent": "group_acffg_prefooter_flex_row",
+            "default_value": "Request A Quote",
+            "placeholder": ""
+        },
+        {
+            "key": "field_acffg_prefooter_flex_row_button_url",
+            "label": "Button URL",
+            "name": "acffg_prefooter_flex_row_button_url",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "URL the button links to. Relative paths like /quote-request/ are fine.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_acffg_prefooter_flex_row_show",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "menu_order": 5,
+            "_name": "acffg_prefooter_flex_row_button_url",
+            "_valid": 1,
+            "parent": "group_acffg_prefooter_flex_row",
+            "default_value": "/quote-request/",
+            "placeholder": "/quote-request/"
+        },
+        {
+            "key": "field_acffg_prefooter_flex_row_button_new_tab",
+            "label": "Open Button in New Tab",
+            "name": "acffg_prefooter_flex_row_button_new_tab",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Open the CTA button in a new browser tab.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_acffg_prefooter_flex_row_show",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "menu_order": 6,
+            "_name": "acffg_prefooter_flex_row_button_new_tab",
+            "_valid": 1,
+            "parent": "group_acffg_prefooter_flex_row",
+            "message": "Open in new tab",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Yes",
+            "ui_off_text": "No"
         }
     ],
     "location": [
@@ -59,16 +217,16 @@
         ]
     ],
     "menu_order": 450,
-    "position": "side",
+    "position": "normal",
     "style": "default",
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": true,
-    "description": "Per-page toggle for the [bma_prefooter_flex_row] full-bleed CTA section. Content is sourced from General Business options.",
+    "description": "Prefooter Flex Row controls: toggle visibility per page and override the heading, body, and button. Defaults are pre-filled from the David Tours reference. Phone is sourced automatically from General Business (acffg_phone).",
     "show_in_rest": 0,
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1781737309
+    "modified": 1781823540
 }
