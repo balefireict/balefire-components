@@ -3,11 +3,12 @@
  * BMA Buttons shortcode (parent group + child button).
  *
  * Parent: [bma_buttons align="center|left|right"] wraps child buttons.
- * Child:  [bma_button label="" url="" style="" size="" arrow="" icon=""]
+ * Child:  [bma_button type="default|phone" label="" url="" style="" size="" arrow="" icon=""]
  *
- * Each child button has its own style, size, arrow, text color, and optional
- * icon (calendar, phone, or custom upload). External links auto-detect
- * target="_blank".
+ * Each child is either a Default button (own style/size/arrow/text-color and
+ * an optional calendar or custom icon) or a Phone link (phone-icon SVG +
+ * number from the acffg_phone ACF options field, rendered as a tel:+1- link).
+ * External links auto-detect target="_blank".
  *
  * @package Balefire\Component\Buttons
  */
@@ -68,18 +69,28 @@ final class Buttons {
 	public static function renderButton( array $atts ): string {
 		$atts = shortcode_atts(
 			array(
-				'label'      => '',
-				'url'        => '',
-				'style'      => 'primary',
-				'size'       => 'md',
-				'arrow'      => 'false',
-				'text_color' => 'default',
-				'icon'       => '',
+				'type'        => 'default',
+				'label'       => '',
+				'url'         => '',
+				'style'       => 'primary',
+				'size'        => 'md',
+				'arrow'       => 'false',
+				'text_color'  => 'default',
+				'icon'        => '',
 				'icon_custom' => '',
+				'phone'       => '',
+				'phone_field' => 'acffg_phone',
 			),
 			$atts,
 			'bma_button'
 		);
+
+		// Phone type renders a phone-icon + tel: link; the button fields below
+		// are irrelevant, so branch before label/url validation.
+		$type = strtolower( trim( (string) $atts['type'] ) );
+		if ( 'phone' === $type ) {
+			return self::renderPhone( $atts );
+		}
 
 		$label = trim( html_entity_decode( (string) $atts['label'], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
 		$url   = trim( html_entity_decode( (string) $atts['url'], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
@@ -134,6 +145,76 @@ final class Buttons {
 			$target_attr,
 			$inner
 		);
+	}
+
+	/**
+	 * Render a "Phone" type button: phone-icon SVG + the phone number as a
+	 * tel: link. The number resolves from the manual `phone` att, falling back
+	 * to the ACF options field named by `phone_field` (default acffg_phone).
+	 * Returns '' when no number is available so no dead anchor renders.
+	 *
+	 * The link inherits its color from context (currentColor) so the icon and
+	 * text always match — consumer themes color .bma-btn-phone for their
+	 * secondary/brand color.
+	 *
+	 * @param array $atts Shortcode attributes (phone, phone_field).
+	 * @return string HTML, or '' when no phone number.
+	 */
+	public static function renderPhone( array $atts ): string {
+		$phone = trim( (string) $atts['phone'] );
+		if ( '' === $phone ) {
+			$phone = trim( (string) self::acfOption( (string) $atts['phone_field'] ) );
+		}
+		if ( '' === $phone ) {
+			return '';
+		}
+
+		$tel  = self::phoneTel( $phone );
+		// Reuse the phone device icon (currentColor) — same path as the SVG ref.
+		$icon = self::renderIcon( 'phone' );
+
+		return sprintf(
+			'<a class="bma-btn-phone" href="%s">%s%s</a>',
+			esc_url( 'tel:' . $tel ),
+			$icon,
+			esc_html( $phone )
+		);
+	}
+
+	/**
+	 * Read a site-wide ACF options field. Soft dependency — returns '' when
+	 * ACF is absent, the field name is empty, or no value is stored.
+	 *
+	 * @param string $field ACF options field name.
+	 * @return mixed Resolved value, or '' when none.
+	 */
+	private static function acfOption( string $field ) {
+		$field = trim( $field );
+		if ( '' === $field || ! function_exists( 'get_field' ) ) {
+			return '';
+		}
+
+		$value = get_field( $field, 'option' );
+		return ( null === $value || false === $value ) ? '' : $value;
+	}
+
+	/**
+	 * Build a tel: URI body from a phone string. Strips to digits and applies
+	 * a +1 country code when missing (10-digit → +1…; 11-digit starting with 1
+	 * → +1…). Mirrors the acffg_phone → tel:+1-{phone} intent.
+	 *
+	 * @param string $phone Raw phone string.
+	 * @return string tel: URI body, e.g. "+187****4395".
+	 */
+	private static function phoneTel( string $phone ): string {
+		$digits = preg_replace( '/[^0-9]/', '', $phone );
+		if ( null === $digits ) {
+			$digits = '';
+		}
+		if ( 11 === strlen( $digits ) && isset( $digits[0] ) && '1' === $digits[0] ) {
+			return '+' . $digits;
+		}
+		return '+1' . $digits;
 	}
 
 	/**
@@ -235,10 +316,12 @@ final class Buttons {
 			__( 'Secondary (theme secondary)', 'balefire' ) => 'secondary',
 		);
 
+		// 'phone' removed from the icon picker — use Type → Phone instead.
+		// renderIcon( 'phone' ) stays for back-compat with existing
+		// [bma_button icon="phone"] content.
 		$icon_choices = array(
 			__( 'None', 'balefire' )     => '',
 			__( 'Calendar', 'balefire' ) => 'calendar',
-			__( 'Phone', 'balefire' )    => 'phone',
 			__( 'Custom', 'balefire' )   => 'custom',
 		);
 
@@ -279,21 +362,35 @@ final class Buttons {
 				'base'            => 'bma_button',
 				'php_class_name'  => 'WPBakeryShortCode_BMA_Button',
 				'category'        => __( 'Custom Elements', 'balefire' ),
-				'description'     => __( 'BMA — Single button with style, size, icon, and arrow.', 'balefire' ),
+				'description'     => __( 'BMA — Button, or a Phone link from the acffg_phone field.', 'balefire' ),
 				'icon'            => 'icon-wpb-ui-button',
 				'as_child'        => array( 'only' => 'bma_buttons' ),
 				'content_element' => true,
 				'params'          => array(
 					array(
+						'type'        => 'dropdown',
+						'heading'     => __( 'Type', 'balefire' ),
+						'param_name'  => 'type',
+						'value'       => array(
+							__( 'Default (button)', 'balefire' )    => 'default',
+							__( 'Phone (icon + number)', 'balefire' ) => 'phone',
+						),
+						'std'         => 'default',
+						'description' => __( 'Phone reads the site-wide acffg_phone field and renders a tel:+1- link. The button fields below are hidden for Phone.', 'balefire' ),
+						'admin_label' => true,
+					),
+					array(
 						'type'        => 'textfield',
 						'heading'     => __( 'Label', 'balefire' ),
 						'param_name'  => 'label',
 						'admin_label' => true,
+						'dependency'  => array( 'element' => 'type', 'value' => array( 'default' ) ),
 					),
 					array(
 						'type'       => 'textfield',
 						'heading'    => __( 'URL', 'balefire' ),
 						'param_name' => 'url',
+						'dependency' => array( 'element' => 'type', 'value' => array( 'default' ) ),
 					),
 					array(
 						'type'       => 'dropdown',
@@ -301,6 +398,7 @@ final class Buttons {
 						'param_name' => 'style',
 						'value'      => $style_choices,
 						'std'        => 'primary',
+						'dependency' => array( 'element' => 'type', 'value' => array( 'default' ) ),
 					),
 					array(
 						'type'       => 'dropdown',
@@ -308,6 +406,7 @@ final class Buttons {
 						'param_name' => 'size',
 						'value'      => $size_choices,
 						'std'        => 'md',
+						'dependency' => array( 'element' => 'type', 'value' => array( 'default' ) ),
 					),
 					array(
 						'type'       => 'dropdown',
@@ -318,6 +417,7 @@ final class Buttons {
 							__( 'Yes', 'balefire' ) => 'true',
 						),
 						'std'        => 'false',
+						'dependency' => array( 'element' => 'type', 'value' => array( 'default' ) ),
 					),
 					array(
 						'type'       => 'dropdown',
@@ -325,6 +425,7 @@ final class Buttons {
 						'param_name' => 'text_color',
 						'value'      => $text_color_choices,
 						'std'        => 'default',
+						'dependency' => array( 'element' => 'type', 'value' => array( 'default' ) ),
 					),
 					array(
 						'type'       => 'dropdown',
@@ -332,12 +433,22 @@ final class Buttons {
 						'param_name' => 'icon',
 						'value'      => $icon_choices,
 						'std'        => '',
+						'dependency' => array( 'element' => 'type', 'value' => array( 'default' ) ),
 					),
 					array(
-						'type'       => 'attach_image',
-						'heading'    => __( 'Custom Icon Image', 'balefire' ),
-						'param_name' => 'icon_custom',
+						'type'        => 'attach_image',
+						'heading'     => __( 'Custom Icon Image', 'balefire' ),
+						'param_name'  => 'icon_custom',
 						'description' => __( 'Upload an icon. Only used when Icon is set to Custom.', 'balefire' ),
+						'dependency'  => array( 'element' => 'type', 'value' => array( 'default' ) ),
+					),
+					array(
+						'type'        => 'textfield',
+						'heading'     => __( 'Phone Number', 'balefire' ),
+						'param_name'  => 'phone',
+						'description' => __( 'Override the site-wide phone (acffg_phone). Leave empty to use the global field.', 'balefire' ),
+						'admin_label' => true,
+						'dependency'  => array( 'element' => 'type', 'value' => array( 'phone' ) ),
 					),
 				),
 			)

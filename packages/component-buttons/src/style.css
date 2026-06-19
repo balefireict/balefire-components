@@ -10,7 +10,7 @@
 .bma-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 1rem;
     align-items: center;
 }
 
@@ -36,8 +36,8 @@
     height: 20px;
     flex-shrink: 0;
     vertical-align: middle;
-    margin-right: 0.4em;
-    margin-block-start: -3.5px;
+    margin-right: 0.25rem;
+    margin-block: auto;
 }
 
 .bma-buttons .btn-icon svg {
@@ -54,4 +54,25 @@
 .bma-buttons .btn-arrow {
     font-size: 0.85em;
     margin-left: 0.1em;
+}
+
+/* Phone type (type="phone") — phone-icon SVG + number as a tel: link.
+   Reuses .btn-icon (currentColor) for the icon; the link inherits its text
+   color from context so icon + number always match. Consumer themes color
+   .bma-btn-phone for their secondary/brand color. */
+
+.bma-buttons .bma-btn-phone {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    color: inherit;
+}
+
+.bma-buttons .bma-btn-phone:hover,
+.bma-buttons .bma-btn-phone:focus {
+    text-decoration: underline;
 }
