@@ -44,6 +44,7 @@ final class SimpleCard {
 		$atts = shortcode_atts(
 			array(
 				'columns' => '3',
+				'class'   => '',
 			),
 			$atts,
 			'bma_simple_card_grid'
@@ -61,8 +62,15 @@ final class SimpleCard {
 			default => 'lg:auto-grid-cols-3',
 		};
 
-		return '<div class="bma-auto-grid auto-grid-gap-6 auto-grid-cols-1 '
-			. esc_attr( $col_class ) . '">' . do_shortcode( (string) $content ) . '</div>';
+		$classes = array( 'bma-auto-grid', 'auto-grid-gap-6', 'auto-grid-cols-1', $col_class );
+		$extra   = trim( (string) $atts['class'] );
+		if ( '' !== $extra ) {
+			foreach ( preg_split( '/\s+/', $extra ) ?: array() as $class ) {
+				$classes[] = sanitize_html_class( $class );
+			}
+		}
+
+		return '<div class="' . esc_attr( implode( ' ', array_filter( $classes ) ) ) . '">' . do_shortcode( (string) $content ) . '</div>';
 	}
 
 	/**
@@ -92,7 +100,7 @@ final class SimpleCard {
 					<h3 class="bma-simple-card__title wp-block-heading"><?php echo esc_html( $title ); ?></h3>
 				<?php endif; ?>
 				<?php if ( '' !== trim( $body_html ) ) : ?>
-					<p class="wp-block-paragraph"><?php echo $body_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already through wp_kses_post ?></p>
+					<div class="bma-simple-card__body"><?php echo $body_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already through wp_kses_post ?></div>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -136,6 +144,12 @@ final class SimpleCard {
 						'param_name' => 'columns',
 						'value'      => array( '3', '1', '2', '4' ),
 						'std'        => '3',
+					),
+					array(
+						'type'        => 'textfield',
+						'heading'     => __( 'Extra class', 'balefire' ),
+						'param_name'  => 'class',
+						'description' => __( 'Optional extra CSS class on the grid wrapper.', 'balefire' ),
 					),
 				),
 			)

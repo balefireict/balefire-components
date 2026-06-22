@@ -47,15 +47,29 @@
 }
 
 .bma-image-text-item__media {
-    flex: 0 0 auto;
-    width: 120px;
+    flex: 0 0 25%;
+    min-width: 100%;
+    height: auto;
     margin: 0;
+}
+
+@media (min-width: 993px) {
+    .bma-image-text-item__media {
+        flex: 0 0 25%;
+        min-width: 0;
+    }
+
+    .bma-image-text-item__content {
+        flex: 0 0 75%;
+    }
 }
 
 .bma-image-text-item__img {
     display: block;
-    width: 120px;
+    width: 100%;
     height: auto;
+    aspect-ratio: 195 / 141;
+    object-fit: cover;
     border-radius: 0.5rem;
 }
 

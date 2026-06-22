@@ -44,6 +44,7 @@ $bma_buttons_boot = static function (): void {
 	if ( function_exists( 'vc_map' ) ) {
 		add_action( 'vc_before_init', array( \Balefire\Component\Buttons\Buttons::class, 'vcMap' ) );
 		add_action( 'vc_after_init', array( \Balefire\Component\Buttons\Buttons::class, 'registerPreviewClasses' ) );
+		add_action( 'vc_after_init', array( \Balefire\Component\Buttons\Buttons::class, 'allowContainersInInnerColumns' ), 20 );
 	}
 };
 

@@ -40,7 +40,8 @@ final class Buttons {
 	public static function render( array $atts, ?string $content = null ): string {
 		$atts = shortcode_atts(
 			array(
-				'align' => 'center',
+				'align'   => 'center',
+				'buttons' => '',
 			),
 			$atts,
 			'bma_buttons'
@@ -48,16 +49,47 @@ final class Buttons {
 
 		$align       = in_array( $atts['align'], self::ALIGNMENTS, true ) ? $atts['align'] : 'center';
 		$align_class = 'justify-' . ( 'left' === $align ? 'start' : ( 'right' === $align ? 'end' : 'center' ) );
+		$inner       = '';
 
-		if ( null === $content || '' === trim( (string) $content ) ) {
+		if ( null !== $content && '' !== trim( (string) $content ) ) {
+			$inner = do_shortcode( (string) $content );
+		} else {
+			$buttons = self::parseButtonGroupAtts( (string) $atts['buttons'] );
+			foreach ( $buttons as $button_atts ) {
+				$inner .= self::renderButton( $button_atts );
+			}
+		}
+
+		if ( '' === trim( $inner ) ) {
 			return '';
 		}
 
 		return sprintf(
 			'<div class="bma-buttons %s">%s</div>',
 			esc_attr( $align_class ),
-			do_shortcode( (string) $content )
+			$inner
 		);
+	}
+
+	/**
+	 * Parse WPBakery param_group button data.
+	 *
+	 * @param string $buttons Encoded param_group value.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private static function parseButtonGroupAtts( string $buttons ): array {
+		$buttons = trim( $buttons );
+		if ( '' === $buttons ) {
+			return array();
+		}
+
+		if ( function_exists( 'vc_param_group_parse_atts' ) ) {
+			$parsed = vc_param_group_parse_atts( $buttons );
+			return is_array( $parsed ) ? $parsed : array();
+		}
+
+		$decoded = json_decode( urldecode( $buttons ), true );
+		return is_array( $decoded ) ? $decoded : array();
 	}
 
 	/**
@@ -290,7 +322,93 @@ final class Buttons {
 		add_shortcode( 'bma_button', array( self::class, 'renderButton' ) );
 	}
 
-	/** Register WPBakery elements (parent + child). */
+	/**
+	 * Shared WPBakery fields for one button inside the Buttons param_group.
+	 *
+	 * @param array<string,string> $style_choices Style dropdown choices.
+	 * @param array<string,string> $size_choices Size dropdown choices.
+	 * @param array<string,string> $text_color_choices Transparent text color choices.
+	 * @param array<string,string> $icon_choices Icon dropdown choices.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private static function buttonParamGroupFields( array $style_choices, array $size_choices, array $text_color_choices, array $icon_choices ): array {
+		return array(
+			array(
+				'type'        => 'dropdown',
+				'heading'     => __( 'Type', 'balefire' ),
+				'param_name'  => 'type',
+				'value'       => array(
+					__( 'Default (button)', 'balefire' )    => 'default',
+					__( 'Phone (icon + number)', 'balefire' ) => 'phone',
+				),
+				'std'         => 'default',
+				'admin_label' => true,
+			),
+			array(
+				'type'        => 'textfield',
+				'heading'     => __( 'Label', 'balefire' ),
+				'param_name'  => 'label',
+				'admin_label' => true,
+			),
+			array(
+				'type'       => 'textfield',
+				'heading'    => __( 'URL', 'balefire' ),
+				'param_name' => 'url',
+			),
+			array(
+				'type'       => 'dropdown',
+				'heading'    => __( 'Style', 'balefire' ),
+				'param_name' => 'style',
+				'value'      => $style_choices,
+				'std'        => 'primary',
+			),
+			array(
+				'type'       => 'dropdown',
+				'heading'    => __( 'Size', 'balefire' ),
+				'param_name' => 'size',
+				'value'      => $size_choices,
+				'std'        => 'md',
+			),
+			array(
+				'type'       => 'dropdown',
+				'heading'    => __( 'Show Arrow (→)', 'balefire' ),
+				'param_name' => 'arrow',
+				'value'      => array(
+					__( 'No', 'balefire' )  => 'false',
+					__( 'Yes', 'balefire' ) => 'true',
+				),
+				'std'        => 'false',
+			),
+			array(
+				'type'       => 'dropdown',
+				'heading'    => __( 'Text Color (transparent only)', 'balefire' ),
+				'param_name' => 'text_color',
+				'value'      => $text_color_choices,
+				'std'        => 'default',
+			),
+			array(
+				'type'       => 'dropdown',
+				'heading'    => __( 'Icon Before Text', 'balefire' ),
+				'param_name' => 'icon',
+				'value'      => $icon_choices,
+				'std'        => '',
+			),
+			array(
+				'type'        => 'attach_image',
+				'heading'     => __( 'Custom Icon Image', 'balefire' ),
+				'param_name'  => 'icon_custom',
+				'description' => __( 'Upload an icon. Only used when Icon is set to Custom.', 'balefire' ),
+			),
+			array(
+				'type'        => 'textfield',
+				'heading'     => __( 'Phone Number', 'balefire' ),
+				'param_name'  => 'phone',
+				'description' => __( 'Override the site-wide phone (acffg_phone). Leave empty to use the global field.', 'balefire' ),
+			),
+		);
+	}
+
+	/** Register WPBakery elements (Buttons wrapper + legacy child button). */
 	public static function vcMap(): void {
 		if ( ! function_exists( 'vc_map' ) ) {
 			return;
@@ -325,7 +443,9 @@ final class Buttons {
 			__( 'Custom', 'balefire' )   => 'custom',
 		);
 
-		// Parent: button group container.
+		// Parent: button group container. This is intentionally a real
+		// WPBakery container so the Backend Editor shows a Buttons wrapper with
+		// sortable Button children, not a param_group field.
 		vc_map(
 			array(
 				'name'                    => __( 'Buttons', 'balefire' ),
@@ -355,14 +475,15 @@ final class Buttons {
 			)
 		);
 
-		// Child: single button.
+		// Child button. Add these inside the Buttons wrapper so the editor flow is
+		// "Buttons" (alignment/group) -> one or more "Button" items.
 		vc_map(
 			array(
 				'name'            => __( 'Button', 'balefire' ),
 				'base'            => 'bma_button',
 				'php_class_name'  => 'WPBakeryShortCode_BMA_Button',
 				'category'        => __( 'Custom Elements', 'balefire' ),
-				'description'     => __( 'BMA — Button, or a Phone link from the acffg_phone field.', 'balefire' ),
+				'description'     => __( 'BMA — Button item. Add inside the Buttons wrapper for alignment and multiple CTAs.', 'balefire' ),
 				'icon'            => 'icon-wpb-ui-button',
 				'as_child'        => array( 'only' => 'bma_buttons' ),
 				'content_element' => true,
@@ -476,6 +597,16 @@ final class Buttons {
 		}
 		if ( ! class_exists( 'WPBakeryShortCode_BMA_Buttons' ) ) {
 			eval( 'class WPBakeryShortCode_BMA_Buttons extends \WPBakeryShortCodesContainer {}' );
+		}
+		if ( ! class_exists( 'WPBakeryShortCode_BMA_Button' ) && class_exists( 'WPBakeryShortCode' ) ) {
+			eval( 'class WPBakeryShortCode_BMA_Button extends \WPBakeryShortCode {}' );
+		}
+	}
+
+	/** Allow Buttons containers inside WPBakery nested row columns. */
+	public static function allowContainersInInnerColumns(): void {
+		if ( function_exists( 'vc_map_update' ) ) {
+			vc_map_update( 'vc_column_inner', array( 'allowed_container_element' => true ) );
 		}
 	}
 }

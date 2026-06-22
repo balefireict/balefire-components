@@ -129,7 +129,7 @@ final class ImageTextList {
 
 		ob_start();
 		?>
-		<div class="<?php echo esc_attr( implode( ' ', $item_classes ) ); ?>"><<?php echo $inner_tag; ?><?php echo $inner_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $inner_attrs is a hardcoded class name + esc_url'd href ?>
+		<div class="<?php echo esc_attr( implode( ' ', $item_classes ) ); ?>"><<?php echo $inner_tag; ?><?php echo $inner_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $inner_attrs is a hardcoded class name + esc_url'd href ?>>
 			<?php if ( '' !== $image_html ) : ?>
 				<figure class="bma-image-text-item__media"><?php echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image returns safe HTML ?></figure>
 			<?php endif; ?>
