@@ -379,7 +379,7 @@ final class ReviewsSlider {
 
 		ob_start();
 		?>
-		<section
+		<div
 			class="reviews-slider"
 			data-reviews-slider
 			data-autoplay="<?php echo esc_attr( $autoplay ); ?>"
@@ -408,7 +408,7 @@ final class ReviewsSlider {
 			<button type="button" class="reviews-slider__nav reviews-slider__next" aria-label="<?php esc_attr_e( 'Next review', 'balefire' ); ?>">
 				<?php echo self::chevron( 'next' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static inline SVG ?>
 			</button>
-		</section>
+		</div>
 		<?php
 		echo self::inlineScript(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static inline script
 
