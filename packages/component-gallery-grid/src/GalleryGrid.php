@@ -67,16 +67,30 @@ final class GalleryGrid {
 				'post_id'          => '',
 				'disable_lightbox' => '',
 				'class'            => '',
+				'fallback_field'   => '',
+				'fallback_post_id' => '',
 			),
 			$atts,
 			'bma_gallery_grid'
 		);
 
 		$field   = trim( (string) self::attr( $atts, 'field' ) );
-		$post_id = trim( (string) self::attr( $atts, 'post_id' ) );
-		$post_id = '' !== $post_id ? (int) $post_id : (int) get_the_ID();
+		$post_id = self::resolvePostId( trim( (string) self::attr( $atts, 'post_id' ) ) );
 
 		$gallery = get_field( $field, $post_id );
+
+		// Fall back to a secondary source (e.g. an options-page gallery) when
+		// the primary field is empty. fallback_post_id accepts 'option'; when
+		// omitted it reuses the primary post id.
+		if ( empty( $gallery ) || ! is_array( $gallery ) ) {
+			$fallback_field = trim( (string) self::attr( $atts, 'fallback_field' ) );
+			if ( '' !== $fallback_field ) {
+				$fallback_raw = trim( (string) self::attr( $atts, 'fallback_post_id' ) );
+				$post_id      = '' !== $fallback_raw ? self::resolvePostId( $fallback_raw ) : $post_id;
+				$gallery      = get_field( $fallback_field, $post_id );
+			}
+		}
+
 		if ( empty( $gallery ) || ! is_array( $gallery ) ) {
 			return '';
 		}
@@ -234,6 +248,18 @@ final class GalleryGrid {
 					),
 					array(
 						'type'        => 'textfield',
+						'heading'     => __( 'Fallback ACF field', 'balefire' ),
+						'param_name'  => 'fallback_field',
+						'description' => __( 'ACF Gallery field to read when the primary field is empty (e.g. an options-page gallery).', 'balefire' ),
+					),
+					array(
+						'type'        => 'textfield',
+						'heading'     => __( 'Fallback post ID', 'balefire' ),
+						'param_name'  => 'fallback_post_id',
+						'description' => __( 'Post ID for the fallback field. Use "option" for an options page. Defaults to the primary post.', 'balefire' ),
+					),
+					array(
+						'type'        => 'textfield',
 						'heading'     => __( 'Extra class', 'balefire' ),
 						'param_name'  => 'class',
 					),
@@ -259,5 +285,27 @@ final class GalleryGrid {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Resolve a shortcode post_id into a value get_field() accepts.
+	 *
+	 * Empty → current post ID; 'option'/'options' pass through (ACF options
+	 * pseudo-id); anything else is cast to an int post ID.
+	 *
+	 * @param string $raw Raw post_id attribute.
+	 * @return int|string
+	 */
+	private static function resolvePostId( string $raw ) {
+		if ( '' === $raw ) {
+			return (int) get_the_ID();
+		}
+
+		$lower = strtolower( $raw );
+		if ( 'option' === $lower || 'options' === $lower ) {
+			return 'option';
+		}
+
+		return (int) $raw;
 	}
 }
