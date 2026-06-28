@@ -3,6 +3,21 @@
    Ported from rockerbox balefire theme: resources/css/sections.css (section 14).
    --------------------------------------------------------------------------- */
 
+/* Heading: question-mark icon beside the centered title. */
+.bma-faq__heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.bma-faq__heading-icon {
+    flex: 0 0 auto;
+    width: 0.72em;
+    height: 0.72em;
+    color: #6f779d;
+}
+
 .bma-faq__list {
     max-width: 48rem;
     margin-inline: auto;

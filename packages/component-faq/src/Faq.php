@@ -70,7 +70,9 @@ final class Faq {
 			return '';
 		}
 
-		return '<h2 class="wp-block-heading has-text-align-center" id="faq-heading">' . esc_html( $title ) . '</h2>';
+		$icon = '<svg class="bma-faq__heading-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30.828 30.828" fill="currentColor" aria-hidden="true"><path d="M15.414,2.569A12.845,12.845,0,1,1,2.569,15.414,12.86,12.86,0,0,1,15.414,2.569Zm0-2.569A15.414,15.414,0,1,0,30.828,15.414,15.415,15.415,0,0,0,15.414,0ZM17.02,21.837a1.606,1.606,0,1,1-1.606-1.606A1.605,1.605,0,0,1,17.02,21.837ZM18.809,8.994a4.535,4.535,0,0,0-3.277-1.227c-2.8,0-4.611,1.991-4.611,5.074H13.5c0-1.909,1.065-2.586,1.976-2.586a1.7,1.7,0,0,1,1.752,1.575c.08,1.088-.5,1.64-1.236,2.339a4.73,4.73,0,0,0-1.839,4.455h2.575a3.385,3.385,0,0,1,1.2-2.8,5.754,5.754,0,0,0,1.973-3.882,4.021,4.021,0,0,0-1.1-2.951Z"/></svg>';
+
+		return '<h2 class="wp-block-heading has-text-align-center bma-faq__heading" id="faq-heading">' . $icon . '<span class="bma-faq__heading-text">' . esc_html( $title ) . '</span></h2>';
 	}
 
 	/**
