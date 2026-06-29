@@ -48,6 +48,7 @@ final class FancyHoverGrid {
 				'acf_title_field' => '',
 				'acf_text_field'  => '',
 				'aspect'          => 'portrait',
+				'columns'         => '3',
 				'overlay_color'   => '#00338f',
 				'overlay_opacity' => '0.862',
 				'hover_blur'      => '3px',
@@ -57,8 +58,9 @@ final class FancyHoverGrid {
 			'bma_fancy_hover_grid'
 		);
 
-		$source = in_array( $atts['source'], array( 'manual', 'posts', 'acf', 'terms' ), true ) ? $atts['source'] : 'manual';
-		$aspect = in_array( $atts['aspect'], self::ASPECT_CHOICES, true ) ? $atts['aspect'] : 'portrait';
+		$source  = in_array( $atts['source'], array( 'manual', 'posts', 'acf', 'terms' ), true ) ? $atts['source'] : 'manual';
+		$aspect  = in_array( $atts['aspect'], self::ASPECT_CHOICES, true ) ? $atts['aspect'] : 'portrait';
+		$columns = in_array( (string) $atts['columns'], array( '2', '3' ), true ) ? (string) $atts['columns'] : '3';
 
 		if ( 'manual' === $source ) {
 			$inner = self::manualInner( $content );
@@ -76,7 +78,7 @@ final class FancyHoverGrid {
 			'bma-auto-grid',
 			'auto-grid-cols-1',
 			'md:auto-grid-cols-2',
-			'lg:auto-grid-cols-3',
+			'lg:auto-grid-cols-' . $columns,
 			'auto-grid-gap-6',
 		);
 		$extra   = trim( (string) $atts['class'] );
@@ -709,6 +711,17 @@ final class FancyHoverGrid {
 							__( 'Ultrawide (21:9)', 'balefire' )   => '21-9',
 							__( 'Auto (natural image)', 'balefire' ) => 'auto',
 						),
+					),
+					array(
+						'type'        => 'dropdown',
+						'heading'     => __( 'Columns', 'balefire' ),
+						'param_name'  => 'columns',
+						'std'         => '3',
+						'value'       => array(
+							__( '3 columns', 'balefire' ) => '3',
+							__( '2 columns', 'balefire' ) => '2',
+						),
+						'description' => __( 'Tiles per row on large screens (drops to 2 on tablet, 1 on mobile).', 'balefire' ),
 					),
 					array(
 						'type'        => 'textfield',
